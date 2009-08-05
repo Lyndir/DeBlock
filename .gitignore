@@ -1,0 +1,13 @@
+# Encoded audio.
+/Resources/Audio/*/*flac
+
+# OS-Specific junk.
+.DS_Store
+
+# Xcode IDE
+/*.xcodeproj/*
+!/*.xcodeproj/*.pbxproj
+/build
+
+# Gorillas Stuff
+/promocodes
