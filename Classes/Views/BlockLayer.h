@@ -62,6 +62,7 @@ typedef enum DMBlockType {
 @property (readwrite) NSUInteger                frame;
 @property (readonly) NSUInteger                 frames;
 @property (readwrite) ccColor4F                 modColor;
+@property (readonly) ccColor4B                  blockColor;
 
 - (id)initWithBlockSize:(CGSize)size;
 

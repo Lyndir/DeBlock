@@ -34,7 +34,8 @@
 @property (readwrite, retain) NSNumber          *level;
 @property (readwrite, retain) NSNumber          *levelScore;
 
-@property (readwrite, retain) NSNumber          *skyColor;
+@property (readwrite, retain) NSNumber          *skyColorFrom;
+@property (readwrite, retain) NSNumber          *skyColorTo;
 
 @property (readwrite, retain) NSNumber          *flawlessBonus;
 

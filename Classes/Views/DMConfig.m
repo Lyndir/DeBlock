@@ -25,7 +25,8 @@
 #define dLevel          NSStringFromSelector(@selector(level))
 #define dLevelScore     NSStringFromSelector(@selector(levelScore))
 
-#define dSkyColor       NSStringFromSelector(@selector(skyColor))
+#define dSkyColorFrom   NSStringFromSelector(@selector(skyColorFrom))
+#define dSkyColorTo     NSStringFromSelector(@selector(skyColorTo))
 
 #define dFlawlessBonus  NSStringFromSelector(@selector(flawlessBonus))
 
@@ -34,7 +35,7 @@
 @implementation DMConfig
 
 @dynamic level, levelScore;
-@dynamic skyColor;
+@dynamic skyColorFrom, skyColorTo;
 @dynamic flawlessBonus;
 
 - (id)init {
@@ -46,7 +47,9 @@
                                 [NSNumber numberWithLong:0],                        dLevel,
                                 [NSNumber numberWithLong:0],                        dLevelScore,
                                 
-                                [NSNumber numberWithLong:0x778077ff],               dSkyColor,
+                                [NSNumber numberWithLong:0x58748Cff],               dSkyColorFrom,
+                                [NSNumber numberWithLong:0xB3D5F2ff],               dSkyColorTo,
+//                                [NSNumber numberWithLong:0xD8E6F2ff],               dSkyColorTo,
                                 
                                 [NSNumber numberWithInt:200],                       dFlawlessBonus,
                                      

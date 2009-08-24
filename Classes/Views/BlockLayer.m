@@ -23,7 +23,7 @@
 //
 
 #import "BlockLayer.h"
-#import "AnimateProperty.h"
+#import "PropertyAction.h"
 #import "DeblockAppDelegate.h"
 
 #define kAllBlocksLevel 10
@@ -134,6 +134,9 @@
 - (void)notifyDestroyed {
     
     [dropEmitter stopSystem];
+    [dropEmitter release];
+    dropEmitter = nil;
+    
     [self.parent removeChild:self cleanup:YES];
 }
 
@@ -236,7 +239,7 @@
 
 - (void)blink {
     
-    AnimateProperty *animateColor = [AnimateProperty actionWithDuration:0.3f key:@"colorMultiplier"
+    PropertyAction *animateColor = [PropertyAction actionWithDuration:0.3f key:@"colorMultiplier"
                                                                    from:[NSNumber numberWithFloat:1.0f]
                                                                      to:[NSNumber numberWithFloat:1.5f]];
     [self runAction:[Sequence actions:animateColor, [animateColor reverse], nil]];
@@ -245,13 +248,49 @@
 
 - (void)crumble {
     
-    AnimateProperty *animateFrames = [AnimateProperty actionWithDuration:0.4f key:@"frame"
+    PropertyAction *animateFrames      = [PropertyAction actionWithDuration:0.4f key:@"frame"
                                                                    from:[NSNumber numberWithUnsignedInt:0]
                                                                      to:[NSNumber numberWithUnsignedInt:frames - 1]];
+    
+    ParticleSystem *crumbleEmitter      = [[ParticleSmoke alloc] initWithTotalParticles:1000];
+    crumbleEmitter.duration             = animateFrames.duration;
+    crumbleEmitter.life                 = 1.0f;
+    crumbleEmitter.lifeVar              = 0.3f;
+    crumbleEmitter.speed                = 5;
+    crumbleEmitter.speedVar             = 5;
+    crumbleEmitter.startSize            = 10;
+    crumbleEmitter.startSizeVar         = 5;
+    crumbleEmitter.endSize              = 20;
+    crumbleEmitter.endSizeVar           = 5;
+    crumbleEmitter.angle                = 90;
+    crumbleEmitter.angleVar             = 10;
+    crumbleEmitter.gravity              = ccp(0, -5);
+    crumbleEmitter.position             = CGPointZero;
+    crumbleEmitter.posVar               = ccp(self.contentSize.width / 2, self.contentSize.height / 3);
+    crumbleEmitter.centerOfGravity      = ccp(self.position.x + self.contentSize.width / 2,
+                                              self.position.y + self.contentSize.height / 3);
+#if TARGET_IPHONE_SIMULATOR
+    crumbleEmitter.startColor           = cccf(1, 1, 1, 0.3f);
+    crumbleEmitter.endColor             = cccf(1, 1, 1, 0);
+#else
+    crumbleEmitter.startColor           = cccf(0.3f, 0.3f, 0.3f, 0.3f);
+    crumbleEmitter.endColor             = cccf(0, 0, 0, 0);
+#endif
+    crumbleEmitter.autoRemoveOnFinish   = YES;
+    [parent addChild:crumbleEmitter];
+    [crumbleEmitter release];
+
+
     [self runAction:[Sequence actions:
                      animateFrames,
                      [CallFunc actionWithTarget:self selector:@selector(notifyDestroyed)],
                      nil]];
+}
+
+
+- (ccColor4B)blockColor {
+    
+    return ccc([(NSNumber *) [blockColors objectForKey:[NSNumber numberWithUnsignedInt:self.type]] longValue]);
 }
 
 
@@ -270,7 +309,7 @@
 - (void)draw {
 
     //CGPoint to      = CGPointMake(self.contentSize.width, self.contentSize.height);
-    ccColor4B fromC = ccc([(NSNumber *) [blockColors objectForKey:[NSNumber numberWithUnsignedInt:self.type]] longValue]);
+    ccColor4B fromC = self.blockColor;
     fromC.r         = fminf(0xff, fmaxf(0x00, fromC.r * modColor.r));
     fromC.g         = fminf(0xff, fmaxf(0x00, fromC.g * modColor.g));
     fromC.b         = fminf(0xff, fmaxf(0x00, fromC.b * modColor.b));
@@ -284,7 +323,7 @@
 	glEnableClientState( GL_TEXTURE_COORD_ARRAY );
 	glEnable( GL_TEXTURE_2D);
     
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 	glColor4ub( fromC.r, fromC.g, fromC.b, fromC.a);
     
     CGRect textureRect;
