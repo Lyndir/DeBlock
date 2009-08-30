@@ -49,7 +49,6 @@
                                 
                                 [NSNumber numberWithLong:0x58748Cff],               dSkyColorFrom,
                                 [NSNumber numberWithLong:0xB3D5F2ff],               dSkyColorTo,
-//                                [NSNumber numberWithLong:0xD8E6F2ff],               dSkyColorTo,
                                 
                                 [NSNumber numberWithInt:200],                       dFlawlessBonus,
                                      

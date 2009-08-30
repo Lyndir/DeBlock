@@ -25,12 +25,12 @@
 #import "Resettable.h"
 
 
-@interface SkyLayer : ParallaxNode <Resettable> {
+@interface SkyLayer : Layer <Resettable> {
 
     BOOL                    fancySky;
 
     ccColor4B               skyColorFrom, skyColorTo;
-    Texture2D               *clouds;
+    Texture2D               **clouds;
     
     CGFloat                 cloudsX;
 }

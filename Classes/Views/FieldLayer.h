@@ -39,6 +39,8 @@
 }
 
 @property (readonly) BOOL       locked;
+@property (readonly) NSInteger  blockRows;
+@property (readonly) NSInteger  blockColumns;
 
 - (BlockLayer *)blockAtRow:(NSInteger)aRow col:(NSInteger)aCol;
 - (BlockLayer *)blockAtTargetRow:(NSInteger)aRow col:(NSInteger)aCol;
@@ -46,7 +48,6 @@
 - (NSArray *)blocksInCol:(NSInteger)aCol;
 - (NSArray *)blocksInTargetRow:(NSInteger)aRow;
 - (NSArray *)blocksInTargetCol:(NSInteger)aCol;
-- (NSArray *)findLinkedBlocksOfBlockAtRow:(NSInteger)aRow col:(NSInteger)aCol;
 - (BOOL)findPositionOfBlock:(BlockLayer *)aBlock toRow:(NSInteger *)aRow col:(NSInteger *)aCol;
 - (void)getPositionOfBlock:(BlockLayer *)aBlock toRow:(NSInteger *)aRow col:(NSInteger *)aCol;
 - (void)setPositionOfBlock:(BlockLayer *)aBlock toRow:(NSInteger)aRow col:(NSInteger)aCol;

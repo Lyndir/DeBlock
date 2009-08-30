@@ -63,7 +63,7 @@
 #pragma mark Behaviors
 
 - (void)prepareUi {
-
+    
     [uiLayer addChild:gameLayer = [[GameLayer alloc] init]];
 
     mainMenu = [[MenuLayer menuWithItems:

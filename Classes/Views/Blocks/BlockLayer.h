@@ -30,17 +30,22 @@ typedef enum DMBlockType {
     DMBlockTypeFour,
     DMBlockTypeFive,
     DMBlockTypeCount,
+    DMBlockTypeSpecial,
+    DMBlockTypeFrozen,
 } DMBlockType;
+
+@class FieldLayer;
 
 @interface BlockLayer : Layer<CocosNodeRGBA> {
 
 @private
-    NSDictionary                                *blockColors;
     DMBlockType                                 type;
     BOOL                                        destroyed;
+    BOOL                                        destructible;
     
     NSInteger                                   targetRow, targetCol;
     NSUInteger                                  frames, frame;
+    ccColor4B                                   blockColor;
     ccColor4F                                   modColor;
     
     IntervalAction                              *moveAction;
@@ -52,8 +57,12 @@ typedef enum DMBlockType {
 
 @property (readwrite) DMBlockType               type;
 @property (readwrite) BOOL                      destroyed;
+/** Indicates whether this block can be destroyed when it is valid. */
+@property (readwrite) BOOL                      destructible;
+/** Indicates whether the conditions on this block mean algorithms should not considder it for destruction. */
 @property (readonly) BOOL                       valid;
 @property (readonly) BOOL                       moving;
+@property (readonly) BOOL                       needsLinksToDestroy;
 @property (readwrite, retain) IntervalAction    *moveAction;
 
 @property (readwrite) NSInteger                 targetRow;
@@ -62,9 +71,21 @@ typedef enum DMBlockType {
 @property (readwrite) NSUInteger                frame;
 @property (readonly) NSUInteger                 frames;
 @property (readwrite) ccColor4F                 modColor;
-@property (readonly) ccColor4B                  blockColor;
+
++ (id)randomBlockWithSize:(CGSize)size;
++ (ccColor4B)colorForType:(DMBlockType)aType;
 
 - (id)initWithBlockSize:(CGSize)size;
+
+- (DMBlockType)randomType;
+- (NSString *)labelString;
+
+- (NSMutableSet *)findLinkedBlocksInField:(FieldLayer *)field
+                                    atRow:(NSInteger)aRow col:(NSInteger)aCol;
+- (NSMutableSet *)findAdjecentBlocksInField:(FieldLayer *)field
+                                      atRow:(NSInteger)aRow col:(NSInteger)aCol;
+- (void)getLinksInField:(FieldLayer *)aField toSet:(NSMutableSet *)allLinkedBlocks
+                recurse:(BOOL)recurse specialLinks:(BOOL)specialLinks;
 
 - (void)blink;
 - (void)crumble;

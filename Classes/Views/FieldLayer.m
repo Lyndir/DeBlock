@@ -34,7 +34,7 @@
 @interface FieldLayer (Private)
 
 - (NSInteger)destroyBlock:(BlockLayer *)aBlock forced:(BOOL)forced;
-- (void)destroySingleBlockAtRow:(NSInteger)row col:(NSInteger)col;
+- (void)destroySingleBlock:(BlockLayer *)aBlock;
 
 - (void)startDropping;
 - (BOOL)dropBlockAtRow:(NSInteger)row col:(NSInteger)col;
@@ -51,7 +51,7 @@
 
 @implementation FieldLayer
 
-@synthesize locked;
+@synthesize locked, blockRows, blockColumns;
 
 
 -(id) init {
@@ -110,13 +110,12 @@
         
         for (NSInteger col = 0; col < blockColumns; ++col) {
             
-            BlockLayer *block = [[BlockLayer alloc] initWithBlockSize:blockSize];
+            BlockLayer *block = [BlockLayer randomBlockWithSize:blockSize];
             block.position = ccp(col * (blockSize.width     + blockPadding) + blockPadding,
                                  row * (blockSize.height    + blockPadding) + blockPadding);
             
             [self addChild:block];
             blockGrid[row][col] = [block retain];
-            [block release];
         }
     }
 }
@@ -201,35 +200,6 @@
 }
 
 
-- (NSArray *)findLinkedBlocksOfBlockAtRow:(NSInteger)aRow col:(NSInteger)aCol {
-    
-    DMBlockType type = [self blockAtRow:aRow col:aCol].type;
-    
-    // Find all neighbouring blocks of the same type.
-    NSMutableArray *linkedBlocks = [NSMutableArray arrayWithCapacity:4];
-    for (NSInteger r = aRow - 1; r <= aRow + 1; ++r) {
-        BlockLayer *block = [self blockAtRow:r col:aCol];
-        if (block == nil || r == aRow)
-            // Bad block, ignore.
-            continue;
-        
-        if (block.type == type)
-            [linkedBlocks addObject:block];
-    }
-    for (NSInteger c = aCol - 1; c <= aCol + 1; ++c) {
-        BlockLayer *block = [self blockAtRow:aRow col:c];
-        if (block == nil || c == aCol)
-            // Bad block, ignore.
-            continue;
-        
-        if (block.type == type)
-            [linkedBlocks addObject:block];
-    }
-    
-    return linkedBlocks;
-}
-
-
 - (BOOL)findPositionOfBlock:(BlockLayer *)aBlock toRow:(NSInteger *)aRow col:(NSInteger *)aCol {
     
     for (NSInteger row = 0; row < blockRows; ++row)
@@ -289,7 +259,7 @@
     blockPoint.x += aBlock.contentSize.width / 2.0f;
     blockPoint.y += aBlock.contentSize.height;
     
-    NSInteger destroyedBlocks = [self destroyBlock:aBlock forced:NO];
+    NSInteger destroyedBlocks = [self destroyBlock:aBlock forced:!aBlock.needsLinksToDestroy];
     NSInteger points = powf(destroyedBlocks, 2);
     if (points) {
         [DMConfig get].levelScore = [NSNumber numberWithInt:[[DMConfig get].levelScore intValue] + points];
@@ -303,41 +273,38 @@
 
 - (NSInteger)destroyBlock:(BlockLayer *)aBlock forced:(BOOL)forced {
     
-    if (aBlock.destroyed)
-        // Already destroyed.
+    NSMutableSet *linkedBlocks = [[NSMutableSet new] autorelease];
+
+    [linkedBlocks addObject:aBlock];
+    [aBlock getLinksInField:self toSet:linkedBlocks
+                    recurse:YES specialLinks:YES];
+
+    // No links and not forced, give up.
+    if (!forced && [linkedBlocks count] <= 1)
         return 0;
+    
+    if (aBlock.type == DMBlockTypeFrozen)
+        NSLog(@"destroying a frozen block!");
+    
+    // Destroy this block and those linked to it.
+    for (BlockLayer *block in linkedBlocks)
+        [self destroySingleBlock:block];
+
+    return [linkedBlocks count] - 1;
+}
+
+
+- (void)destroySingleBlock:(BlockLayer *)aBlock {
 
     // Find the position of the block to destroy.
     NSInteger row, col;
     [self getPositionOfBlock:aBlock toRow:&row col:&col];
     
-    NSArray *linkedBlocks = [self findLinkedBlocksOfBlockAtRow:row col:col];
-    if (!forced && ![linkedBlocks count])
-        // No blocks linked, cannot destroy.
-        return 0;
-    
-    // Destroy this block.
-    [self destroySingleBlockAtRow:(NSInteger)row col:(NSInteger)col];
-    
-    // Destroy all linked blocks.
-    NSUInteger destroyedBlocks = 1;
-    for (BlockLayer *linkedBlock in linkedBlocks)
-        destroyedBlocks += [self destroyBlock:linkedBlock forced:YES];
-    
-    return destroyedBlocks;
-}
-
-
-- (void)destroySingleBlockAtRow:(NSInteger)row col:(NSInteger)col {
-
-    BlockLayer *block = blockGrid[row][col];
-    if (!block)
-        return;
-    
-    block.destroyed    = YES;
-    [self reorderChild:block z:1];
-    [block crumble];
-    [block release];
+    // Destroy the block.
+    aBlock.destroyed    = YES;
+    [self reorderChild:aBlock z:1];
+    [aBlock crumble];
+    [aBlock release];
     
     blockGrid[row][col] = nil;
 }
@@ -524,7 +491,8 @@
 
 - (void)collapsingFinished {
 
-    NSUInteger blocksLeft = 0, linksLeft = 0;
+    NSMutableSet *allLinkedBlocks = [NSMutableSet new];
+    NSUInteger blocksLeft = 0;
     for (NSInteger row = 0; row < blockRows; ++row)
         for (NSInteger col = 0; col < blockColumns; ++col) {
             BlockLayer *block = blockGrid[row][col];
@@ -532,9 +500,10 @@
                 continue;
             
             ++blocksLeft;
-            if ([[self findLinkedBlocksOfBlockAtRow:row col:col] count])
-                ++linksLeft;
+            [block getLinksInField:self toSet:allLinkedBlocks recurse:YES specialLinks:YES];
         }
+    NSUInteger linksLeft = [allLinkedBlocks count];
+    [allLinkedBlocks release];
     
     if (!linksLeft) {
         DbEndReason endReason = DbEndReasonNextField;
@@ -664,12 +633,49 @@
 - (void)destroyAll {
     
     for (NSInteger row = 0; row < blockRows; ++row)
-        for (NSInteger col = 0; col < blockColumns; ++col)
-            [self destroySingleBlockAtRow:row col:col];
+        for (NSInteger col = 0; col < blockColumns; ++col) {
+            BlockLayer *block = blockGrid[row][col];
+
+            if (block)
+                [self destroySingleBlock:block];
+        }
 }
 
 
--(void) dealloc {
+- (NSString *)description {
+    
+    NSMutableString *d = [NSMutableString new];
+    [d appendString:@"    ||"];
+    
+    for (NSInteger col = 0; col < blockColumns; ++col)
+        [d appendFormat:@" %02d  |", col];
+
+    for (NSInteger row = blockRows - 1; row >= 0; --row) {
+        [d appendFormat:@"\n %02d ||", row];
+        for (NSInteger col = 0; col < blockColumns; ++col) {
+            BlockLayer *block = blockGrid[row][col];
+            if (block) {
+                NSMutableString *properties = [NSMutableString stringWithCapacity:2];
+                if (block.destroyed)
+                    [properties appendString:@"d"];
+                if (!block.destructible)
+                    [properties appendString:@"i"];
+                if (block.moving)
+                    [properties appendString:@"m"];
+                while ([properties length] < 2)
+                    [properties appendString:@" "];
+                
+                [d appendFormat:@" %C%@ |",
+                 [[[block class] description] characterAtIndex:0], properties];
+            }
+        }
+    }
+    
+    return [d autorelease];
+}
+
+
+- (void)dealloc {
     
     [msgLabel release];
     msgLabel = nil;

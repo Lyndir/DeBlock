@@ -25,6 +25,10 @@
 #import "SkyLayer.h"
 #import "DeblockAppDelegate.h"
 
+#define kCloudCount         10
+#define kCloudFrames        6
+#define kCloudAnimation     @"clouds"
+#define kCloudTime          40
 
 @implementation SkyLayer
 
@@ -35,15 +39,45 @@
 		return self;
     
     self.contentSize = [Director sharedDirector].winSize;
-    clouds = [[[TextureMgr sharedTextureMgr] addImage:@"clouds.png"] retain];
+
+    clouds = malloc(sizeof(Texture2D *) * kCloudFrames);
+    for (NSUInteger c = 0; c < kCloudFrames; ++c)
+        clouds[c] = [[[TextureMgr sharedTextureMgr] addImage:[NSString stringWithFormat:@"clouds.%d.png", c + 1]] retain];
+    
+    ccBlendFunc cloudBlend;
+    cloudBlend.src = GL_ONE;
+    cloudBlend.dst = GL_ONE_MINUS_SRC_ALPHA;
+    
+    for (NSUInteger c = 0; c < kCloudCount; ++c) {
+        Sprite *cloud = [Sprite spriteWithTexture:clouds[random() % kCloudFrames]];
+        cloud.position = CGPointMake(random() % (NSInteger)(self.contentSize.width + cloud.contentSize.width)
+                                     + cloud.contentSize.width / 4,
+                                     self.contentSize.height - random() % (NSInteger)cloud.contentSize.height / 3);
+        NSInteger t = fmaxf(1.0f, kCloudTime - kCloudTime * cloud.position.x / (self.contentSize.width + cloud.contentSize.width));
+        [cloud runAction:[Sequence actionOne:[MoveTo actionWithDuration:random() % t / 2 + t / 2
+                                                               position:CGPointMake(self.contentSize.width + cloud.contentSize.width / 2,
+                                                                                    cloud.position.y)]
+                                         two:[CallFuncN actionWithTarget:self selector:@selector(cloudDone:)]]];
+        [cloud setBlendFunc:cloudBlend];
+        [self addChild:cloud z:1];
+    }
     
     return self;
 }
 
 
-- (void)onEnter {
+- (void)cloudDone:(Sprite *)cloud {
     
-    [self schedule:@selector(updateClouds:)];
+    cloud.position = CGPointMake(-cloud.contentSize.width / 2,
+                                 self.contentSize.height + random() % (NSInteger)cloud.contentSize.height / 4);
+    [cloud runAction:[Sequence actionOne:[MoveTo actionWithDuration:random() % kCloudTime / 2 + kCloudTime / 2
+                                                           position:CGPointMake(self.contentSize.width + cloud.contentSize.width / 2,
+                                                                                cloud.position.y)]
+                                     two:[CallFuncN actionWithTarget:self selector:@selector(cloudDone:)]]];
+}
+
+
+- (void)onEnter {
     
     [self reset];
     
@@ -59,33 +93,10 @@
 }
 
 
-- (void)updateClouds:(ccTime)dt {
-    
-    cloudsX += dt * 10;
-    while (cloudsX > clouds.contentSize.width)
-        cloudsX -= clouds.contentSize.width;
-}
-
-
 -(void) draw {
     
     if(fancySky) {
         DrawBoxFrom(CGPointZero, ccp(self.contentSize.width, self.contentSize.height), skyColorFrom, skyColorTo);
-        
-        glEnableClientState( GL_VERTEX_ARRAY);
-        glEnableClientState( GL_TEXTURE_COORD_ARRAY );
-        glEnable( GL_TEXTURE_2D);
-        
-        glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-        
-        [clouds drawAtPoint:CGPointMake(cloudsX - clouds.contentSize.width, 0)];
-        if (cloudsX < self.contentSize.width)
-            [clouds drawAtPoint:CGPointMake(cloudsX, 0)];
-        
-        glDisable( GL_TEXTURE_2D);
-        
-        glDisableClientState(GL_VERTEX_ARRAY );
-        glDisableClientState( GL_TEXTURE_COORD_ARRAY );
     }
     
     else {
@@ -97,6 +108,8 @@
 
 
 -(void) dealloc {
+    
+    free(clouds);
     
     [super dealloc];
 }

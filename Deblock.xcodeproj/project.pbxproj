@@ -71,6 +71,14 @@
 		DAA173B1102CBB120042FEDC /* TGAlib.m in Sources */ = {isa = PBXBuildFile; fileRef = DAA173A4102CBB120042FEDC /* TGAlib.m */; };
 		DAA173B2102CBB120042FEDC /* CGPointExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = DAA173A7102CBB120042FEDC /* CGPointExtension.m */; };
 		DAA173B3102CBB120042FEDC /* FileUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = DAA173AA102CBB120042FEDC /* FileUtils.m */; };
+		DAC8D42410446FA600438A8B /* clouds.1.png in Resources */ = {isa = PBXBuildFile; fileRef = DAC8D41E10446FA600438A8B /* clouds.1.png */; };
+		DAC8D42510446FA600438A8B /* clouds.2.png in Resources */ = {isa = PBXBuildFile; fileRef = DAC8D41F10446FA600438A8B /* clouds.2.png */; };
+		DAC8D42610446FA600438A8B /* clouds.3.png in Resources */ = {isa = PBXBuildFile; fileRef = DAC8D42010446FA600438A8B /* clouds.3.png */; };
+		DAC8D42710446FA600438A8B /* clouds.4.png in Resources */ = {isa = PBXBuildFile; fileRef = DAC8D42110446FA600438A8B /* clouds.4.png */; };
+		DAC8D42810446FA600438A8B /* clouds.5.png in Resources */ = {isa = PBXBuildFile; fileRef = DAC8D42210446FA600438A8B /* clouds.5.png */; };
+		DAC8D42910446FA600438A8B /* clouds.6.png in Resources */ = {isa = PBXBuildFile; fileRef = DAC8D42310446FA600438A8B /* clouds.6.png */; };
+		DAC8D5C31045D78000438A8B /* BlockLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = DAC8D5C01045D78000438A8B /* BlockLayer.m */; };
+		DAC8D5C41045D78000438A8B /* SpecialBlocks.m in Sources */ = {isa = PBXBuildFile; fileRef = DAC8D5C21045D78000438A8B /* SpecialBlocks.m */; };
 		DACF74D7101A35B4003F2AF6 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = DA6A20911017B6D700B55AF8 /* Localizable.strings */; };
 		DACF74D8101A35BD003F2AF6 /* menu.png in Resources */ = {isa = PBXBuildFile; fileRef = DA6A20931017B6D700B55AF8 /* menu.png */; };
 		DACF74D9101A35BD003F2AF6 /* score.png in Resources */ = {isa = PBXBuildFile; fileRef = DA6A20951017B6D700B55AF8 /* score.png */; };
@@ -80,7 +88,6 @@
 		DACF74DE101A369F003F2AF6 /* GameLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = DA53050510107849000D32DF /* GameLayer.m */; };
 		DACF74DF101A369F003F2AF6 /* FieldLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = DA53052D101080A2000D32DF /* FieldLayer.m */; };
 		DACF74E0101A369F003F2AF6 /* SkyLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = DA53052310108077000D32DF /* SkyLayer.m */; };
-		DACF74E1101A369F003F2AF6 /* BlockLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = DA6A1B811015E11B00B55AF8 /* BlockLayer.m */; };
 		DACF74E2101A369F003F2AF6 /* Config.m in Sources */ = {isa = PBXBuildFile; fileRef = DA6A202C1017B67F00B55AF8 /* Config.m */; };
 		DACF74E3101A369F003F2AF6 /* AbstractAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DA6A202E1017B67F00B55AF8 /* AbstractAppDelegate.m */; };
 		DACF74E4101A369F003F2AF6 /* AudioController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA6A20301017B67F00B55AF8 /* AudioController.m */; };
@@ -167,8 +174,6 @@
 		DA5A798510429C0300BB27DB /* PropertyAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PropertyAction.m; sourceTree = "<group>"; };
 		DA6A1B361015DC5700B55AF8 /* DMConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DMConfig.h; path = Views/DMConfig.h; sourceTree = "<group>"; };
 		DA6A1B371015DC5700B55AF8 /* DMConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DMConfig.m; path = Views/DMConfig.m; sourceTree = "<group>"; };
-		DA6A1B801015E11B00B55AF8 /* BlockLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BlockLayer.h; sourceTree = "<group>"; };
-		DA6A1B811015E11B00B55AF8 /* BlockLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BlockLayer.m; sourceTree = "<group>"; };
 		DA6A202B1017B67F00B55AF8 /* Config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Config.h; sourceTree = "<group>"; };
 		DA6A202C1017B67F00B55AF8 /* Config.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Config.m; sourceTree = "<group>"; };
 		DA6A202D1017B67F00B55AF8 /* AbstractAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AbstractAppDelegate.h; sourceTree = "<group>"; };
@@ -333,6 +338,16 @@
 		DAA173A8102CBB120042FEDC /* ccArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ccArray.h; sourceTree = "<group>"; };
 		DAA173A9102CBB120042FEDC /* FileUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileUtils.h; sourceTree = "<group>"; };
 		DAA173AA102CBB120042FEDC /* FileUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FileUtils.m; sourceTree = "<group>"; };
+		DAC8D41E10446FA600438A8B /* clouds.1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = clouds.1.png; sourceTree = "<group>"; };
+		DAC8D41F10446FA600438A8B /* clouds.2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = clouds.2.png; sourceTree = "<group>"; };
+		DAC8D42010446FA600438A8B /* clouds.3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = clouds.3.png; sourceTree = "<group>"; };
+		DAC8D42110446FA600438A8B /* clouds.4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = clouds.4.png; sourceTree = "<group>"; };
+		DAC8D42210446FA600438A8B /* clouds.5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = clouds.5.png; sourceTree = "<group>"; };
+		DAC8D42310446FA600438A8B /* clouds.6.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = clouds.6.png; sourceTree = "<group>"; };
+		DAC8D5BF1045D78000438A8B /* BlockLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BlockLayer.h; sourceTree = "<group>"; };
+		DAC8D5C01045D78000438A8B /* BlockLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BlockLayer.m; sourceTree = "<group>"; };
+		DAC8D5C11045D78000438A8B /* SpecialBlocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpecialBlocks.h; sourceTree = "<group>"; };
+		DAC8D5C21045D78000438A8B /* SpecialBlocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpecialBlocks.m; sourceTree = "<group>"; };
 		DACF73E9101A3520003F2AF6 /* Deblock.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Deblock.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAF609FF1020AD9C00F53A37 /* MenuLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuLayer.h; sourceTree = "<group>"; };
 		DAF60A001020AD9C00F53A37 /* MenuLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuLayer.m; sourceTree = "<group>"; };
@@ -431,6 +446,12 @@
 		DA53049D100FCC14000D32DF /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				DAC8D41E10446FA600438A8B /* clouds.1.png */,
+				DAC8D41F10446FA600438A8B /* clouds.2.png */,
+				DAC8D42010446FA600438A8B /* clouds.3.png */,
+				DAC8D42110446FA600438A8B /* clouds.4.png */,
+				DAC8D42210446FA600438A8B /* clouds.5.png */,
+				DAC8D42310446FA600438A8B /* clouds.6.png */,
 				DA5A781C10409E4200BB27DB /* clouds.png */,
 				DA3A72F5102A1A4400296606 /* block.cracked.1.png */,
 				DA3A72F6102A1A4400296606 /* block.cracked.2.png */,
@@ -451,14 +472,13 @@
 		DA53050210107849000D32DF /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				DAC8D5B21045D66E00438A8B /* Blocks */,
 				DA53050410107849000D32DF /* GameLayer.h */,
 				DA53050510107849000D32DF /* GameLayer.m */,
 				DA53052C101080A2000D32DF /* FieldLayer.h */,
 				DA53052D101080A2000D32DF /* FieldLayer.m */,
 				DA53052210108077000D32DF /* SkyLayer.h */,
 				DA53052310108077000D32DF /* SkyLayer.m */,
-				DA6A1B801015E11B00B55AF8 /* BlockLayer.h */,
-				DA6A1B811015E11B00B55AF8 /* BlockLayer.m */,
 				DA9EDF35102809B000528A29 /* DbHUDLayer.h */,
 				DA9EDF36102809B000528A29 /* DbHUDLayer.m */,
 			);
@@ -822,6 +842,17 @@
 			path = "../../../../../../$(SOURCE_ROOT)";
 			sourceTree = SOURCE_ROOT;
 		};
+		DAC8D5B21045D66E00438A8B /* Blocks */ = {
+			isa = PBXGroup;
+			children = (
+				DAC8D5BF1045D78000438A8B /* BlockLayer.h */,
+				DAC8D5C01045D78000438A8B /* BlockLayer.m */,
+				DAC8D5C11045D78000438A8B /* SpecialBlocks.h */,
+				DAC8D5C21045D78000438A8B /* SpecialBlocks.m */,
+			);
+			path = Blocks;
+			sourceTree = "<group>";
+		};
 		DAF60A961020C63000F53A37 /* Audio */ = {
 			isa = PBXGroup;
 			children = (
@@ -920,6 +951,12 @@
 				DA3A730B102A1A4400296606 /* block.cracked.10.png in Resources */,
 				DA3A730C102A1A4400296606 /* block.whole.png in Resources */,
 				DA5A781D10409E4200BB27DB /* clouds.png in Resources */,
+				DAC8D42410446FA600438A8B /* clouds.1.png in Resources */,
+				DAC8D42510446FA600438A8B /* clouds.2.png in Resources */,
+				DAC8D42610446FA600438A8B /* clouds.3.png in Resources */,
+				DAC8D42710446FA600438A8B /* clouds.4.png in Resources */,
+				DAC8D42810446FA600438A8B /* clouds.5.png in Resources */,
+				DAC8D42910446FA600438A8B /* clouds.6.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -935,7 +972,6 @@
 				DACF74DE101A369F003F2AF6 /* GameLayer.m in Sources */,
 				DACF74DF101A369F003F2AF6 /* FieldLayer.m in Sources */,
 				DACF74E0101A369F003F2AF6 /* SkyLayer.m in Sources */,
-				DACF74E1101A369F003F2AF6 /* BlockLayer.m in Sources */,
 				DACF74E2101A369F003F2AF6 /* Config.m in Sources */,
 				DACF74E3101A369F003F2AF6 /* AbstractAppDelegate.m in Sources */,
 				DACF74E4101A369F003F2AF6 /* AudioController.m in Sources */,
@@ -1004,6 +1040,8 @@
 				DAA173B2102CBB120042FEDC /* CGPointExtension.m in Sources */,
 				DAA173B3102CBB120042FEDC /* FileUtils.m in Sources */,
 				DA5A798610429C0300BB27DB /* PropertyAction.m in Sources */,
+				DAC8D5C31045D78000438A8B /* BlockLayer.m in Sources */,
+				DAC8D5C41045D78000438A8B /* SpecialBlocks.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
