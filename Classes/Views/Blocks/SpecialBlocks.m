@@ -39,10 +39,33 @@
     return self;
 }
 
+- (void)crumble {
+    
+    [AudioController vibrate];
+
+    [super crumble];
+}
+
 @end
 
 
 @implementation BombBlockLayer
+
++ (NSUInteger)minimumLevel {
+    
+    return 0;
+}
+
+- (id)initWithBlockSize:(CGSize)size {
+    
+    if (!(self = [super initWithBlockSize:size]))
+        return nil;
+    
+    [textures[0] release];
+    textures[0]         = [[[TextureMgr sharedTextureMgr] addImage:@"block.whole.bomb.png"] retain];
+    
+    return self;
+}
 
 - (NSString *)labelString {
     
@@ -71,13 +94,20 @@
 
 @implementation MorphBlockLayer
 
++ (NSUInteger)minimumLevel {
+    
+    return 2;
+}
+
 - (id)initWithBlockSize:(CGSize)size {
     
     if (!(self = [super initWithBlockSize:size]))
         return nil;
     
-    self.type = [self randomType];
-    
+    self.type = [[self class] randomType];
+    [textures[0] release];
+    textures[0]         = [[[TextureMgr sharedTextureMgr] addImage:@"block.whole.morph.png"] retain];
+
     return self;
 }
 
@@ -96,7 +126,7 @@
         return;
     }
     
-    self.type = [self randomType];
+    self.type = [[self class] randomType];
 }
 
 - (NSString *)labelString {
@@ -109,12 +139,19 @@
 
 @implementation ZapBlockLayer
 
++ (NSUInteger)minimumLevel {
+    
+    return 5;
+}
+
 - (id)initWithBlockSize:(CGSize)size {
     
     if (!(self = [super initWithBlockSize:size]))
         return nil;
     
-    self.type = [self randomType];
+    self.type = [[self class] randomType];
+    [textures[0] release];
+    textures[0]         = [[[TextureMgr sharedTextureMgr] addImage:@"block.whole.zap.png"] retain];
     
     return self;
 }
@@ -147,12 +184,19 @@
 
 @implementation FreezeBlockLayer
 
++ (NSUInteger)minimumLevel {
+    
+    return 10;
+}
+
 - (id)initWithBlockSize:(CGSize)size {
     
     if (!(self = [super initWithBlockSize:size]))
         return nil;
     
-    self.type = [self randomType];
+    self.type = [[self class] randomType];
+    [textures[0] release];
+    textures[0]         = [[[TextureMgr sharedTextureMgr] addImage:@"block.whole.freeze.png"] retain];
     
     return self;
 }
@@ -162,7 +206,7 @@
     [super onEnter];
     
     ccColor4B targetColor = [[self class] colorForType:DMBlockTypeFrozen];
-    [self runAction:[Sequence actionOne:[TintTo actionWithDuration:5 red:targetColor.r green:targetColor.g blue:targetColor.b]
+    [self runAction:[Sequence actionOne:[TintTo actionWithDuration:10 red:targetColor.r green:targetColor.g blue:targetColor.b]
                                     two:[CallFunc actionWithTarget:self selector:@selector(freeze)]]];
 }
 

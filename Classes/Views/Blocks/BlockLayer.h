@@ -38,6 +38,9 @@ typedef enum DMBlockType {
 
 @interface BlockLayer : Layer<CocosNodeRGBA> {
 
+@protected
+    Texture2D                                   **textures;
+
 @private
     DMBlockType                                 type;
     BOOL                                        destroyed;
@@ -49,7 +52,6 @@ typedef enum DMBlockType {
     ccColor4F                                   modColor;
     
     IntervalAction                              *moveAction;
-    Texture2D                                   **textures;
     Label                                       *label;
     
     ParticleSystem                              *dropEmitter;
@@ -61,7 +63,6 @@ typedef enum DMBlockType {
 @property (readwrite) BOOL                      destructible;
 /** Indicates whether the conditions on this block mean algorithms should not considder it for destruction. */
 @property (readonly) BOOL                       valid;
-@property (readonly) BOOL                       moving;
 @property (readonly) BOOL                       needsLinksToDestroy;
 @property (readwrite, retain) IntervalAction    *moveAction;
 
@@ -72,13 +73,15 @@ typedef enum DMBlockType {
 @property (readonly) NSUInteger                 frames;
 @property (readwrite) ccColor4F                 modColor;
 
-+ (id)randomBlockWithSize:(CGSize)size;
++ (NSUInteger)minimumLevel;
++ (id)randomBlockForLevel:(NSUInteger)level withSize:(CGSize)size;
 + (ccColor4B)colorForType:(DMBlockType)aType;
 
 - (id)initWithBlockSize:(CGSize)size;
 
-- (DMBlockType)randomType;
++ (DMBlockType)randomType;
 - (NSString *)labelString;
+- (BOOL)moving;
 
 - (NSMutableSet *)findLinkedBlocksInField:(FieldLayer *)field
                                     atRow:(NSInteger)aRow col:(NSInteger)aCol;

@@ -24,6 +24,14 @@
 
 #import "Config.h"
 
+#define cLevel          NSStringFromSelector(@selector(level))
+#define cLevelScore     NSStringFromSelector(@selector(levelScore))
+
+#define cSkyColorFrom   NSStringFromSelector(@selector(skyColorFrom))
+#define cSkyColorTo     NSStringFromSelector(@selector(skyColorTo))
+
+#define cFlawlessBonus  NSStringFromSelector(@selector(flawlessBonus))
+
 
 @interface DMConfig : Config {
 

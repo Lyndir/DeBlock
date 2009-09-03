@@ -31,9 +31,7 @@
 
 @private
     GameLayer                       *gameLayer;
-    MenuLayer                       *pausedMenu;
-    MenuLayer                       *gameOverMenu;
-    MenuLayer                       *mainMenu;
+    MenuLayer                       *pausedMenu, *gameOverMenu, *mainMenu;
 }
 
 @property (readonly) GameLayer      *gameLayer;

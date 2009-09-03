@@ -41,6 +41,7 @@ typedef enum DbEndReason {
     
     SkyLayer                                            *skyLayer;
     FieldLayer                                          *fieldLayer;
+    Layer                                               *fieldScroller;
     
     Action                                              *shakeAction;
     ScaleTime                                           *scaleTimeAction;

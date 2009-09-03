@@ -110,7 +110,7 @@
         
         for (NSInteger col = 0; col < blockColumns; ++col) {
             
-            BlockLayer *block = [BlockLayer randomBlockWithSize:blockSize];
+            BlockLayer *block = [BlockLayer randomBlockForLevel:[[DMConfig get].level intValue] withSize:blockSize];
             block.position = ccp(col * (blockSize.width     + blockPadding) + blockPadding,
                                  row * (blockSize.height    + blockPadding) + blockPadding);
             
@@ -234,7 +234,7 @@
             // Block already at its target destination.
             return;
         
-        else if (block.moving)
+        else if ([block moving])
             // However, if aBlock lands on a spot where another block is still moving from, back the other block up
             // to aBlock's old grid location so that it still remains in the grid and can still be found by any search operation.
             // When this other block is done moving it will unset this position itself (or trigger this behaviour again).
@@ -282,9 +282,6 @@
     // No links and not forced, give up.
     if (!forced && [linkedBlocks count] <= 1)
         return 0;
-    
-    if (aBlock.type == DMBlockTypeFrozen)
-        NSLog(@"destroying a frozen block!");
     
     // Destroy this block and those linked to it.
     for (BlockLayer *block in linkedBlocks)
@@ -639,6 +636,14 @@
             if (block)
                 [self destroySingleBlock:block];
         }
+}
+
+
+- (void)draw {
+    
+    DrawBoxFrom(CGPointMake(-5, -5), CGPointMake(self.contentSize.width + 5, self.contentSize.height + 5),
+//                ccc([[DMConfig get].skyColorFrom longValue]), ccc([[DMConfig get].skyColorTo longValue]));
+                ccc([[DMConfig get].skyColorTo longValue] & 0x0f0f0f33), ccc([[DMConfig get].skyColorFrom longValue] & 0x0f0f0f33));
 }
 
 

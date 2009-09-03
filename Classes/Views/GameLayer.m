@@ -52,8 +52,10 @@
     [self setPausedSilently:_paused];
     
     if(running) {
-        if(paused)
+        if(paused){
             [[DeblockAppDelegate get].uiLayer message:NSLocalizedString(@"messages.paused", @"Paused")];
+        }
+        
         else {
             [[DeblockAppDelegate get].uiLayer message:NSLocalizedString(@"messages.unpaused", @"Unpaused")];
         }
@@ -71,10 +73,14 @@
         if(running)
             [self scaleTimeTo:0 duration:0.5f];
         [[DeblockAppDelegate get] hideHud];
+        [fieldScroller runAction:[MoveTo actionWithDuration:0.5f
+                                                position:CGPointMake(0, fieldScroller.contentSize.height)]];
     } else {
         [self scaleTimeTo:1.0f duration:1.0f];
         [[DeblockAppDelegate get] popAllLayers];
         [[DeblockAppDelegate get] revealHud];
+        [fieldScroller runAction:[MoveTo actionWithDuration:0.5f
+                                                   position:CGPointZero]];
     }
 }
 
@@ -86,7 +92,7 @@
     [scaleTimeAction release];
     
     scaleTimeAction = [[ScaleTime actionWithTimeScaleTarget:aTimeScale duration:aDuration] retain];
-    [self runAction:scaleTimeAction scaleTime:NO];
+    [fieldLayer runAction:scaleTimeAction scaleTime:NO];
 }
 
 
@@ -169,13 +175,15 @@
     fieldLayer              = [[FieldLayer alloc] init];
     skyLayer                = [[SkyLayer alloc] init];
     
-    CGSize winSize = [Director sharedDirector].winSize;
-    fieldLayer.contentSize  = CGSizeMake(winSize.width * 9/10, winSize.height * 4/5);
-    fieldLayer.position     = ccp((winSize.width - fieldLayer.contentSize.width) / 2.0f,
-                                  (winSize.height - fieldLayer.contentSize.height - [DeblockAppDelegate get].hudLayer.contentSize.height) / 2.0f +  [DeblockAppDelegate get].hudLayer.contentSize.height);
+    fieldLayer.contentSize  = CGSizeMake(self.contentSize.width * 9/10, self.contentSize.height * 4/5);
+    fieldLayer.position     = ccp((self.contentSize.width - fieldLayer.contentSize.width) / 2.0f,
+                                  (self.contentSize.height - fieldLayer.contentSize.height - [DeblockAppDelegate get].hudLayer.contentSize.height) / 2.0f +  [DeblockAppDelegate get].hudLayer.contentSize.height);
+
+    fieldScroller           = [Layer new];
+    [fieldScroller addChild:fieldLayer];
     
     [self addChild:skyLayer z:-1];
-    [self addChild:fieldLayer z:1];
+    [self addChild:fieldScroller z:1];
     
     paused = YES;
     
@@ -187,7 +195,7 @@
     
     [super onEnterTransitionDidFinish];
     
-    [self newGame];
+    [[DeblockAppDelegate get] showMainMenu];
 }
 
 

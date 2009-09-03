@@ -24,6 +24,7 @@
 
 #import "DeblockAppDelegate.h"
 #import "DbHUDLayer.h"
+#import "StatsLayer.h"
 
 
 @interface DeblockAppDelegate ()
@@ -43,6 +44,11 @@
 
 #pragma mark ###############################
 #pragma mark Lifecycle
+
++ (void)initialize {
+    
+    [DMConfig get];
+}
 
 - (void)dealloc {
     
@@ -68,39 +74,25 @@
 
     mainMenu = [[MenuLayer menuWithItems:
                  [MenuItemFont itemFromString:@"New Game" target:self selector:@selector(newGame:)],
+                 [MenuItemFont itemFromString:@"Statistics" target:self selector:@selector(statistics:)],
                  nil] retain];
-    MenuItemFont *deblockLogo = [MenuItemLabel itemWithLabel:
-                                 [Label labelWithString:@"Deblock"
-                                               fontName:NSLocalizedString(@"font.family.fixed", @"American Typewriter")
-                                               fontSize:[NSLocalizedString(@"font.size.large", @"48") floatValue]]
-                                                      target:nil selector:NULL];
-    [deblockLogo setIsEnabled:NO];
-    [mainMenu setLogo:deblockLogo];
+    [mainMenu setLogo:[MenuItemImage itemFromNormalImage:@"title.png"
+                                           selectedImage:@"title.png"]];
 
     pausedMenu = [[MenuLayer menuWithItems:
                    [MenuItemFont itemFromString:@"Continue Game" target:self selector:@selector(continueGame:)],
                    [MenuItemFont itemFromString:@"Stop Game" target:self selector:@selector(stopGame:)],
                    [MenuItemFont itemFromString:@"Restart Level" target:self selector:@selector(levelRedo:)],
                    nil] retain];
-    MenuItemFont *pausedLogo = [MenuItemLabel itemWithLabel:
-                                 [Label labelWithString:@"Game Paused"
-                                               fontName:NSLocalizedString(@"font.family.fixed", @"American Typewriter")
-                                               fontSize:[NSLocalizedString(@"font.size.large", @"48") floatValue]]
-                                                      target:nil selector:NULL];
-    [pausedLogo setIsEnabled:NO];
-    [pausedMenu setLogo:pausedLogo];
+    [pausedMenu setLogo:[MenuItemImage itemFromNormalImage:@"title.paused.png"
+                                             selectedImage:@"title.paused.png"]];
 
     gameOverMenu = [[MenuLayer menuWithItems:
                      [MenuItemFont itemFromString:@"Stop Game" target:self selector:@selector(stopGame:)],
                      [MenuItemFont itemFromString:@"Retry Level" target:self selector:@selector(levelRedo:)],
                      nil] retain];
-    MenuItemFont *gameOverLogo = [MenuItemLabel itemWithLabel:
-                                 [Label labelWithString:@"Game Over"
-                                               fontName:NSLocalizedString(@"font.family.fixed", @"American Typewriter")
-                                               fontSize:[NSLocalizedString(@"font.size.large", @"48") floatValue]]
-                                                      target:nil selector:NULL];
-    [gameOverLogo setIsEnabled:NO];
-    [gameOverMenu setLogo:gameOverLogo];
+    [gameOverMenu setLogo:[MenuItemImage itemFromNormalImage:@"title.gameover.png"
+                                               selectedImage:@"title.gameover.png"]];
 }
 
 
@@ -169,9 +161,15 @@
 }
 
 
-+(DeblockAppDelegate *) get {
+- (void)statistics:(id)caller {
     
-    return (DeblockAppDelegate *) [[UIApplication sharedApplication] delegate];
+    [[DeblockAppDelegate get] pushLayer:[StatsLayer get]];
+}
+
+
++ (DeblockAppDelegate *)get {
+    
+    return (DeblockAppDelegate *) [super get];
 }
 
 

@@ -33,7 +33,7 @@
 
 @implementation BlockLayer
 
-@synthesize type, moving, destroyed, destructible, moveAction;
+@synthesize type, destroyed, destructible, moveAction;
 @synthesize targetRow, targetCol;
 @synthesize frames, frame, modColor;
 
@@ -67,16 +67,22 @@ static NSDictionary *blockColors;
                    [NSNumber numberWithLong:0xE39549ff],    [NSNumber numberWithUnsignedInt:DMBlockTypeFive],
 
                    [NSNull null],                           [NSNumber numberWithUnsignedInt:DMBlockTypeCount],
-                   [NSNumber numberWithLong:0xCCCCCCff],    [NSNumber numberWithUnsignedInt:DMBlockTypeSpecial],
+                   [NSNumber numberWithLong:0xEEEEEEff],    [NSNumber numberWithUnsignedInt:DMBlockTypeSpecial],
                    [NSNumber numberWithLong:0x9999CCff],    [NSNumber numberWithUnsignedInt:DMBlockTypeFrozen],
                    nil];
 }
 
 
-+ (id)randomBlockWithSize:(CGSize)size {
++ (NSUInteger)minimumLevel {
+    
+    return 0;
+}
+
+
++ (id)randomBlockForLevel:(NSUInteger)level withSize:(CGSize)size {
 
     id class;
-    switch (random() % 100) {
+    switch (random() % 50) {
         case 1:
             class = [BombBlockLayer class];
             break;
@@ -93,6 +99,9 @@ static NSDictionary *blockColors;
             class = [BlockLayer class];
     }
     
+    if (level < [class minimumLevel])
+        class = [BlockLayer class];
+    
     return [[[class alloc] initWithBlockSize:size] autorelease];
 }
 
@@ -107,7 +116,7 @@ static NSDictionary *blockColors;
         return nil;
     
     self.contentSize    = size;
-    self.type           = [self randomType];
+    self.type           = [[self class] randomType];
     self.destroyed      = NO;
     self.destructible   = YES;
     self.modColor       = cccf(1, 1, 1, 1);
@@ -119,14 +128,14 @@ static NSDictionary *blockColors;
     for (NSUInteger i = 1; i < 11; ++i)
         textures[i]     = [[[TextureMgr sharedTextureMgr] addImage:[NSString stringWithFormat:@"block.cracked.%d.png", i]] retain];
 
-    label               = [[Label alloc] initWithString:[self labelString] dimensions:size
+    /*label               = [[Label alloc] initWithString:[self labelString] dimensions:size
                                               alignment:UITextAlignmentCenter
                                                fontName:[Config get].fixedFontName
                                                fontSize:[[Config get].smallFontSize unsignedIntValue]];
     label.position      = ccp(size.width / 2, size.height / 2);
-    [self addChild:label];
+    [self addChild:label];*/
     
-    isTouchEnabled      = YES;
+    self.isTouchEnabled      = YES;
     
     [self schedule:@selector(randomEvent:) interval:0.1f];
     
@@ -134,7 +143,7 @@ static NSDictionary *blockColors;
 }
 
 
-- (DMBlockType)randomType {
++ (DMBlockType)randomType {
     
     DMBlockType typeRange = DMBlockTypeCount * [[DMConfig get].level intValue] / kAllBlocksLevel;
     return random() % ((int)fmaxf(fminf(typeRange, DMBlockTypeCount), kMinBlocks));
@@ -249,7 +258,7 @@ static NSDictionary *blockColors;
     }
 
     if (!dropEmitter.parent)
-        [parent addChild:dropEmitter];
+        [self.parent addChild:dropEmitter];
 
     dropEmitter.centerOfGravity = ccp(self.position.x + self.contentSize.width / 2, self.position.y);
 }
@@ -358,14 +367,6 @@ static NSDictionary *blockColors;
     blockRect.origin    = CGPointZero;
     blockRect.size      = self.contentSize;
     
-    if (CGRectContainsPoint(blockRect, touchPoint)) {
-        IndicateInSpaceOf(touchPoint, self);
-        IndicateInSpaceOf(CGPointMake(blockRect.origin.x, blockRect.origin.y), self);
-        IndicateInSpaceOf(CGPointMake(blockRect.origin.x, blockRect.size.height), self);
-        IndicateInSpaceOf(CGPointMake(blockRect.size.width, blockRect.size.height), self);
-        IndicateInSpaceOf(CGPointMake(blockRect.size.width, blockRect.origin.y), self);
-    }
-    
     return CGRectContainsPoint(blockRect, touchPoint);
 }
 
@@ -426,7 +427,7 @@ static NSDictionary *blockColors;
     crumbleEmitter.endColor             = cccf(0, 0, 0, 0);
 #endif
     crumbleEmitter.autoRemoveOnFinish   = YES;
-    [parent addChild:crumbleEmitter];
+    [self.parent addChild:crumbleEmitter];
     [crumbleEmitter release];
 
 

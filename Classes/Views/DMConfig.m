@@ -22,15 +22,8 @@
 //  Copyright 2009 lhunath (Maarten Billemont). All rights reserved.
 //
 
-#define dLevel          NSStringFromSelector(@selector(level))
-#define dLevelScore     NSStringFromSelector(@selector(levelScore))
-
-#define dSkyColorFrom   NSStringFromSelector(@selector(skyColorFrom))
-#define dSkyColorTo     NSStringFromSelector(@selector(skyColorTo))
-
-#define dFlawlessBonus  NSStringFromSelector(@selector(flawlessBonus))
-
 #import "DMConfig.h"
+
 
 @implementation DMConfig
 
@@ -44,14 +37,16 @@
         return nil;
     
     [defaults registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
-                                [NSNumber numberWithLong:0],                        dLevel,
-                                [NSNumber numberWithLong:0],                        dLevelScore,
+                                [NSNumber numberWithLong:0x38343C00],               cShadeColor,
+
+                                [NSNumber numberWithLong:0],                        cLevel,
+                                [NSNumber numberWithLong:0],                        cLevelScore,
                                 
-                                [NSNumber numberWithLong:0x58748Cff],               dSkyColorFrom,
-                                [NSNumber numberWithLong:0xB3D5F2ff],               dSkyColorTo,
+                                [NSNumber numberWithLong:0x58748Cff],               cSkyColorFrom,
+                                [NSNumber numberWithLong:0xB3D5F2ff],               cSkyColorTo,
                                 
-                                [NSNumber numberWithInt:200],                       dFlawlessBonus,
-                                     
+                                [NSNumber numberWithInt:200],                       cFlawlessBonus,
+                                
                                 nil
                                 ]];
     
@@ -61,11 +56,7 @@
 
 + (DMConfig *)get {
 
-    static DMConfig *dmConfig;
-    if(!dmConfig)
-        dmConfig = [[DMConfig alloc] init];
-    
-    return dmConfig;
+    return (DMConfig *)[super get];
 }
 
 @end
