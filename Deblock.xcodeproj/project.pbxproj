@@ -119,6 +119,7 @@
 		DACF7586101A3824003F2AF6 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		DACF7587101A3824003F2AF6 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		DACF7588101A3824003F2AF6 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765FC0DF74451002DB57D /* CoreGraphics.framework */; };
+		DADA8BA210504F1500481D2D /* GraphNode.m in Sources */ = {isa = PBXBuildFile; fileRef = DADA8BA110504F1500481D2D /* GraphNode.m */; };
 		DAF60A011020AD9C00F53A37 /* MenuLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = DAF60A001020AD9C00F53A37 /* MenuLayer.m */; };
 		DAF60A981020C63000F53A37 /* snapclick.caf in Resources */ = {isa = PBXBuildFile; fileRef = DAF60A971020C63000F53A37 /* snapclick.caf */; };
 		DAF689AD101B9A97005A646A /* bar.png in Resources */ = {isa = PBXBuildFile; fileRef = DA6A20531017B67F00B55AF8 /* bar.png */; };
@@ -366,6 +367,8 @@
 		DAC8D5C11045D78000438A8B /* SpecialBlocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpecialBlocks.h; sourceTree = "<group>"; };
 		DAC8D5C21045D78000438A8B /* SpecialBlocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpecialBlocks.m; sourceTree = "<group>"; };
 		DACF73E9101A3520003F2AF6 /* Deblock.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Deblock.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		DADA8BA010504F1500481D2D /* GraphNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GraphNode.h; sourceTree = "<group>"; };
+		DADA8BA110504F1500481D2D /* GraphNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GraphNode.m; sourceTree = "<group>"; };
 		DAF609FF1020AD9C00F53A37 /* MenuLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuLayer.h; sourceTree = "<group>"; };
 		DAF60A001020AD9C00F53A37 /* MenuLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuLayer.m; sourceTree = "<group>"; };
 		DAF60A971020C63000F53A37 /* snapclick.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = snapclick.caf; sourceTree = "<group>"; };
@@ -507,6 +510,8 @@
 				DA9EDF36102809B000528A29 /* DbHUDLayer.m */,
 				DA8279A510503D6700DC0B93 /* StatsLayer.h */,
 				DA8279A610503D6700DC0B93 /* StatsLayer.m */,
+				DADA8BA010504F1500481D2D /* GraphNode.h */,
+				DADA8BA110504F1500481D2D /* GraphNode.m */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1076,6 +1081,7 @@
 				DAC8D5C31045D78000438A8B /* BlockLayer.m in Sources */,
 				DAC8D5C41045D78000438A8B /* SpecialBlocks.m in Sources */,
 				DA8279A710503D6700DC0B93 /* StatsLayer.m in Sources */,
+				DADA8BA210504F1500481D2D /* GraphNode.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

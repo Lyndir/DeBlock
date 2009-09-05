@@ -9,3 +9,6 @@
 "config.direction"                      = "ltr";
 "config.song.random"                    = "Shuffle";
 "config.song.off"                       = "Off";
+
+// Statistics
+"stats.topscore"                        = "Top Score: %04d";
