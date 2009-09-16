@@ -61,8 +61,6 @@
     CGFloat                                     originalVerticalOffset;
     
     NSUInteger                                  scoreCount, verticeCount;
-    CGPoint                                     *scorePoints;
-    ccColor4B                                   *scoreColors;
     
     ccTime                                      animationTimeLeft;
     GLuint                                      vertexBuffer;

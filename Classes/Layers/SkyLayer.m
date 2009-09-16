@@ -87,8 +87,8 @@
 
 -(void) reset {
 
-    skyColorFrom = ccc([[DMConfig get].skyColorFrom longValue]);
-    skyColorTo = ccc([[DMConfig get].skyColorTo longValue]);
+    skyColorFrom = ccc4l([[DMConfig get].skyColorFrom longValue]);
+    skyColorTo = ccc4l([[DMConfig get].skyColorTo longValue]);
     fancySky = [[Config get].visualFx boolValue];
 }
 

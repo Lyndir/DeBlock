@@ -38,18 +38,17 @@
 
 #pragma mark Properties
 
-@synthesize paused;
+@synthesize paused, running;
 @synthesize skyLayer, fieldLayer;
-@synthesize scaleTimeAction;
 
 
--(void) setPaused:(BOOL)_paused {
+-(void) setPaused:(BOOL)isPaused {
 
-    if(paused == _paused)
+    if(paused == isPaused)
         // Nothing changed.
         return;
     
-    [self setPausedSilently:_paused];
+    [self setPausedSilently:isPaused];
     
     if(running) {
         if(paused){
@@ -63,20 +62,19 @@
 }
 
 
--(void) setPausedSilently:(BOOL)_paused {
+-(void) setPausedSilently:(BOOL)isPaused {
     
-    paused = _paused;
+    paused = isPaused;
     
     [[UIApplication sharedApplication] setStatusBarHidden:!paused animated:YES];
     
     if(paused) {
-        if(running)
-            [self scaleTimeTo:0 duration:0.5f];
+        [self unschedule:@selector(increasePenalty:)];
         [[DeblockAppDelegate get] hideHud];
         [fieldScroller runAction:[MoveTo actionWithDuration:0.5f
                                                 position:CGPointMake(0, fieldScroller.contentSize.height)]];
     } else {
-        [self scaleTimeTo:1.0f duration:1.0f];
+        [self schedule:@selector(increasePenalty:) interval:0.1f];
         [[DeblockAppDelegate get] popAllLayers];
         [[DeblockAppDelegate get] revealHud];
         [fieldScroller runAction:[MoveTo actionWithDuration:0.5f
@@ -85,27 +83,16 @@
 }
 
 
-- (void)scaleTimeTo:(float)aTimeScale duration:(ccTime)aDuration {
-
-    if (scaleTimeAction)
-        [self stopAction:scaleTimeAction];
-    [scaleTimeAction release];
-    
-    scaleTimeAction = [[ScaleTime actionWithTimeScaleTarget:aTimeScale duration:aDuration] retain];
-    [fieldLayer runAction:scaleTimeAction scaleTime:NO];
-}
-
-
 #pragma mark Interact
 
--(void) reset {
+- (void)reset {
     
     [skyLayer reset];
     [fieldLayer reset];
 }
 
 
--(void) shake {
+- (void)shake {
     
     if ([[Config get].vibration boolValue])
         [AudioController vibrate];
@@ -114,24 +101,25 @@
 }
 
 
--(void) newGame {
+- (void)newGameWithMode:(DbMode)gameMode {
     
     [DMConfig get].level = [NSNumber numberWithInt:1];
+    [DMConfig get].gameMode = [NSNumber numberWithUnsignedInt:gameMode];
     [[DMConfig get] recordScore:0];
-    [[DeblockAppDelegate get].hudLayer updateHudWithScore:0];
     
     [self startGame];
 }
 
-
--(void) startGame {
+- (void)startGame {
 
     if(running)
         @throw [NSException exceptionWithName:NSInternalInconsistencyException
                                        reason:@"Tried to start a game while one's still running."
                                      userInfo:nil];
-    endReason = DbEndReasonEnded;
-    [DMConfig get].levelScore = [NSNumber numberWithInt:0];
+    endReason                   = DbEndReasonEnded;
+    penaltyInterval             = 2;
+    [DMConfig get].levelScore   = [NSNumber numberWithInt:0];
+    [DMConfig get].levelPenalty = [NSNumber numberWithInt:0];
     [[DeblockAppDelegate get].hudLayer updateHudWithScore:0];
     
     // Reset the game field and start the game.
@@ -151,13 +139,15 @@
     endReason = reason;
     [self setPausedSilently:NO];
 
+    running = NO;
+
     [fieldLayer stopGame];
 }
 
 
 #pragma mark Internal
 
--(id) init {
+- (id)init {
     
 	if (!(self = [super init]))
 		return self;
@@ -195,7 +185,7 @@
     
     [super onEnterTransitionDidFinish];
     
-    [[DeblockAppDelegate get] showMainMenu];
+    [[DeblockAppDelegate get] showMainMenuNoFade];
 }
 
 
@@ -227,7 +217,8 @@
 
 -(void) stopped {
     
-    running = NO;
+    running     = NO;
+
     switch (endReason) {
         case DbEndReasonEnded:
             [[DeblockAppDelegate get] showMainMenu];
@@ -243,7 +234,21 @@
                         format:@"End reason not implemented: %d", endReason];
     }
     
-    endReason = DbEndReasonEnded;
+    endReason   = DbEndReasonEnded;
+}
+
+
+- (void)increasePenalty:(ccTime)dt {
+    
+    if (!running || paused)
+        return;
+    
+    remainingPenaltyTime        += dt;
+    NSInteger penalty           = remainingPenaltyTime / penaltyInterval;
+    remainingPenaltyTime        -= penalty * penaltyInterval;
+    [DMConfig get].levelPenalty = [NSNumber numberWithInt:[[DMConfig get].levelPenalty intValue] - penalty];
+    
+    [[DeblockAppDelegate get].hudLayer updateHudWithScore:0];
 }
 
 

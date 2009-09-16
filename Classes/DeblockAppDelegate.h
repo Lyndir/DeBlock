@@ -27,11 +27,13 @@
 #import "MenuLayer.h"
 
 
-@interface DeblockAppDelegate : AbstractAppDelegate {
+@interface DeblockAppDelegate : AbstractAppDelegate<MenuDelegate> {
 
 @private
     GameLayer                       *gameLayer;
-    MenuLayer                       *pausedMenu, *gameOverMenu, *mainMenu;
+    MenuLayer                       *mainMenu, *newGameMenu, *pausedMenu, *gameOverMenu;
+    
+    MenuItem                        *continueGame;
 }
 
 @property (readonly) GameLayer      *gameLayer;
@@ -39,6 +41,7 @@
 +(DeblockAppDelegate *) get;
 
 - (void)showMainMenu;
+- (void)showMainMenuNoFade;
 - (void)showGameOverMenu;
 
 @end

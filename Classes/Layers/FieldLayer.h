@@ -28,7 +28,7 @@
 @interface FieldLayer : Layer <Resettable> {
 
 @private
-    Label                       *msgLabel, *infoLabel;
+    Label                       *msgLabel;
 
     BOOL                        locked;
 
@@ -53,10 +53,11 @@
 - (void)setPositionOfBlock:(BlockLayer *)aBlock toRow:(NSInteger)aRow col:(NSInteger)aCol;
 - (void)destroyBlock:(BlockLayer *)aBlock;
 
--(void) startGame;
--(void) stopGame;
+- (void)startGame;
+- (void)stopGame;
+- (void)checkGameState;
 
--(void) message: (NSString *)msg on:(CocosNode *)node;
--(void) message: (NSString *)msg at:(CGPoint)point;
+- (void)message: (NSString *)msg on:(CocosNode *)node;
+- (void)message: (NSString *)msg at:(CGPoint)point;
 
 @end

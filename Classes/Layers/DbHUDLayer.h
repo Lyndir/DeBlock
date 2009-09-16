@@ -28,7 +28,7 @@
 @interface DbHUDLayer : HUDLayer {
 
 @private
-    LabelAtlas          *levelScoreCount;
+    LabelAtlas          *levelScoreCount, *levelPenaltyCount;
 }
 
 @end

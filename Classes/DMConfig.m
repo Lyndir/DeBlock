@@ -27,7 +27,8 @@
 
 @implementation DMConfig
 
-@dynamic level, levelScore;
+@dynamic level, levelScore, levelPenalty;
+@dynamic gameMode;
 @dynamic skyColorFrom, skyColorTo;
 @dynamic flawlessBonus;
 
@@ -41,11 +42,14 @@
 
                                 [NSNumber numberWithLong:0],                        cLevel,
                                 [NSNumber numberWithLong:0],                        cLevelScore,
+                                [NSNumber numberWithLong:0],                        cLevelPenalty,
+
+                                [NSNumber numberWithLong:DbModeClassic],            cGameMode,
                                 
                                 [NSNumber numberWithLong:0x58748Cff],               cSkyColorFrom,
                                 [NSNumber numberWithLong:0xB3D5F2ff],               cSkyColorTo,
                                 
-                                [NSNumber numberWithInt:200],                       cFlawlessBonus,
+                                [NSNumber numberWithInt:10],                        cFlawlessBonus,
                                 
                                 nil
                                 ]];

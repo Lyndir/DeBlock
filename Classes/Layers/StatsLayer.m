@@ -33,6 +33,8 @@
     if (!(self = [super init]))
         return nil;
     
+    self.background = [Sprite spriteWithFile:@"splash.png"];
+
     graph = [[GraphNode alloc] initWithArray:[NSArray arrayWithObjects:
                                               [Score scoreWithScore:random() % 200
                                                                  by:@"lhunath"

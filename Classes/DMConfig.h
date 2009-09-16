@@ -26,6 +26,9 @@
 
 #define cLevel          NSStringFromSelector(@selector(level))
 #define cLevelScore     NSStringFromSelector(@selector(levelScore))
+#define cLevelPenalty   NSStringFromSelector(@selector(levelPenalty))
+
+#define cGameMode       NSStringFromSelector(@selector(gameMode))
 
 #define cSkyColorFrom   NSStringFromSelector(@selector(skyColorFrom))
 #define cSkyColorTo     NSStringFromSelector(@selector(skyColorTo))
@@ -41,6 +44,9 @@
 
 @property (readwrite, retain) NSNumber          *level;
 @property (readwrite, retain) NSNumber          *levelScore;
+@property (readwrite, retain) NSNumber          *levelPenalty;
+
+@property (readwrite, retain) NSNumber          *gameMode;
 
 @property (readwrite, retain) NSNumber          *skyColorFrom;
 @property (readwrite, retain) NSNumber          *skyColorTo;

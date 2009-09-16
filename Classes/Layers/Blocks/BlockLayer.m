@@ -107,7 +107,7 @@ static NSDictionary *blockColors;
 
 + (ccColor4B)colorForType:(DMBlockType)aType {
     
-    return ccc([[blockColors objectForKey:[NSNumber numberWithUnsignedInt:aType]] longValue]);
+    return ccc4l([[blockColors objectForKey:[NSNumber numberWithUnsignedInt:aType]] longValue]);
 }
 
 - (id)initWithBlockSize:(CGSize)size {
@@ -119,7 +119,7 @@ static NSDictionary *blockColors;
     self.type           = [[self class] randomType];
     self.destroyed      = NO;
     self.destructible   = YES;
-    self.modColor       = cccf(1, 1, 1, 1);
+    self.modColor       = ccc4f(1, 1, 1, 1);
 
     frames              = 11;
     frame               = 0;
@@ -248,11 +248,11 @@ static NSDictionary *blockColors;
         dropEmitter.posVar              = ccp(self.contentSize.width / 2, 0);
         dropEmitter.position            = CGPointZero;
 #if TARGET_IPHONE_SIMULATOR
-        dropEmitter.startColor          = cccf(1, 1, 1, 0.3f);
-        dropEmitter.endColor            = cccf(1, 1, 1, 0);
+        dropEmitter.startColor          = ccc4f(1, 1, 1, 0.3f);
+        dropEmitter.endColor            = ccc4f(1, 1, 1, 0);
 #else
-        dropEmitter.startColor          = cccf(0.3f, 0.3f, 0.3f, 0.3f);
-        dropEmitter.endColor            = cccf(0, 0, 0, 0);
+        dropEmitter.startColor          = ccc4f(0.3f, 0.3f, 0.3f, 0.3f);
+        dropEmitter.endColor            = ccc4f(0, 0, 0, 0);
 #endif
         dropEmitter.autoRemoveOnFinish  = YES;
     }
@@ -293,21 +293,9 @@ static NSDictionary *blockColors;
 }
 
 
-- (GLubyte)r {
+- (ccColor3B)color {
     
-    return blockColor.r;
-}
-
-
-- (GLubyte)g {
-    
-    return blockColor.g;
-}
-
-
-- (GLubyte)b {
-    
-    return blockColor.b;
+    return ccc3(blockColor.r, blockColor.g, blockColor.b);
 }
 
 
@@ -317,11 +305,11 @@ static NSDictionary *blockColors;
 }
 
 
-- (void)setRGB:(GLubyte)r :(GLubyte)g :(GLubyte)b {
+- (void)setColor:(ccColor3B)color {
     
-    blockColor.r = r;
-    blockColor.g = g;
-    blockColor.b = b;
+    blockColor.r = color.r;
+    blockColor.g = color.g;
+    blockColor.b = color.b;
 }
 
 
@@ -367,13 +355,12 @@ static NSDictionary *blockColors;
     blockRect.origin    = CGPointZero;
     blockRect.size      = self.contentSize;
     
-    return CGRectContainsPoint(blockRect, touchPoint);
-}
-
-
-- (void)ccTouchEnded:(UITouch *)touch withEvent:(UIEvent *)event {
+    if (CGRectContainsPoint(blockRect, touchPoint)) {
+        [[DeblockAppDelegate get].gameLayer.fieldLayer destroyBlock:self];
+        return YES;
+    }
     
-    [[DeblockAppDelegate get].gameLayer.fieldLayer destroyBlock:self];
+    return NO;
 }
 
 
@@ -420,11 +407,11 @@ static NSDictionary *blockColors;
     crumbleEmitter.centerOfGravity      = ccp(self.position.x + self.contentSize.width / 2,
                                               self.position.y + self.contentSize.height / 3);
 #if TARGET_IPHONE_SIMULATOR
-    crumbleEmitter.startColor           = cccf(1, 1, 1, 0.3f);
-    crumbleEmitter.endColor             = cccf(1, 1, 1, 0);
+    crumbleEmitter.startColor           = ccc4f(1, 1, 1, 0.3f);
+    crumbleEmitter.endColor             = ccc4f(1, 1, 1, 0);
 #else
-    crumbleEmitter.startColor           = cccf(0.3f, 0.3f, 0.3f, 0.3f);
-    crumbleEmitter.endColor             = cccf(0, 0, 0, 0);
+    crumbleEmitter.startColor           = ccc4f(0.3f, 0.3f, 0.3f, 0.3f);
+    crumbleEmitter.endColor             = ccc4f(0, 0, 0, 0);
 #endif
     crumbleEmitter.autoRemoveOnFinish   = YES;
     [self.parent addChild:crumbleEmitter];

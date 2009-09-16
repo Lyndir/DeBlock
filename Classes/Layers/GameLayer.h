@@ -29,7 +29,7 @@
 typedef enum DbEndReason {
     DbEndReasonEnded,
     DbEndReasonGameOver,
-    DbEndReasonNextField
+    DbEndReasonNextField,
 } DbEndReason;
 
 
@@ -44,20 +44,20 @@ typedef enum DbEndReason {
     Layer                                               *fieldScroller;
     
     Action                                              *shakeAction;
-    ScaleTime                                           *scaleTimeAction;
+    
+    ccTime                                              penaltyInterval;
+    ccTime                                              remainingPenaltyTime;
 }
 
 @property (nonatomic, readwrite) BOOL                   paused;
+@property (nonatomic, readwrite) BOOL                   running;
 
 @property (nonatomic, readonly) SkyLayer                *skyLayer;
 @property (nonatomic, readonly) FieldLayer              *fieldLayer;
 
-@property (nonatomic, readonly) ScaleTime               *scaleTimeAction;
-
 - (void)shake;
-- (void)scaleTimeTo:(float)aTimeScale duration:(ccTime)aDuration;
 
-- (void)newGame;
+- (void)newGameWithMode:(DbMode)gameMode;
 - (void)startGame;
 - (void)stopGame:(DbEndReason)reason;
 

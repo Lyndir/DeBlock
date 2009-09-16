@@ -1,9 +1,12 @@
 // Fonts
-"font.size.small"                       = "18";
-"font.size.normal"                      = "34";
+"font.size.small"                       = "12";
+"font.size.normal"                      = "32";
 "font.size.large"                       = "48";
-"font.family.default"                   = "Marker Felt";
-"font.family.fixed"                     = "American Typewriter";
+//"font.family.default"                   = "Absolute";
+"font.family.default"                   = "AdvertisersGothic-Regular";
+//"font.family.default"                   = "Bilbao-Poster-Black";
+//"font.family.default"                   = "MammaGamma";
+"font.family.fixed"                     = "Absolute";
 
 // Global Config
 "config.direction"                      = "ltr";
@@ -12,3 +15,7 @@
 
 // Statistics
 "stats.topscore"                        = "Top Score: %04d";
+
+// Messages
+"messages.paused"                       = "Game Paused";
+"messages.unpaused"                     = "Game Resuming";

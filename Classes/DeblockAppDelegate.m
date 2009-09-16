@@ -25,12 +25,16 @@
 #import "DeblockAppDelegate.h"
 #import "DbHUDLayer.h"
 #import "StatsLayer.h"
+#import "MenuItemSpacer.h"
+#import "MenuItemTitle.h"
 
 
 @interface DeblockAppDelegate ()
 
-- (void)newGame:(id)caller;
+- (void)newClassicGame:(id)caller;
+- (void)newTimedGame:(id)caller;
 - (void)continueGame:(id)caller;
+- (void)resumeGame:(id)caller;
 - (void)stopGame:(id)caller;
 - (void)levelRedo:(id)caller;
     
@@ -72,27 +76,65 @@
     
     [uiLayer addChild:gameLayer = [[GameLayer alloc] init]];
 
-    mainMenu = [[MenuLayer menuWithItems:
+    mainMenu = [[MenuLayer menuWithDelegate:self logo:[MenuItemSpacer spacerLarge]
+                                      items:
+                 [MenuItemSpacer spacerNormal],
+                 continueGame =
+                 [[MenuItemFont itemFromString:@"Continue Game" target:self selector:@selector(continueGame:)] retain],
                  [MenuItemFont itemFromString:@"New Game" target:self selector:@selector(newGame:)],
+                 [MenuItemSpacer spacerSmall],
                  [MenuItemFont itemFromString:@"Statistics" target:self selector:@selector(statistics:)],
                  nil] retain];
-    [mainMenu setLogo:[MenuItemImage itemFromNormalImage:@"title.png"
-                                           selectedImage:@"title.png"]];
-
-    pausedMenu = [[MenuLayer menuWithItems:
-                   [MenuItemFont itemFromString:@"Continue Game" target:self selector:@selector(continueGame:)],
-                   [MenuItemFont itemFromString:@"Stop Game" target:self selector:@selector(stopGame:)],
+    mainMenu.background         = [Sprite spriteWithFile:@"splash.png"];
+    mainMenu.outerPadding       = margin(110, 20, 10, 20);
+    mainMenu.innerRatio         = 1/30.0f;
+    mainMenu.opacity            = 0xcc;
+    mainMenu.color              = ccc3(0x99, 0x99, 0xff);
+    mainMenu.colorGradient      = ccc4(0xcc, 0xcc, 0xff, 0xcc);
+    
+    newGameMenu = [[MenuLayer menuWithDelegate:self logo:[MenuItemSpacer spacerLarge]
+                                         items:
+                    [MenuItemSpacer spacerNormal],
+                    [MenuItemFont itemFromString:@"Classic" target:self selector:@selector(newClassicGame:)],
+                    [MenuItemFont itemFromString:@"Timed" target:self selector:@selector(newTimedGame:)],
+                    nil] retain];
+    newGameMenu.background      = [Sprite spriteWithFile:@"splash.png"];
+    newGameMenu.outerPadding    = margin(110, 20, 10, 20);
+    newGameMenu.innerRatio      = 1/20.0f;
+    newGameMenu.opacity         = 0xcc;
+    newGameMenu.color           = ccc3(0x99, 0x99, 0xff);
+    newGameMenu.colorGradient   = ccc4(0xcc, 0xcc, 0xff, 0xcc);
+    
+    pausedMenu = [[MenuLayer menuWithDelegate:self logo:[MenuItemImage itemFromNormalImage:@"title.paused.png"
+                                                                              selectedImage:@"title.paused.png"]
+                                        items:
+                   [MenuItemFont itemFromString:@"Resume Game" target:self selector:@selector(resumeGame:)],
                    [MenuItemFont itemFromString:@"Restart Level" target:self selector:@selector(levelRedo:)],
+                   [MenuItemSpacer spacerSmall],
+                   [MenuItemFont itemFromString:@"End Game" target:self selector:@selector(stopGame:)],
                    nil] retain];
-    [pausedMenu setLogo:[MenuItemImage itemFromNormalImage:@"title.paused.png"
-                                             selectedImage:@"title.paused.png"]];
 
-    gameOverMenu = [[MenuLayer menuWithItems:
+    gameOverMenu = [[MenuLayer menuWithDelegate:self logo:[MenuItemImage itemFromNormalImage:@"title.gameover.png"
+                                                                               selectedImage:@"title.gameover.png"]
+                                          items:
                      [MenuItemFont itemFromString:@"Stop Game" target:self selector:@selector(stopGame:)],
                      [MenuItemFont itemFromString:@"Retry Level" target:self selector:@selector(levelRedo:)],
                      nil] retain];
-    [gameOverMenu setLogo:[MenuItemImage itemFromNormalImage:@"title.gameover.png"
-                                               selectedImage:@"title.gameover.png"]];
+}
+
+- (Scene *)startUpScene {
+
+    Scene *uiScene = [[Scene alloc] init];
+    [uiScene addChild:[AbstractAppDelegate get].uiLayer];
+    
+    return [uiScene autorelease];
+}
+
+- (void)didEnter:(MenuLayer *)menuLayer {
+    
+    if (menuLayer == mainMenu) {
+        [continueGame setIsEnabled:[[DMConfig get].level intValue] > 1];
+    }
 }
 
 
@@ -131,6 +173,12 @@
 }
 
 
+- (void)showMainMenuNoFade {
+    
+    mainMenu.fadeNextEntry  = NO;
+    [self showMainMenu];
+}
+
 - (void)showGameOverMenu {
     
     [self pushLayer:gameOverMenu];
@@ -139,11 +187,29 @@
 
 - (void)newGame:(id)caller {
     
-    [gameLayer newGame];
+    [self pushLayer:newGameMenu];
+}
+
+
+- (void)newClassicGame:(id)caller {
+    
+    [gameLayer newGameWithMode:DbModeClassic];
+}
+
+
+- (void)newTimedGame:(id)caller {
+    
+    [gameLayer newGameWithMode:DbModeTimed];
 }
 
 
 - (void)continueGame:(id)caller {
+    
+    [gameLayer startGame];
+}
+
+
+- (void)resumeGame:(id)caller {
 
     [[DeblockAppDelegate get] popAllLayers];
 }

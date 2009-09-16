@@ -165,7 +165,7 @@
     
     NSMutableSet *linkedBlocks = [NSMutableSet setWithCapacity:8];
     for (NSInteger r = 0; r < field.blockRows; ++r) {
-        for (NSInteger c = 0; c < field.blockRows; ++c) {
+        for (NSInteger c = 0; c < field.blockColumns; ++c) {
             BlockLayer *block = [field blockAtRow:r col:c];
             if (block == nil || block == self)
                 // Bad block, ignore.
@@ -235,6 +235,7 @@
     self.type               = DMBlockTypeFrozen;
     
     [linkedBlocks release];
+    [field checkGameState];
 }
 
 @end

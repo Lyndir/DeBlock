@@ -206,8 +206,8 @@
         
         float scoreRatio    = ((Score *)[sortedScores objectAtIndex:s]).score * scoreMultiplier;
         
-        vertices[sv + 0].c  = vertices[sv + 1].c    = vertices[sv + 5].c    = ccc(0xccffcc66);
-        vertices[sv + 2].c  = vertices[sv + 3].c    = vertices[sv + 4].c    = ccc(0xccffccff);
+        vertices[sv + 0].c  = vertices[sv + 1].c    = vertices[sv + 5].c    = ccc4(0xcc, 0xff, 0xcc, 0x66);
+        vertices[sv + 2].c  = vertices[sv + 3].c    = vertices[sv + 4].c    = ccc4(0xcc, 0xff, 0xcc, 0xff);
         
         CGFloat nearX       = padding;
         CGFloat nearY       = sy;
@@ -245,9 +245,9 @@
     
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     DrawBoxFrom(CGPointZero, ccp(self.contentSize.width + 1, self.contentSize.height + 1),
-                ccc(0x00000000), ccc(0x00000066));
+                ccc4(0x00, 0x00, 0x00, 0x00), ccc4(0x00, 0x00, 0x00, 0x66));
     DrawBorderFrom(CGPointZero, ccp(self.contentSize.width + 1, self.contentSize.height + 1),
-                ccc(0xffffff33), 1);
+                ccc4(0xff, 0xff, 0xff, 0x33), 1);
 
     glEnable(GL_SCISSOR_TEST);
     Scissor(self, ccp(padding, padding), ccp(self.contentSize.width - padding, self.contentSize.height - padding));
