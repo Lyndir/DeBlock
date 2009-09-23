@@ -31,6 +31,8 @@
 @dynamic gameMode;
 @dynamic skyColorFrom, skyColorTo;
 @dynamic flawlessBonus;
+@dynamic userName, userScoreHistory;
+
 
 - (id)init {
     
@@ -50,9 +52,41 @@
                                 [NSNumber numberWithLong:0xB3D5F2ff],               cSkyColorTo,
                                 
                                 [NSNumber numberWithInt:10],                        cFlawlessBonus,
-                                
+
+                                [[[UIDevice currentDevice].name
+                                  componentsSeparatedByString:@"’"]
+                                 objectAtIndex:0],                                  cUserName,
+                                [NSDictionary dictionary],                          cUserScoreHistory,
+
                                 nil
                                 ]];
+    
+    self.userScoreHistory = [NSDictionary dictionaryWithObjectsAndKeys:
+                             [NSDictionary dictionaryWithObjectsAndKeys:
+                              [NSNumber numberWithInt:random() % 200],
+                              [NSString stringWithFormat:@"%f", [[NSDate dateWithTimeIntervalSinceNow:random() % 10000] timeIntervalSince1970]],
+                              nil],
+                             @"Foo",
+
+                             [NSDictionary dictionaryWithObjectsAndKeys:
+                              [NSNumber numberWithInt:random() % 200],
+                              [NSString stringWithFormat:@"%f", [[NSDate dateWithTimeIntervalSinceNow:random() % 10000] timeIntervalSince1970]],
+                              nil],
+                             @"Bar",
+                             
+                             [NSDictionary dictionaryWithObjectsAndKeys:
+                              [NSNumber numberWithInt:random() % 200],
+                              [NSString stringWithFormat:@"%f", [[NSDate dateWithTimeIntervalSinceNow:random() % 10000] timeIntervalSince1970]],
+                              nil],
+                             @"Pom",
+                             
+                             [NSDictionary dictionaryWithObjectsAndKeys:
+                              [NSNumber numberWithInt:random() % 200],
+                              [NSString stringWithFormat:@"%f", [[NSDate dateWithTimeIntervalSinceNow:random() % 10000] timeIntervalSince1970]],
+                              nil],
+                             @"Lala",
+                             
+                             nil];
     
     return self;
 }
@@ -61,6 +95,41 @@
 + (DMConfig *)get {
 
     return (DMConfig *)[super get];
+}
+
+
+#pragma mark ###############################
+#pragma mark Behaviors
+
+- (void)recordScore:(NSInteger)score {
+    
+    if (score < 0)
+        score = 0;
+    
+    [super recordScore:score];
+}
+
+- (void)saveScore {
+
+    // Find the user's current scores in the score history.
+    NSMutableDictionary *newUserScores = [[self userScoreHistory] mutableCopy];
+    NSDictionary *currentUserScores = [newUserScores objectForKey:[self userName]];
+    
+    // Store the new score on the current date amoungst the user's scores.
+    NSMutableDictionary *newCurrentUserScores = nil;
+    if (currentUserScores)
+        newCurrentUserScores = [currentUserScores mutableCopy];
+    else
+        newCurrentUserScores = [NSMutableDictionary new];
+    [newCurrentUserScores setObject:[self score] forKey:[NSString stringWithFormat:@"%f", [[NSDate date] timeIntervalSince1970]]];
+
+    // Store the user's new scores in the score history.
+    [newUserScores setObject:newCurrentUserScores forKey:[self userName]];
+    [self setUserScoreHistory:newUserScores];
+
+    // Clean up. 
+    [newCurrentUserScores release];
+    [newUserScores release];
 }
 
 @end

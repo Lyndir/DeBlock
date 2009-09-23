@@ -24,16 +24,19 @@
 
 #import "Config.h"
 
-#define cLevel          NSStringFromSelector(@selector(level))
-#define cLevelScore     NSStringFromSelector(@selector(levelScore))
-#define cLevelPenalty   NSStringFromSelector(@selector(levelPenalty))
+#define cLevel          	NSStringFromSelector(@selector(level))
+#define cLevelScore         NSStringFromSelector(@selector(levelScore))
+#define cLevelPenalty       NSStringFromSelector(@selector(levelPenalty))
 
-#define cGameMode       NSStringFromSelector(@selector(gameMode))
+#define cGameMode           NSStringFromSelector(@selector(gameMode))
 
-#define cSkyColorFrom   NSStringFromSelector(@selector(skyColorFrom))
-#define cSkyColorTo     NSStringFromSelector(@selector(skyColorTo))
+#define cSkyColorFrom       NSStringFromSelector(@selector(skyColorFrom))
+#define cSkyColorTo         NSStringFromSelector(@selector(skyColorTo))
 
-#define cFlawlessBonus  NSStringFromSelector(@selector(flawlessBonus))
+#define cFlawlessBonus      NSStringFromSelector(@selector(flawlessBonus))
+
+#define cUserName           NSStringFromSelector(@selector(userName))
+#define cUserScoreHistory       NSStringFromSelector(@selector(userScoreHistory))
 
 
 @interface DMConfig : Config {
@@ -52,5 +55,8 @@
 @property (readwrite, retain) NSNumber          *skyColorTo;
 
 @property (readwrite, retain) NSNumber          *flawlessBonus;
+
+@property (readwrite, retain) NSString          *userName;
+@property (readwrite, retain) NSDictionary      *userScoreHistory;
 
 @end

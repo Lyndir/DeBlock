@@ -22,6 +22,8 @@
 //  Copyright 2009 lhunath (Maarten Billemont). All rights reserved.
 //
 
+#import "ScrollLayer.h"
+
 
 @interface Score : NSObject {
 
@@ -46,24 +48,31 @@
 @end
 
 
-@interface GraphNode : Layer {
+@interface GraphDataNode : ScrollLayer {
+    
+    NSArray                                     *sortedScores;
+    NSInteger                                   topScore;
+    
+    CGFloat                                     padding, barHeight;
+    NSUInteger                                  scoreCount, verticeCount;
+    
+    ccTime                                      animationTimeLeft;
+    GLuint                                      vertexBuffer;
+}
+
+@end
+
+
+@interface GraphNode : CocosNode {
 
 @private
     NSArray                                     *scores, *sortedScores;
     SEL                                         comparator;
     
+    GraphDataNode                               *graphDataNode;
+    
     NSDateFormatter                             *dateFormatter;
     NSString                                    *scoreFormat;
-    CGFloat                                     padding;
-    
-    CGPoint                                     dragFromPoint;
-    CGFloat                                     verticalOffset;
-    CGFloat                                     originalVerticalOffset;
-    
-    NSUInteger                                  scoreCount, verticeCount;
-    
-    ccTime                                      animationTimeLeft;
-    GLuint                                      vertexBuffer;
 }
 
 /** An array of Score objects. */
@@ -79,6 +88,9 @@
 
 /** The amount of pixels of padding to use between the graph border and the graph data. */
 @property (readwrite) CGFloat                   padding;
+
+/** The height of the bars in pixels. */
+@property (readwrite) CGFloat                   barHeight;
 
 /** @param newData  An array of Score objects. */
 - (id)initWithArray:(NSArray *)newData;

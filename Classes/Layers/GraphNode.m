@@ -66,102 +66,70 @@
     return [self.username compare:other.username];
 }
 
+- (NSString *)description {
+    
+    return [NSString stringWithFormat:@"%@: %@: %d", self.username, self.date, self.score];
+}
+
 @end
 
-@interface GraphNode ()
 
-- (void)updateSortedScores;
+@interface GraphDataNode ()
+
+@property (readwrite, retain) NSArray           *sortedScores;
+@property (readwrite) CGFloat                   padding;
+@property (readwrite) CGFloat                   barHeight;
+
+- (void)updateWithSortedScores:(NSArray *)sortedScores;
 - (void)updateVertices;
 
 @end
 
 
-@implementation GraphNode
 
-@synthesize scores, dateFormatter, scoreFormat, comparator, padding;
+@implementation GraphDataNode
+
+@synthesize padding, barHeight, sortedScores;
 
 
-- (id)initWithArray:(NSArray *)newScores {
+- (void)setPadding:(CGFloat)aPadding {
     
-    if (!(self = [super init]))
-        return nil;
-    
-    CGSize winSize      = [Director sharedDirector].winSize;
-    self.contentSize    = CGSizeMake(winSize.width * 0.9f, winSize.height * 0.7f);
-    self.position       = ccp((winSize.width - self.contentSize.width) / 2,
-                              (winSize.height - self.contentSize.height) / 2);
-    
-    self.padding        = 10;
-    self.comparator     = @selector(compareByTopScore:);
-    self.scoreFormat    = @"%04d | %s";
-    self.dateFormatter  = [NSDateFormatter new];
-    [self.dateFormatter setDateStyle:NSDateFormatterShortStyle];
-    [self.dateFormatter setTimeStyle:NSDateFormatterShortStyle];
-
-	self.scores         = newScores;
-    
-    self.isTouchEnabled = YES;
-
-	return self;
-}
-
-
--(void) registerWithTouchDispatcher {
-    
-	[[TouchDispatcher sharedDispatcher] addTargetedDelegate:self priority:0 swallowsTouches:YES];
-}
-
-
-- (BOOL)ccTouchBegan:(UITouch *)touch withEvent:(UIEvent *)event {
-    
-    originalVerticalOffset  = verticalOffset;
-    dragFromPoint           = [self convertTouchToNodeSpace:touch];
-
-    CGRect graphRect;
-    graphRect.origin        = CGPointZero;
-    graphRect.size          = self.contentSize;
-    
-    return CGRectContainsPoint(graphRect, dragFromPoint);
-}
-
-
-- (void)ccTouchMoved:(UITouch *)touch withEvent:(UIEvent *)event {
-
-    CGPoint dragToPoint     = [self convertTouchToNodeSpace:touch];
-    verticalOffset          = originalVerticalOffset + (dragToPoint.y - dragFromPoint.y);
-    
+    padding                     = aPadding;
     [self updateVertices];
 }
 
-
-- (void)ccTouchEnded:(UITouch *)touch withEvent:(UIEvent *)event {
-
-    originalVerticalOffset  = verticalOffset;
+- (void)setBarHeight:(CGFloat)aBarHeight {
+    
+    barHeight                   = aBarHeight;
+    [self updateVertices];
 }
 
+- (void)updateWithSortedScores:(NSArray *)newSortedScores {
 
-- (void)setScores:(NSArray *)newScores {
-    
-    [scores release];
-    scores              = [newScores retain];
-    
-    [self updateSortedScores];
-}
+    self.sortedScores           = newSortedScores;
+    scoreCount                  = [sortedScores count];
 
+    // Find the top score.
+    topScore                    = ((Score *)[sortedScores lastObject]).score;
+    for (Score *score in sortedScores)
+        if (score.score > topScore)
+            topScore            = score.score;
 
-- (void)setComparator:(SEL)newComparator {
+    // Make score labels.
+    NSUInteger s = 0;
+    for (Score *score in sortedScores) {
+        Label *scoreLabel       = [[Label alloc] initWithString:score.username
+                                                 fontName:[Config get].fontName fontSize:[[Config get].fontSize intValue]];
+        scoreLabel.position     = ccp(scoreLabel.contentSize.width / 2 + padding + 10,
+                                      self.contentSize.height - scoreLabel.contentSize.height / 2 - barHeight * s);
+        [self addChild:scoreLabel];
+        [scoreLabel release];
+        
+        ++s;
+    }
     
-    comparator          = newComparator;
-
-    [self updateSortedScores];
-}
-
-- (void)updateSortedScores {
-    
-    [sortedScores release];
-    sortedScores        = [[scores sortedArrayUsingSelector:comparator] retain];
-    
-    animationTimeLeft   = kAnimationDuration;
+    // (Re)start the score bars animation.
+    animationTimeLeft           = kAnimationDuration;
     [self schedule:@selector(animate:)];
 }
 
@@ -181,57 +149,58 @@
 
 - (void)updateVertices {
     
-    // Find the top score.
-    NSInteger topScore      = ((Score *)[sortedScores lastObject]).score;
-    for (Score *score in sortedScores)
-        if (score.score > topScore)
-            topScore = score.score;
-
-    
     // Build vertex arrays.
-    scoreCount              = [sortedScores count];
     Vertex *vertices        = malloc(sizeof(Vertex)     /* size of a vertex */
-                                     * 6                /* amount of vertices per score box */
+                                     * 12               /* amount of vertices per score box */
                                      * scoreCount       /* amount of scores */);
     
     NSUInteger sv           = 0;
-    CGFloat sy              = self.contentSize.height - padding + verticalOffset;
-    CGFloat height          = (CGFloat)[[Config get].largeFontSize unsignedIntValue];
+    CGFloat sy              = self.contentSize.height - padding;
     float scoreMultiplier   = (kAnimationDuration - animationTimeLeft) / (kAnimationDuration * topScore);
     for (NSUInteger s = 0; s < scoreCount; ++s) {
-        if (sy - height > self.contentSize.height - padding) {
-            sy              -= height;
+        if (sy - barHeight > self.contentSize.height - padding) {
+            sy              -= barHeight;
             continue;
         }
         
         float scoreRatio    = ((Score *)[sortedScores objectAtIndex:s]).score * scoreMultiplier;
         
-        vertices[sv + 0].c  = vertices[sv + 1].c    = vertices[sv + 5].c    = ccc4(0xcc, 0xff, 0xcc, 0x66);
-        vertices[sv + 2].c  = vertices[sv + 3].c    = vertices[sv + 4].c    = ccc4(0xcc, 0xff, 0xcc, 0xff);
+        vertices[sv + 0].c  = vertices[sv + 1].c    = vertices[sv + 5].c    = ccc4(0xbb, 0xcc, 0xff, 0xaa); // near (top)
+        vertices[sv + 2].c  = vertices[sv + 3].c    = vertices[sv + 4].c    = ccc4(0xdd, 0xdd, 0xff, 0xdd); // half
+        vertices[sv + 6].c  = vertices[sv + 7].c    = vertices[sv + 11].c   = ccc4(0xdd, 0xdd, 0xff, 0xee); // half
+        vertices[sv + 8].c  = vertices[sv + 9].c    = vertices[sv + 10].c   = ccc4(0xff, 0xff, 0xff, 0xff); // far (bottom)
         
         CGFloat nearX       = padding;
         CGFloat nearY       = sy;
         CGFloat farX        = padding + (self.contentSize.width - 2 * padding) * scoreRatio;
-        CGFloat farY        = sy - height;
+        CGFloat farY        = sy - barHeight;
+        //CGFloat halfX     = (nearX + farX) / 2;
+        CGFloat halfY       = nearY + (farY - nearY) * 0.618f;
         vertices[sv + 0].p  = ccp(nearX , nearY);
         vertices[sv + 1].p  = ccp(farX  , nearY);
-        vertices[sv + 2].p  = ccp(nearX , farY);
-        vertices[sv + 3].p  = ccp(nearX , farY);
-        vertices[sv + 4].p  = ccp(farX  , farY);
+        vertices[sv + 2].p  = ccp(nearX , halfY);
+        vertices[sv + 3].p  = ccp(nearX , halfY);
+        vertices[sv + 4].p  = ccp(farX  , halfY);
         vertices[sv + 5].p  = ccp(farX  , nearY);
+        vertices[sv + 6].p  = ccp(nearX , halfY);
+        vertices[sv + 7].p  = ccp(farX  , halfY);
+        vertices[sv + 8].p  = ccp(nearX , farY);
+        vertices[sv + 9].p  = ccp(nearX , farY);
+        vertices[sv + 10].p = ccp(farX  , farY);
+        vertices[sv + 11].p = ccp(farX  , halfY);
         
-        sv                  += 6;
-        sy                  -= height;
-        if (sy - height <= padding - height)
+        sv                  += 12;
+        sy                  -= barHeight;
+        if (sy - barHeight <= padding - barHeight)
             break;
     }
-    verticeCount            = sv / 6;
-
+    verticeCount            = sv / 12;
+    
     // Push our window data into VBOs.
     glDeleteBuffers(1, &vertexBuffer);
     glGenBuffers(1, &vertexBuffer);
     glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * verticeCount * 6, vertices, GL_DYNAMIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * verticeCount * 12, vertices, GL_DYNAMIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     
     // Free the client side data.
@@ -244,19 +213,15 @@
     glEnableClientState(GL_COLOR_ARRAY);
     
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    DrawBoxFrom(CGPointZero, ccp(self.contentSize.width + 1, self.contentSize.height + 1),
-                ccc4(0x00, 0x00, 0x00, 0x00), ccc4(0x00, 0x00, 0x00, 0x66));
-    DrawBorderFrom(CGPointZero, ccp(self.contentSize.width + 1, self.contentSize.height + 1),
-                ccc4(0xff, 0xff, 0xff, 0x33), 1);
-
+    
     glEnable(GL_SCISSOR_TEST);
     Scissor(self, ccp(padding, padding), ccp(self.contentSize.width - padding, self.contentSize.height - padding));
-
+    
     glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
     glVertexPointer(2, GL_FLOAT, sizeof(Vertex), 0);
     glColorPointer(4, GL_UNSIGNED_BYTE, sizeof(Vertex), (GLvoid *)offsetof(Vertex, c));
     
-    glDrawArrays(GL_TRIANGLES, 0, verticeCount * 6);
+    glDrawArrays(GL_TRIANGLES, 0, verticeCount * 12);
     
     glDisable(GL_SCISSOR_TEST);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -272,6 +237,103 @@
     vertexBuffer = 0;
     
     [super dealloc];
+}
+
+
+@end
+
+
+@interface GraphNode ()
+
+- (void)updateSortedScores;
+
+@end
+
+
+@implementation GraphNode
+
+@synthesize scores, dateFormatter, scoreFormat, comparator;
+
+
+- (id)initWithArray:(NSArray *)newScores {
+    
+    if (!(self = [super init]))
+        return nil;
+    
+    CGSize winSize          = [Director sharedDirector].winSize;
+    self.contentSize        = CGSizeMake(winSize.width * 0.9f, winSize.height * 0.7f);
+    self.position           = ccp((winSize.width - self.contentSize.width) / 2,
+                                  (winSize.height - self.contentSize.height) / 2);
+    
+    [self addChild:graphDataNode = [GraphDataNode new]];
+    graphDataNode.contentSize = self.contentSize;
+    
+    self.padding            = 0;
+    self.barHeight          = [[Config get].largeFontSize unsignedIntValue];
+    self.comparator         = @selector(compareByTopScore:);
+    self.scoreFormat        = @"%04d | %s";
+    self.dateFormatter      = [NSDateFormatter new];
+    [self.dateFormatter setDateStyle:NSDateFormatterShortStyle];
+    [self.dateFormatter setTimeStyle:NSDateFormatterShortStyle];
+
+	self.scores             = newScores;
+
+	return self;
+}
+
+
+- (void)setScores:(NSArray *)newScores {
+    
+    [scores release];
+    scores                  = [newScores retain];
+    
+    [self updateSortedScores];
+}
+
+
+- (void)setComparator:(SEL)newComparator {
+    
+    comparator              = newComparator;
+
+    [self updateSortedScores];
+}
+
+- (void)updateSortedScores {
+    
+    [sortedScores release];
+    sortedScores        = [[scores sortedArrayUsingSelector:comparator] retain];
+    
+    [graphDataNode updateWithSortedScores:sortedScores];
+}
+
+- (CGFloat)padding {
+    
+    return graphDataNode.padding;
+}
+
+- (void)setPadding:(CGFloat)aPadding {
+    
+    graphDataNode.padding   = aPadding;
+}
+
+- (CGFloat)barHeight {
+    
+    return graphDataNode.barHeight;
+}
+
+- (void)setBarHeight:(CGFloat)aBarHeight {
+    
+    graphDataNode.barHeight = aBarHeight;
+}
+
+- (void)draw {
+    
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    DrawBoxFrom(CGPointZero, ccp(self.contentSize.width, self.contentSize.height),
+                ccc4(0x00, 0x00, 0x00, 0x00), ccc4(0x00, 0x00, 0x00, 0x66));
+    DrawBorderFrom(CGPointZero, ccp(self.contentSize.width, self.contentSize.height),
+                   ccc4(0xff, 0xff, 0xff, 0x33), 1);
+    glBlendFunc(CC_BLEND_SRC, CC_BLEND_DST);
 }
 
 @end

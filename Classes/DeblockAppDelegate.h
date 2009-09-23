@@ -25,11 +25,13 @@
 #import "AbstractAppDelegate.h"
 #import "GameLayer.h"
 #import "MenuLayer.h"
-
+#import "PlayerViewController.h"
 
 @interface DeblockAppDelegate : AbstractAppDelegate<MenuDelegate> {
 
 @private
+    PlayerViewController            *playerVC;
+    
     GameLayer                       *gameLayer;
     MenuLayer                       *mainMenu, *newGameMenu, *pausedMenu, *gameOverMenu;
     
@@ -40,8 +42,9 @@
 
 +(DeblockAppDelegate *) get;
 
+- (void)showDirector;
+
 - (void)showMainMenu;
-- (void)showMainMenuNoFade;
 - (void)showGameOverMenu;
 
 @end

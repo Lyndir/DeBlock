@@ -74,8 +74,10 @@
 
 - (void)prepareUi {
     
-    [uiLayer addChild:gameLayer = [[GameLayer alloc] init]];
-
+    playerVC = [PlayerViewController new];
+    [window addSubview:playerVC.view];
+    [window makeKeyAndVisible];
+    
     mainMenu = [[MenuLayer menuWithDelegate:self logo:[MenuItemSpacer spacerLarge]
                                       items:
                  [MenuItemSpacer spacerNormal],
@@ -87,7 +89,7 @@
                  nil] retain];
     mainMenu.background         = [Sprite spriteWithFile:@"splash.png"];
     mainMenu.outerPadding       = margin(110, 20, 10, 20);
-    mainMenu.innerRatio         = 1/30.0f;
+    mainMenu.innerRatio         = 1/20.0f;
     mainMenu.opacity            = 0xcc;
     mainMenu.color              = ccc3(0x99, 0x99, 0xff);
     mainMenu.colorGradient      = ccc4(0xcc, 0xcc, 0xff, 0xcc);
@@ -106,28 +108,34 @@
     newGameMenu.colorGradient   = ccc4(0xcc, 0xcc, 0xff, 0xcc);
     
     pausedMenu = [[MenuLayer menuWithDelegate:self logo:[MenuItemImage itemFromNormalImage:@"title.paused.png"
-                                                                              selectedImage:@"title.paused.png"]
+                                                                             selectedImage:@"title.paused.png"]
                                         items:
                    [MenuItemFont itemFromString:@"Resume Game" target:self selector:@selector(resumeGame:)],
                    [MenuItemFont itemFromString:@"Restart Level" target:self selector:@selector(levelRedo:)],
                    [MenuItemSpacer spacerSmall],
                    [MenuItemFont itemFromString:@"End Game" target:self selector:@selector(stopGame:)],
                    nil] retain];
-
+    
     gameOverMenu = [[MenuLayer menuWithDelegate:self logo:[MenuItemImage itemFromNormalImage:@"title.gameover.png"
                                                                                selectedImage:@"title.gameover.png"]
                                           items:
                      [MenuItemFont itemFromString:@"Stop Game" target:self selector:@selector(stopGame:)],
                      [MenuItemFont itemFromString:@"Retry Level" target:self selector:@selector(levelRedo:)],
                      nil] retain];
+    
+    [uiLayer addChild:gameLayer = [[GameLayer alloc] init]];
 }
 
-- (Scene *)startUpScene {
+- (void)showDirector {
 
-    Scene *uiScene = [[Scene alloc] init];
-    [uiScene addChild:[AbstractAppDelegate get].uiLayer];
+    [playerVC.view removeFromSuperview];
     
-    return [uiScene autorelease];
+    mainMenu.fadeNextEntry  = NO;
+    [self pushLayer:mainMenu];
+
+    Scene *uiScene = [Scene node];
+    [uiScene addChild:self.uiLayer];
+    [[Director sharedDirector] runWithScene:uiScene];
 }
 
 - (void)didEnter:(MenuLayer *)menuLayer {
@@ -172,12 +180,6 @@
     [self pushLayer:mainMenu];
 }
 
-
-- (void)showMainMenuNoFade {
-    
-    mainMenu.fadeNextEntry  = NO;
-    [self showMainMenu];
-}
 
 - (void)showGameOverMenu {
     

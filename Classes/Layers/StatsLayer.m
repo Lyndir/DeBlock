@@ -35,50 +35,25 @@
     
     self.background = [Sprite spriteWithFile:@"splash.png"];
 
-    graph = [[GraphNode alloc] initWithArray:[NSArray arrayWithObjects:
-                                              [Score scoreWithScore:random() % 200
-                                                                 by:@"lhunath"
-                                                                 at:[NSDate dateWithTimeIntervalSinceNow:random() % 10000]],
-                                              [Score scoreWithScore:random() % 200
-                                                                 by:@"lhunath"
-                                                                 at:[NSDate dateWithTimeIntervalSinceNow:random() % 10000]],
-                                              [Score scoreWithScore:random() % 200
-                                                                 by:@"lhunath"
-                                                                 at:[NSDate dateWithTimeIntervalSinceNow:random() % 10000]],
-                                              [Score scoreWithScore:random() % 200
-                                                                 by:@"lhunath"
-                                                                 at:[NSDate dateWithTimeIntervalSinceNow:random() % 10000]],
-                                              [Score scoreWithScore:random() % 200
-                                                                 by:@"lhunath"
-                                                                 at:[NSDate dateWithTimeIntervalSinceNow:random() % 10000]],
-                                              [Score scoreWithScore:random() % 200
-                                                                 by:@"lhunath"
-                                                                 at:[NSDate dateWithTimeIntervalSinceNow:random() % 10000]],
-                                              [Score scoreWithScore:random() % 200
-                                                                 by:@"lhunath"
-                                                                 at:[NSDate dateWithTimeIntervalSinceNow:random() % 10000]],
-                                              [Score scoreWithScore:random() % 200
-                                                                 by:@"lhunath"
-                                                                 at:[NSDate dateWithTimeIntervalSinceNow:random() % 10000]],
-                                              [Score scoreWithScore:random() % 200
-                                                                 by:@"lhunath"
-                                                                 at:[NSDate dateWithTimeIntervalSinceNow:random() % 10000]],
-                                              [Score scoreWithScore:random() % 200
-                                                                 by:@"lhunath"
-                                                                 at:[NSDate dateWithTimeIntervalSinceNow:random() % 10000]],
-                                              [Score scoreWithScore:random() % 200
-                                                                 by:@"lhunath"
-                                                                 at:[NSDate dateWithTimeIntervalSinceNow:random() % 10000]],
-                                              [Score scoreWithScore:random() % 200
-                                                                 by:@"lhunath"
-                                                                 at:[NSDate dateWithTimeIntervalSinceNow:random() % 10000]],
-                                              [Score scoreWithScore:random() % 200
-                                                                 by:@"lhunath"
-                                                                 at:[NSDate dateWithTimeIntervalSinceNow:random() % 10000]],
-                                              [Score scoreWithScore:random() % 200
-                                                                 by:@"lhunath"
-                                                                 at:[NSDate dateWithTimeIntervalSinceNow:random() % 10000]],
-                                              nil]];
+    NSMutableArray *scores = [NSMutableArray arrayWithCapacity:[[DMConfig get].userScoreHistory count]];
+    for (NSString *user in [[DMConfig get].userScoreHistory allKeys]) {
+        NSDictionary *userScores = [[DMConfig get].userScoreHistory objectForKey:user];
+        NSNumber *topUserScore = nil;
+        NSDate *topUserScoreDate = nil;
+
+        for (NSString *dateEncoded in [userScores allKeys]) {
+            NSDate *date = [NSDate dateWithTimeIntervalSince1970:[dateEncoded floatValue]];
+            NSNumber *currentUserScore = [userScores objectForKey:dateEncoded];
+            if (!topUserScore || [currentUserScore compare:topUserScore] == NSOrderedDescending) {
+                topUserScore = currentUserScore;
+                topUserScoreDate = date;
+            }
+        }
+        
+        [scores addObject:[Score scoreWithScore:[topUserScore intValue] by:user at:topUserScoreDate]];
+    }
+    
+    graph = [[GraphNode alloc] initWithArray:scores];
     [self addChild:graph];
     
     return self;

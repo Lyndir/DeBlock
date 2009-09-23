@@ -181,14 +181,6 @@
 }
 
 
--(void) onEnterTransitionDidFinish {
-    
-    [super onEnterTransitionDidFinish];
-    
-    [[DeblockAppDelegate get] showMainMenuNoFade];
-}
-
-
 -(void) onEnter {
     
     [super onEnter];
