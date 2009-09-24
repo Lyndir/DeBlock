@@ -86,6 +86,36 @@
                               nil],
                              @"Lala",
                              
+                             [NSDictionary dictionaryWithObjectsAndKeys:
+                              [NSNumber numberWithInt:random() % 200],
+                              [NSString stringWithFormat:@"%f", [[NSDate dateWithTimeIntervalSinceNow:random() % 10000] timeIntervalSince1970]],
+                              nil],
+                             @"Jumbo",
+                             
+                             [NSDictionary dictionaryWithObjectsAndKeys:
+                              [NSNumber numberWithInt:random() % 200],
+                              [NSString stringWithFormat:@"%f", [[NSDate dateWithTimeIntervalSinceNow:random() % 10000] timeIntervalSince1970]],
+                              nil],
+                             @"Lefty",
+                             
+                             [NSDictionary dictionaryWithObjectsAndKeys:
+                              [NSNumber numberWithInt:random() % 200],
+                              [NSString stringWithFormat:@"%f", [[NSDate dateWithTimeIntervalSinceNow:random() % 10000] timeIntervalSince1970]],
+                              nil],
+                             @"Hitsy",
+                             
+                             [NSDictionary dictionaryWithObjectsAndKeys:
+                              [NSNumber numberWithInt:random() % 200],
+                              [NSString stringWithFormat:@"%f", [[NSDate dateWithTimeIntervalSinceNow:random() % 10000] timeIntervalSince1970]],
+                              nil],
+                             @"Totsy",
+                             
+                             [NSDictionary dictionaryWithObjectsAndKeys:
+                              [NSNumber numberWithInt:random() % 200],
+                              [NSString stringWithFormat:@"%f", [[NSDate dateWithTimeIntervalSinceNow:random() % 10000] timeIntervalSince1970]],
+                              nil],
+                             @"Nana",
+                             
                              nil];
     
     return self;

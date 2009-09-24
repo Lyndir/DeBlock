@@ -20,7 +20,7 @@
 
 @implementation ScrollLayer
 
-@synthesize scrollPerSecond, scrollRatio;
+@synthesize scrollPerSecond, scrollRatio, scrollableContentSize;
 @synthesize origin, scroll;
 
 
@@ -57,7 +57,6 @@
     // Instantly apply remaining scroll & reset it.
     origin                  = [self limitPoint:ccpAdd(origin, scroll)];
     scroll                  = CGPointZero;
-    NSLog(@"touchbegan: scroll is now: %@", NSStringFromCGPoint(scroll));
 
     // Remember where the dragging began.
     dragFromPosition        = self.position;
@@ -72,7 +71,6 @@
     CGPoint dragToPoint     = [self.parent convertTouchToNodeSpace:touch];
     scroll                  = ccp((dragToPoint.x - dragFromPoint.x) * scrollRatio.x,
                                   (dragToPoint.y - dragFromPoint.y) * scrollRatio.y);
-    NSLog(@"touchmoved: scroll is now: %@", NSStringFromCGPoint(scroll));
 }
 
 
@@ -90,10 +88,14 @@
 
 - (CGPoint)limitPoint:(CGPoint)point {
 
-    point.x                 = fmaxf(-self.contentSize.width,    fminf(point.x, 0));
-    point.y                 = fmaxf(-self.contentSize.height,   fminf(point.y, 0));
+    CGPoint maxScroll       = ccp(fmaxf(scrollableContentSize.width  - self.contentSize.width,  0),
+                                  fmaxf(scrollableContentSize.height - self.contentSize.height, 0));
+    CGPoint minScroll       = CGPointZero;
     
-    return point;
+    CGPoint limitPoint      = ccp(fminf(fmaxf(point.x, minScroll.x), maxScroll.x),
+                                  fminf(fmaxf(point.y, minScroll.y), maxScroll.y));
+    
+    return limitPoint;
 }
 
 
@@ -114,6 +116,20 @@
     
     CGPoint scrollStep      = ccpMult(scrollLeft, (scrollLeftLen + 20) * scrollPerSecond * dt);
     self.position           = ccpAdd(self.position, scrollStep);
+}
+
+
+- (void)visit {
+
+    if (!visible)
+        return;
+    
+    glEnable(GL_SCISSOR_TEST);
+    Scissor(self.parent, CGPointZero, CGPointFromSize(self.contentSize));
+    
+    [super visit];
+
+    glDisable(GL_SCISSOR_TEST);
 }
 
 

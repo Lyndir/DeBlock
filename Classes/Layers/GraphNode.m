@@ -91,16 +91,17 @@
 
 @synthesize padding, barHeight, sortedScores;
 
-
-- (void)setPadding:(CGFloat)aPadding {
+- (void)setBarHeight:(CGFloat)aBarHeight {
     
-    padding                     = aPadding;
+    barHeight = aBarHeight;
+    self.scrollableContentSize  = CGSizeMake(self.contentSize.width, padding * 2 + scoreCount * barHeight);
     [self updateVertices];
 }
 
-- (void)setBarHeight:(CGFloat)aBarHeight {
+- (void)setPadding:(CGFloat)aPadding {
     
-    barHeight                   = aBarHeight;
+    padding = aPadding;
+    self.scrollableContentSize  = CGSizeMake(self.contentSize.width, padding * 2 + scoreCount * barHeight);
     [self updateVertices];
 }
 
@@ -108,6 +109,7 @@
 
     self.sortedScores           = newSortedScores;
     scoreCount                  = [sortedScores count];
+    self.scrollableContentSize  = CGSizeMake(self.contentSize.width, scoreCount * barHeight);
 
     // Find the top score.
     topScore                    = ((Score *)[sortedScores lastObject]).score;
@@ -207,15 +209,12 @@
     free(vertices);
 }
 
--(void) draw {
+- (void)draw {
     
     glEnableClientState(GL_VERTEX_ARRAY);
     glEnableClientState(GL_COLOR_ARRAY);
     
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    
-    glEnable(GL_SCISSOR_TEST);
-    Scissor(self, ccp(padding, padding), ccp(self.contentSize.width - padding, self.contentSize.height - padding));
     
     glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
     glVertexPointer(2, GL_FLOAT, sizeof(Vertex), 0);
@@ -223,7 +222,6 @@
     
     glDrawArrays(GL_TRIANGLES, 0, verticeCount * 12);
     
-    glDisable(GL_SCISSOR_TEST);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBlendFunc(CC_BLEND_SRC, CC_BLEND_DST);
     
@@ -231,7 +229,8 @@
     glDisableClientState(GL_VERTEX_ARRAY);
 }
 
--(void) dealloc {
+
+- (void)dealloc {
     
     glDeleteBuffers(1, &vertexBuffer);
     vertexBuffer = 0;
@@ -330,9 +329,9 @@
     
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     DrawBoxFrom(CGPointZero, ccp(self.contentSize.width, self.contentSize.height),
-                ccc4(0x00, 0x00, 0x00, 0x00), ccc4(0x00, 0x00, 0x00, 0x66));
+                ccc4(0x00, 0x00, 0x00, 0x66), ccc4(0x00, 0x00, 0x00, 0x99));
     DrawBorderFrom(CGPointZero, ccp(self.contentSize.width, self.contentSize.height),
-                   ccc4(0xff, 0xff, 0xff, 0x33), 1);
+                   ccc4(0xff, 0xff, 0xff, 0x66), 1);
     glBlendFunc(CC_BLEND_SRC, CC_BLEND_DST);
 }
 

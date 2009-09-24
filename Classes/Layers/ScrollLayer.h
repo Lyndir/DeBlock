@@ -15,6 +15,7 @@
 
     CGFloat                                     scrollPerSecond;
     CGPoint                                     scrollRatio;
+    CGSize                                      scrollableContentSize;
 
     CGPoint                                     origin;
     CGPoint                                     scroll;
@@ -22,6 +23,7 @@
 
 @property (readwrite) CGFloat                   scrollPerSecond;
 @property (readwrite) CGPoint                   scrollRatio;
+@property (readwrite) CGSize                    scrollableContentSize;
 
 @property (readwrite) CGPoint                   origin;
 @property (readwrite) CGPoint                   scroll;
