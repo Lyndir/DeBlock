@@ -134,14 +134,14 @@
 	[request start];
 	
 	BOOL success = [[request responseString] isEqualToString:@"HTTP/1.1"];
-	GHAssertTrue(success,@"Wrong HTTP version used");
+	GHAssertTrue(success,@"Wrong HTTP version used (May fail when using a proxy that changes the HTTP version!)");
 	
 	request = [[[ASIHTTPRequest alloc] initWithURL:url] autorelease];
 	[request setUseHTTPVersionOne:YES];
 	[request start];
 	
 	success = [[request responseString] isEqualToString:@"HTTP/1.0"];
-	GHAssertTrue(success,@"Wrong HTTP version used");	
+	GHAssertTrue(success,@"Wrong HTTP version used (May fail when using a proxy that changes the HTTP version!)");	
 }
 
 - (void)testUserAgent
@@ -222,13 +222,7 @@
 	ASIHTTPRequest *request = [[[ASIHTTPRequest alloc] initWithURL:url] autorelease];
 	[request setDownloadDestinationPath:path];
 	[request start];
-	
-	NSString *tempPath = [request temporaryFileDownloadPath];
-	GHAssertNotNil(tempPath,@"Failed to download file to temporary location");		
-	
-	BOOL success = (![[NSFileManager defaultManager] fileExistsAtPath:tempPath]);
-	GHAssertTrue(success,@"Failed to remove file from temporary location");	
-	
+
 #if TARGET_OS_IPHONE
 	UIImage *image = [[[UIImage alloc] initWithContentsOfFile:path] autorelease];
 #else
@@ -237,6 +231,7 @@
 	
 	GHAssertNotNil(image,@"Failed to download data to a file");
 }
+
 
 - (void)testCompressedResponseDownloadToFile
 {
@@ -461,8 +456,9 @@
 
 - (void)testBasicAuthentication
 {
+	[ASIHTTPRequest clearSession];
 
-	NSURL *url = [[[NSURL alloc] initWithString:@"http://allseeing-i.com/ASIHTTPRequest/tests/basic-authentication"] autorelease];
+	NSURL *url = [NSURL URLWithString:@"http://allseeing-i.com/ASIHTTPRequest/tests/basic-authentication"];
 	ASIHTTPRequest *request;
 	BOOL success;
 	NSError *err;
@@ -519,6 +515,34 @@
 	[request start];
 	err = [request error];
 	GHAssertNil(err,@"Failed to use stored credentials");
+	
+	// Tests shouldPresentCredentialsBeforeChallenge
+	request = [[[ASIHTTPRequest alloc] initWithURL:url] autorelease];
+	[request setUseSessionPersistance:YES];
+	[request start];
+	
+	success = [request authenticationRetryCount] == 0;
+	GHAssertTrue(success,@"Didn't supply credentials before being asked for them when talking to the same server with shouldPresentCredentialsBeforeChallenge == YES");	
+	
+	request = [[[ASIHTTPRequest alloc] initWithURL:url] autorelease];
+	[request setUseSessionPersistance:YES];
+	[request setShouldPresentCredentialsBeforeChallenge:NO];
+	[request start];
+	
+	success = [request authenticationRetryCount] == 1;
+	GHAssertTrue(success,@"Supplied credentials before being asked for them");	
+	
+	
+	// Ok, now let's test on a different server
+	url = [NSURL URLWithString:@"https://selfsigned.allseeing-i.com/ASIHTTPRequest/tests/basic-authentication"];
+	request = [[[ASIHTTPRequest alloc] initWithURL:url] autorelease];
+	[request setUseSessionPersistance:YES];
+	[request setUseKeychainPersistance:NO];
+	[request setValidatesSecureCertificate:NO];
+	[request start];
+	success = [[request error] code] == ASIAuthenticationErrorType;
+	GHAssertTrue(success,@"Reused credentials when we shouldn't have");	
+	
 }
 
 
@@ -670,13 +694,14 @@
 	GHAssertTrue(success,@"Failed to correctly display increment progress for a partial download");
 }
 
-- (void)testSSL
+// The '000' is to ensure this test runs first, as another test may connect to https://selfsigned.allseeing-i.com and accept the certificate
+- (void)test000SSL
 {
 	NSURL *url = [NSURL URLWithString:@"https://selfsigned.allseeing-i.com"];
 	ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
 	[request start];
 	
-	GHAssertNotNil([request error],@"Failed to generate an error for a self-signed certificate");		
+	GHAssertNotNil([request error],@"Failed to generate an error for a self-signed certificate (Will fail on the second run in the same session!)");		
 	
 	// Just for testing the request generated a custom error description - don't do this! You should look at the domain / code of the underlyingError in your own programs.
 	BOOL success = ([[[request error] localizedDescription] isEqualToString:@"A connection failure occurred: SSL problem (possibily a bad/expired/self-signed certificate)"]);
@@ -897,6 +922,7 @@
 	BOOL success = [[request responseStatusMessage] isEqualToString:@"HTTP/1.0 404 Not Found"];
 	GHAssertTrue(success,@"Got wrong response status message");
 }
+
 
 @end
 

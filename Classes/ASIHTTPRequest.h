@@ -16,6 +16,12 @@
 #endif
 #import <stdio.h>
 
+// Make targeting 2.2.1 more reliable
+// See: http://www.blumtnwerx.com/blog/2009/06/cross-sdk-code-hygiene-in-xcode/
+#ifndef __IPHONE_3_0
+	#define __IPHONE_3_0 30000
+#endif
+
 
 typedef enum _ASINetworkErrorType {
     ASIConnectionFailureErrorType = 1,
@@ -298,6 +304,13 @@ extern unsigned long const ASIWWANBandwidthThrottleAmount;
 	
 	// True when request is attempting to handle an authentication challenge
 	BOOL authenticationChallengeInProgress;
+	
+	// When YES, ASIHTTPRequests will present credentials from the session store for requests to the same server before being asked for them
+	// This avoids an extra round trip for requests after authentication has succeeded, which is much for efficient for authenticated requests with large bodies, or on slower connections
+	// Set to NO to only present credentials when explictly asked for them
+	// This only affects credentials stored in the session cache when useSessionPersistance is YES. Credentials from the keychain are never presented unless the server asks for them
+	// Default is YES
+	BOOL shouldPresentCredentialsBeforeChallenge;
 }
 
 #pragma mark init / dealloc
@@ -337,9 +350,6 @@ extern unsigned long const ASIWWANBandwidthThrottleAmount;
 
 // Start the read stream. Called by loadRequest, and again to restart the request when authentication is needed
 - (void)startRequest;
-
-// Cancel loading and clean up
-- (void)cancelLoad;
 
 // Call to delete the temporary file used during a file download (if it exists)
 // No need to call this if the request succeeds - it is removed automatically
@@ -382,8 +392,8 @@ extern unsigned long const ASIWWANBandwidthThrottleAmount;
 #pragma mark http authentication stuff
 
 // Apply credentials to this request
-- (BOOL)applyCredentials:(NSMutableDictionary *)newCredentials;
-- (BOOL)applyProxyCredentials:(NSMutableDictionary *)newCredentials;
+- (BOOL)applyCredentials:(NSDictionary *)newCredentials;
+- (BOOL)applyProxyCredentials:(NSDictionary *)newCredentials;
 
 // Attempt to obtain credentials for this request from the URL, username and password or keychain
 - (NSMutableDictionary *)findCredentials;
@@ -408,26 +418,37 @@ extern unsigned long const ASIWWANBandwidthThrottleAmount;
 - (void)handleStreamComplete;
 - (void)handleStreamError;
 
-#pragma mark managing the session
+# pragma mark session credentials
 
-+ (void)setSessionCredentials:(NSMutableDictionary *)newCredentials;
-+ (void)setSessionAuthentication:(CFHTTPAuthenticationRef)newAuthentication;
-+ (void)setSessionProxyCredentials:(NSMutableDictionary *)newCredentials;
-+ (void)setSessionProxyAuthentication:(CFHTTPAuthenticationRef)newAuthentication;
++ (NSMutableArray *)sessionProxyCredentialsStore;
++ (NSMutableArray *)sessionCredentialsStore;
+
++ (void)storeProxyAuthenticationCredentialsInSessionStore:(NSDictionary *)credentials;
++ (void)storeAuthenticationCredentialsInSessionStore:(NSDictionary *)credentials;
+
++ (void)removeProxyAuthenticationCredentialsFromSessionStore:(NSDictionary *)credentials;
++ (void)removeAuthenticationCredentialsFromSessionStore:(NSDictionary *)credentials;
+
+- (NSDictionary *)findSessionProxyAuthenticationCredentials;
+- (NSDictionary *)findSessionAuthenticationCredentials;
+
 
 #pragma mark keychain storage
 
 // Save credentials for this request to the keychain
-- (void)saveCredentialsToKeychain:(NSMutableDictionary *)newCredentials;
+- (void)saveCredentialsToKeychain:(NSDictionary *)newCredentials;
 
-// Save creddentials to the keychain
+// Save credentials to the keychain
 + (void)saveCredentials:(NSURLCredential *)credentials forHost:(NSString *)host port:(int)port protocol:(NSString *)protocol realm:(NSString *)realm;
++ (void)saveCredentials:(NSURLCredential *)credentials forProxy:(NSString *)host port:(int)port realm:(NSString *)realm;
 
 // Return credentials from the keychain
 + (NSURLCredential *)savedCredentialsForHost:(NSString *)host port:(int)port protocol:(NSString *)protocol realm:(NSString *)realm;
++ (NSURLCredential *)savedCredentialsForProxy:(NSString *)host port:(int)port protocol:(NSString *)protocol realm:(NSString *)realm;
 
 // Remove credentials from the keychain
 + (void)removeCredentialsForHost:(NSString *)host port:(int)port protocol:(NSString *)protocol realm:(NSString *)realm;
++ (void)removeCredentialsForProxy:(NSString *)host port:(int)port realm:(NSString *)realm;
 
 // We keep track of any cookies we accept, so that we can remove them from the persistent store later
 + (void)setSessionCookies:(NSMutableArray *)newSessionCookies;
@@ -574,4 +595,7 @@ extern unsigned long const ASIWWANBandwidthThrottleAmount;
 @property (assign) BOOL shouldPresentAuthenticationDialog;
 @property (assign) BOOL shouldPresentProxyAuthenticationDialog;
 @property (assign) BOOL authenticationChallengeInProgress;
+@property (assign) BOOL shouldPresentCredentialsBeforeChallenge;
+@property (assign, readonly) int authenticationRetryCount;
+@property (assign, readonly) int proxyAuthenticationRetryCount;
 @end
