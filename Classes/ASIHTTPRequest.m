@@ -72,12 +72,16 @@ static unsigned long maxBandwidthPerSecond = 0;
 // A default figure for throttling bandwidth on mobile devices
 unsigned long const ASIWWANBandwidthThrottleAmount = 14800;
 
+#if TARGET_OS_IPHONE
 // YES when bandwidth throttling is active
 // This flag does not denote whether throttling is turned on - rather whether it is currently in use
 // It will be set to NO when throttling was turned on with setShouldThrottleBandwidthForWWAN, but a WI-FI connection is active
-BOOL isBandwidthThrottled = NO;
+static BOOL isBandwidthThrottled = NO;
 
-BOOL shouldThrottleBandwithForWWANOnly = NO;
+// When YES, bandwidth will be automatically throttled when using WWAN (3G/Edge/GPRS)
+// Wifi will not be throttled
+static BOOL shouldThrottleBandwithForWWANOnly = NO;
+#endif
 
 // Mediates access to the session cookies so requests
 static NSRecursiveLock *sessionCookiesLock = nil;
@@ -88,6 +92,8 @@ static NSRecursiveLock *sessionCookiesLock = nil;
 // Once it gets the lock, it will try to look for existing credentials again rather than showing the dialog / notifying the delegate
 // This is so it can make use of any credentials supplied for the other request, if they are appropriate
 static NSRecursiveLock *delegateAuthenticationLock = nil;
+
+static NSOperationQueue *sharedRequestQueue = nil;
 
 // Private stuff
 @interface ASIHTTPRequest ()
@@ -397,6 +403,15 @@ static NSRecursiveLock *delegateAuthenticationLock = nil;
 	} else {
 		return [self rawResponseData];
 	}
+}
+
+#pragma mark running a request
+
+// Run a request asynchronously by adding it to the global queue
+// (Use [request start] for a synchronous request)
+- (void)startAsynchronous
+{
+	[[ASIHTTPRequest sharedRequestQueue] addOperation:self];
 }
 
 
@@ -2082,6 +2097,17 @@ static NSRecursiveLock *delegateAuthenticationLock = nil;
 		[self failWithError:[NSError errorWithDomain:NetworkRequestErrorDomain code:ASIConnectionFailureErrorType userInfo:[NSDictionary dictionaryWithObjectsAndKeys:reason,NSLocalizedDescriptionKey,underlyingError,NSUnderlyingErrorKey,nil]]];
 	}
     [super cancel];
+}
+
+#pragma mark global queue
+
++ (NSOperationQueue *)sharedRequestQueue
+{
+	if (!sharedRequestQueue) {
+		sharedRequestQueue = [[NSOperationQueue alloc] init];
+		[sharedRequestQueue setMaxConcurrentOperationCount:YES];
+	}
+	return sharedRequestQueue;
 }
 
 # pragma mark session credentials
