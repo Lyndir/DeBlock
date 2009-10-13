@@ -40,81 +40,98 @@
         return nil;
     
     [defaults registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
-                                [NSNumber numberWithLong:0x38343C00],               cShadeColor,
+                                [NSNumber numberWithLong:0x38343C00],                           cShadeColor,
 
-                                [NSNumber numberWithLong:0],                        cLevel,
-                                [NSNumber numberWithLong:0],                        cLevelScore,
-                                [NSNumber numberWithLong:0],                        cLevelPenalty,
+                                [NSArray arrayWithObjects:
+                                 @"Carriage_House_Deblock.mp3",
+                                 @"Marimba_Deblock.mp3",
+                                 @"Staccato_Deblock.mp3",
+                                 @"Mjolnir_Deblock.mp3",
+                                 @"random",
+                                 @"",
+                                 nil],                                                          cTracks,
+                                [NSArray arrayWithObjects:
+                                 @"Carriage_House_Deblock",
+                                 @"Marimba",
+                                 @"Staccato",
+                                 @"Mjolnir",
+                                 NSLocalizedString(@"config.song.random", @"Shuffle"),
+                                 NSLocalizedString(@"config.song.off", @"Off"),
+                                 nil],                                                          cTrackNames,
+                                
+                                [NSNumber numberWithLong:0],                                    cLevel,
+                                [NSNumber numberWithLong:0],                                    cLevelScore,
+                                [NSNumber numberWithLong:0],                                    cLevelPenalty,
 
-                                [NSNumber numberWithLong:DbModeClassic],            cGameMode,
+                                [NSNumber numberWithLong:DbModeClassic],                        cGameMode,
                                 
-                                [NSNumber numberWithLong:0x58748Cff],               cSkyColorFrom,
-                                [NSNumber numberWithLong:0xB3D5F2ff],               cSkyColorTo,
+                                [NSNumber numberWithLong:0x58748Cff],                           cSkyColorFrom,
+                                [NSNumber numberWithLong:0xB3D5F2ff],                           cSkyColorTo,
                                 
-                                [NSNumber numberWithInt:10],                        cFlawlessBonus,
+                                [NSNumber numberWithInt:10],                                    cFlawlessBonus,
 
                                 [[[UIDevice currentDevice].name
                                   componentsSeparatedByString:@"’"]
-                                 objectAtIndex:0],                                  cUserName,
-                                [NSDictionary dictionary],                          cUserScoreHistory,
+                                 objectAtIndex:0],                                              cUserName,
+                                [NSDictionary dictionary],                                      cUserScoreHistory,
 
                                 nil
                                 ]];
     
     self.userScoreHistory = [NSDictionary dictionaryWithObjectsAndKeys:
                              [NSDictionary dictionaryWithObjectsAndKeys:
-                              [NSNumber numberWithInt:random() % 200],
+                              [NSNumber numberWithInt:random() % 1500],
                               [NSString stringWithFormat:@"%f", [[NSDate dateWithTimeIntervalSinceNow:random() % 10000] timeIntervalSince1970]],
                               nil],
-                             @"Foo",
+                             @"John",
 
                              [NSDictionary dictionaryWithObjectsAndKeys:
-                              [NSNumber numberWithInt:random() % 200],
+                              [NSNumber numberWithInt:random() % 1500],
                               [NSString stringWithFormat:@"%f", [[NSDate dateWithTimeIntervalSinceNow:random() % 10000] timeIntervalSince1970]],
                               nil],
-                             @"Bar",
+                             @"Aeryn",
                              
                              [NSDictionary dictionaryWithObjectsAndKeys:
-                              [NSNumber numberWithInt:random() % 200],
+                              [NSNumber numberWithInt:random() % 1500],
                               [NSString stringWithFormat:@"%f", [[NSDate dateWithTimeIntervalSinceNow:random() % 10000] timeIntervalSince1970]],
                               nil],
-                             @"Pom",
+                             @"D'Argo",
                              
                              [NSDictionary dictionaryWithObjectsAndKeys:
-                              [NSNumber numberWithInt:random() % 200],
+                              [NSNumber numberWithInt:random() % 1500],
                               [NSString stringWithFormat:@"%f", [[NSDate dateWithTimeIntervalSinceNow:random() % 10000] timeIntervalSince1970]],
                               nil],
-                             @"Lala",
+                             @"Zhaan",
                              
                              [NSDictionary dictionaryWithObjectsAndKeys:
-                              [NSNumber numberWithInt:random() % 200],
+                              [NSNumber numberWithInt:random() % 1500],
                               [NSString stringWithFormat:@"%f", [[NSDate dateWithTimeIntervalSinceNow:random() % 10000] timeIntervalSince1970]],
                               nil],
-                             @"Jumbo",
+                             @"Rygel",
                              
                              [NSDictionary dictionaryWithObjectsAndKeys:
-                              [NSNumber numberWithInt:random() % 200],
+                              [NSNumber numberWithInt:random() % 1500],
                               [NSString stringWithFormat:@"%f", [[NSDate dateWithTimeIntervalSinceNow:random() % 10000] timeIntervalSince1970]],
                               nil],
-                             @"Lefty",
+                             @"Chiana",
                              
                              [NSDictionary dictionaryWithObjectsAndKeys:
-                              [NSNumber numberWithInt:random() % 200],
+                              [NSNumber numberWithInt:random() % 1500],
                               [NSString stringWithFormat:@"%f", [[NSDate dateWithTimeIntervalSinceNow:random() % 10000] timeIntervalSince1970]],
                               nil],
-                             @"Hitsy",
+                             @"Pilot",
                              
                              [NSDictionary dictionaryWithObjectsAndKeys:
-                              [NSNumber numberWithInt:random() % 200],
+                              [NSNumber numberWithInt:random() % 1500],
                               [NSString stringWithFormat:@"%f", [[NSDate dateWithTimeIntervalSinceNow:random() % 10000] timeIntervalSince1970]],
                               nil],
-                             @"Totsy",
+                             @"Crais",
                              
                              [NSDictionary dictionaryWithObjectsAndKeys:
-                              [NSNumber numberWithInt:random() % 200],
+                              [NSNumber numberWithInt:random() % 1500],
                               [NSString stringWithFormat:@"%f", [[NSDate dateWithTimeIntervalSinceNow:random() % 10000] timeIntervalSince1970]],
                               nil],
-                             @"Nana",
+                             @"Scorpius",
                              
                              nil];
     

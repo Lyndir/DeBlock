@@ -53,12 +53,28 @@
     NSArray                                     *sortedScores;
     NSInteger                                   topScore;
     
+    NSString                                    *scoreFormat;
+    NSDateFormatter                             *dateFormatter;
+    
     CGFloat                                     padding, barHeight;
-    NSUInteger                                  scoreCount, verticeCount;
+    NSUInteger                                  scoreCount, barCount;
     
     ccTime                                      animationTimeLeft;
     GLuint                                      vertexBuffer;
+    Label                                       **scoreLabels;
 }
+
+/** The formatter to use when rendering score dates. */
+@property (readwrite, retain) NSDateFormatter   *dateFormatter;
+/** The format string to render the score data with.
+ *
+ * The arguments to the format string are in this order: score, username, formatted date. */
+@property (readwrite, retain) NSString          *scoreFormat;
+
+/** The amount of pixels of padding to use between the graph border and the graph data. */
+@property (readwrite) CGFloat                   padding;
+/** The height of the bars in pixels. */
+@property (readwrite) CGFloat                   barHeight;
 
 @end
 
@@ -70,27 +86,14 @@
     SEL                                         comparator;
     
     GraphDataNode                               *graphDataNode;
-    
-    NSDateFormatter                             *dateFormatter;
-    NSString                                    *scoreFormat;
 }
 
 /** An array of Score objects. */
 @property (readwrite, retain) NSArray           *scores;
-/** The formatter to use when rendering score dates. */
-@property (readwrite, retain) NSDateFormatter   *dateFormatter;
-/** The format string to render the score data with.
- *
- * The arguments to the format string are in this order: score, username, formatted date. */
-@property (readwrite, retain) NSString          *scoreFormat;
 /** The method on the Score object that will determine the order of rendered score appearance. */
 @property (readwrite) SEL                       comparator;
-
-/** The amount of pixels of padding to use between the graph border and the graph data. */
-@property (readwrite) CGFloat                   padding;
-
-/** The height of the bars in pixels. */
-@property (readwrite) CGFloat                   barHeight;
+/** The node that displays the actual graph data. */
+@property (readonly) GraphDataNode              *graphDataNode;
 
 /** @param newData  An array of Score objects. */
 - (id)initWithArray:(NSArray *)newData;

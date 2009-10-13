@@ -8,7 +8,7 @@
 
 #import "ScrollLayer.h"
 
-#define kDefaultScrollPerSecond     0.1f
+#define kDefaultScrollPerSecond     0.01f
 
 
 @interface ScrollLayer ()
@@ -99,6 +99,13 @@
 }
 
 
+- (CGRect)visibleRect {
+    
+    CGPoint visibleOrigin = ccpNeg(self.position);
+    return CGRectFromPointAndSize(visibleOrigin, self.contentSize);
+}
+
+
 - (void)tick:(ccTime)dt {
     
     CGPoint scrollTarget    = ccpAdd(origin, scroll);
@@ -113,9 +120,16 @@
         self.position       = scrollTarget;
         return;
     }
-    
-    CGPoint scrollStep      = ccpMult(scrollLeft, (scrollLeftLen + 20) * scrollPerSecond * dt);
+
+    CGPoint scrollStep      = ccpMult(scrollLeft, (scrollLeftLen + 4 / kDefaultScrollPerSecond) * scrollPerSecond * dt);
     self.position           = ccpAdd(self.position, scrollStep);
+    [self didUpdateScroll];
+}
+
+
+- (void)didUpdateScroll {
+    
+    // Override me if you need to update your UI as it is scrolled.
 }
 
 

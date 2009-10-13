@@ -85,14 +85,29 @@
                  [[MenuItemFont itemFromString:@"Continue Game" target:self selector:@selector(continueGame:)] retain],
                  [MenuItemFont itemFromString:@"New Game" target:self selector:@selector(newGame:)],
                  [MenuItemSpacer spacerSmall],
-                 [MenuItemFont itemFromString:@"Statistics" target:self selector:@selector(statistics:)],
+                 [MenuItemFont itemFromString:@"More..." target:self selector:@selector(more:)],
                  nil] retain];
     mainMenu.background         = [Sprite spriteWithFile:@"splash.png"];
-    mainMenu.outerPadding       = margin(110, 20, 10, 20);
+    mainMenu.outerPadding       = margin(100, 20, 10, 20);
     mainMenu.innerRatio         = 1/20.0f;
     mainMenu.opacity            = 0xcc;
     mainMenu.color              = ccc3(0x99, 0x99, 0xff);
     mainMenu.colorGradient      = ccc4(0xcc, 0xcc, 0xff, 0xcc);
+    
+    moreMenu = [[MenuLayer menuWithDelegate:self logo:[MenuItemSpacer spacerLarge]
+                                      items:
+                 [MenuItemSpacer spacerNormal],
+                 [MenuItemFont itemFromString:@"Configuration" target:self selector:@selector(configuration:)],
+                 [MenuItemSpacer spacerSmall],
+                 [MenuItemFont itemFromString:@"Strategy" target:self selector:@selector(strategy:)],
+                 [MenuItemFont itemFromString:@"Statistics" target:self selector:@selector(statistics:)],
+                 nil] retain];
+    moreMenu.background         = [Sprite spriteWithFile:@"splash.png"];
+    moreMenu.outerPadding       = margin(100, 20, 10, 20);
+    moreMenu.innerRatio         = 1/20.0f;
+    moreMenu.opacity            = 0xcc;
+    moreMenu.color              = ccc3(0x99, 0x99, 0xff);
+    moreMenu.colorGradient      = ccc4(0xcc, 0xcc, 0xff, 0xcc);
     
     newGameMenu = [[MenuLayer menuWithDelegate:self logo:[MenuItemSpacer spacerLarge]
                                          items:
@@ -106,6 +121,18 @@
     newGameMenu.opacity         = 0xcc;
     newGameMenu.color           = ccc3(0x99, 0x99, 0xff);
     newGameMenu.colorGradient   = ccc4(0xcc, 0xcc, 0xff, 0xcc);
+    
+    configMenu = [[ConfigMenuLayer menuWithDelegate:self logo:[MenuItemSpacer spacerLarge]
+                                           settings:
+                   @selector(music),
+                   @selector(soundFx),
+                   nil] retain];
+    configMenu.background       = [Sprite spriteWithFile:@"splash.png"];
+    configMenu.outerPadding     = margin(110, 20, 10, 20);
+    configMenu.innerRatio       = 1/20.0f;
+    configMenu.opacity          = 0xcc;
+    configMenu.color            = ccc3(0x99, 0x99, 0xff);
+    configMenu.colorGradient    = ccc4(0xcc, 0xcc, 0xff, 0xcc);
     
     pausedMenu = [[MenuLayer menuWithDelegate:self logo:[MenuItemImage itemFromNormalImage:@"title.paused.png"
                                                                              selectedImage:@"title.paused.png"]
@@ -226,6 +253,23 @@
 - (void)levelRedo:(id)caller {
     
     [gameLayer levelRedo];
+}
+
+
+- (void)more:(id)caller {
+    
+    [[DeblockAppDelegate get] pushLayer:moreMenu];
+}
+
+
+- (void)configuration:(id)caller {
+    
+    [[DeblockAppDelegate get] pushLayer:configMenu];
+}
+
+
+- (void)strategy:(id)caller {
+    
 }
 
 

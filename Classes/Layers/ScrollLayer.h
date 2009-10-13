@@ -28,4 +28,7 @@
 @property (readwrite) CGPoint                   origin;
 @property (readwrite) CGPoint                   scroll;
 
+- (void)didUpdateScroll;
+- (CGRect)visibleRect;
+
 @end

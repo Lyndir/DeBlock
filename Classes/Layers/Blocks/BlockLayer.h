@@ -34,6 +34,12 @@ typedef enum DMBlockType {
     DMBlockTypeFrozen,
 } DMBlockType;
 
+typedef enum DMScanReason {
+    DMScanReasonDestroying,
+    DMScanReasonCheckState,
+    DMScanReasonFreezing
+} DMScanReason;
+
 @class FieldLayer;
 
 @interface BlockLayer : Layer<CocosNodeRGBA> {
@@ -52,7 +58,7 @@ typedef enum DMBlockType {
     ccColor4F                                   modColor;
     
     IntervalAction                              *moveAction;
-    Label                                       *label;
+    //Label                                     *label;
     
     ParticleSystem                              *dropEmitter;
 }
@@ -63,7 +69,6 @@ typedef enum DMBlockType {
 @property (readwrite) BOOL                      destructible;
 /** Indicates whether the conditions on this block mean algorithms should not considder it for destruction. */
 @property (readonly) BOOL                       valid;
-@property (readonly) BOOL                       needsLinksToDestroy;
 @property (readwrite, retain) IntervalAction    *moveAction;
 
 @property (readwrite) NSInteger                 targetRow;
@@ -83,12 +88,11 @@ typedef enum DMBlockType {
 - (NSString *)labelString;
 - (BOOL)moving;
 
-- (NSMutableSet *)findLinkedBlocksInField:(FieldLayer *)field
+- (BOOL)isLinkedToAdjecentBlock:(BlockLayer *)block forReason:(DMScanReason)aReason;
+- (NSMutableSet *)findLinkedBlocksInField:(FieldLayer *)field forReason:(DMScanReason)aReason
                                     atRow:(NSInteger)aRow col:(NSInteger)aCol;
-- (NSMutableSet *)findAdjecentBlocksInField:(FieldLayer *)field
-                                      atRow:(NSInteger)aRow col:(NSInteger)aCol;
-- (void)getLinksInField:(FieldLayer *)aField toSet:(NSMutableSet *)allLinkedBlocks
-                recurse:(BOOL)recurse specialLinks:(BOOL)specialLinks;
+- (void)getLinksInField:(FieldLayer *)aField forReason:(DMScanReason)aReason
+                  toSet:(NSMutableSet *)allLinkedBlocks;
 
 - (void)blink;
 - (void)crumble;

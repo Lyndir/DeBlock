@@ -77,8 +77,6 @@
 @interface GraphDataNode ()
 
 @property (readwrite, retain) NSArray           *sortedScores;
-@property (readwrite) CGFloat                   padding;
-@property (readwrite) CGFloat                   barHeight;
 
 - (void)updateWithSortedScores:(NSArray *)sortedScores;
 - (void)updateVertices;
@@ -89,7 +87,24 @@
 
 @implementation GraphDataNode
 
-@synthesize padding, barHeight, sortedScores;
+@synthesize sortedScores;
+@synthesize padding, barHeight;
+@synthesize scoreFormat, dateFormatter;
+
+- (id)init {
+
+    if (!(self = [super init]))
+        return nil;
+    
+    self.padding            = 0;
+    self.barHeight          = [[Config get].largeFontSize unsignedIntValue];
+    self.scoreFormat        = @"%04d - %@";
+    self.dateFormatter      = [[NSDateFormatter new] autorelease];
+    [self.dateFormatter setDateStyle:NSDateFormatterShortStyle];
+    [self.dateFormatter setTimeStyle:NSDateFormatterShortStyle];
+
+    return self;
+}
 
 - (void)setBarHeight:(CGFloat)aBarHeight {
     
@@ -105,8 +120,28 @@
     [self updateVertices];
 }
 
+- (void)setScoreFormat:(NSString *)aScoreFormat {
+    
+    scoreFormat = aScoreFormat;
+    [self updateVertices];
+}
+
+- (void)setDateFormatter:(NSDateFormatter *)aDateFormatter {
+    
+    dateFormatter = aDateFormatter;
+    [self updateVertices];
+}
+
 - (void)updateWithSortedScores:(NSArray *)newSortedScores {
 
+    // Clean up existing score labels.
+    for (NSUInteger s = 0; s < scoreCount; ++s) {
+        [self removeChild:scoreLabels[s] cleanup:YES];
+        [scoreLabels[s] release];
+    }
+    free(scoreLabels);
+    scoreLabels                 = nil;
+    
     self.sortedScores           = newSortedScores;
     scoreCount                  = [sortedScores count];
     self.scrollableContentSize  = CGSizeMake(self.contentSize.width, scoreCount * barHeight);
@@ -119,13 +154,14 @@
 
     // Make score labels.
     NSUInteger s = 0;
+    scoreLabels                 = malloc(sizeof(Label *) * scoreCount);
     for (Score *score in sortedScores) {
-        Label *scoreLabel       = [[Label alloc] initWithString:score.username
-                                                 fontName:[Config get].fontName fontSize:[[Config get].fontSize intValue]];
-        scoreLabel.position     = ccp(scoreLabel.contentSize.width / 2 + padding + 10,
-                                      self.contentSize.height - scoreLabel.contentSize.height / 2 - barHeight * s);
-        [self addChild:scoreLabel];
-        [scoreLabel release];
+        scoreLabels[s]          = [[Label alloc] initWithString:[NSString stringWithFormat:scoreFormat,
+                                                                 score.score, score.username, [dateFormatter stringFromDate:score.date]]
+                                                       fontName:[Config get].fixedFontName fontSize:[[Config get].fontSize intValue]];
+        scoreLabels[s].position = ccp(scoreLabels[s].contentSize.width / 2 + padding + 10,
+                                      self.contentSize.height - scoreLabels[s].contentSize.height / 2 - barHeight * s);
+        [self addChild:scoreLabels[s]];
         
         ++s;
     }
@@ -141,68 +177,77 @@
     animationTimeLeft -= dt;
     if (animationTimeLeft <= 0) {
         [self unschedule:_cmd];
-        dt += animationTimeLeft;
-        if (!dt)
-            return;
+        animationTimeLeft = 0;
     }
     
     [self updateVertices];
 }
 
+- (void)didUpdateScroll {
+    
+    [self updateVertices];
+}
+
 - (void)updateVertices {
+
+    // Hide all score labels initially; we will reveal the ones that we create vertices for when we do.
+    for (NSUInteger s = 0; s < scoreCount; ++s)
+        scoreLabels[s].visible = NO;
     
     // Build vertex arrays.
     Vertex *vertices        = malloc(sizeof(Vertex)     /* size of a vertex */
-                                     * 12               /* amount of vertices per score box */
+                                     * 6               /* amount of vertices per score box */
                                      * scoreCount       /* amount of scores */);
     
     NSUInteger sv           = 0;
-    CGFloat sy              = self.contentSize.height - padding;
+    CGRect visibleRect      = [self visibleRect];
+    CGFloat sy              = visibleRect.size.height - padding;
     float scoreMultiplier   = (kAnimationDuration - animationTimeLeft) / (kAnimationDuration * topScore);
     for (NSUInteger s = 0; s < scoreCount; ++s) {
-        if (sy - barHeight > self.contentSize.height - padding) {
+        if (sy - visibleRect.origin.y - barHeight > visibleRect.size.height - padding) {
             sy              -= barHeight;
             continue;
         }
         
         float scoreRatio    = ((Score *)[sortedScores objectAtIndex:s]).score * scoreMultiplier;
         
-        vertices[sv + 0].c  = vertices[sv + 1].c    = vertices[sv + 5].c    = ccc4(0xbb, 0xcc, 0xff, 0xaa); // near (top)
-        vertices[sv + 2].c  = vertices[sv + 3].c    = vertices[sv + 4].c    = ccc4(0xdd, 0xdd, 0xff, 0xdd); // half
-        vertices[sv + 6].c  = vertices[sv + 7].c    = vertices[sv + 11].c   = ccc4(0xdd, 0xdd, 0xff, 0xee); // half
-        vertices[sv + 8].c  = vertices[sv + 9].c    = vertices[sv + 10].c   = ccc4(0xff, 0xff, 0xff, 0xff); // far (bottom)
+        vertices[sv + 0].c  = vertices[sv + 1].c    = vertices[sv + 5].c    = ccc4(0xee, 0xee, 0xff, 0xbb); // near (top)
+        vertices[sv + 2].c  = vertices[sv + 3].c    = vertices[sv + 4].c    = ccc4(0xee, 0xee, 0xff, 0xee); // half
+        //vertices[sv + 6].c  = vertices[sv + 7].c    = vertices[sv + 11].c   = ccc4(0xee, 0xee, 0xff, 0xee); // half
+        //vertices[sv + 8].c  = vertices[sv + 9].c    = vertices[sv + 10].c   = ccc4(0xee, 0xee, 0xff, 0xcc); // far (bottom)
         
         CGFloat nearX       = padding;
         CGFloat nearY       = sy;
-        CGFloat farX        = padding + (self.contentSize.width - 2 * padding) * scoreRatio;
-        CGFloat farY        = sy - barHeight;
+        CGFloat farX        = nearX + (self.contentSize.width - 2 * padding) * scoreRatio;
+        CGFloat farY        = nearY - barHeight;
         //CGFloat halfX     = (nearX + farX) / 2;
-        CGFloat halfY       = nearY + (farY - nearY) * 0.618f;
+        CGFloat halfY       = farY; //= nearY + (farY - nearY) * (1 - 0.618f);
         vertices[sv + 0].p  = ccp(nearX , nearY);
         vertices[sv + 1].p  = ccp(farX  , nearY);
         vertices[sv + 2].p  = ccp(nearX , halfY);
         vertices[sv + 3].p  = ccp(nearX , halfY);
         vertices[sv + 4].p  = ccp(farX  , halfY);
         vertices[sv + 5].p  = ccp(farX  , nearY);
-        vertices[sv + 6].p  = ccp(nearX , halfY);
+        /*vertices[sv + 6].p  = ccp(nearX , halfY);
         vertices[sv + 7].p  = ccp(farX  , halfY);
         vertices[sv + 8].p  = ccp(nearX , farY);
         vertices[sv + 9].p  = ccp(nearX , farY);
         vertices[sv + 10].p = ccp(farX  , farY);
-        vertices[sv + 11].p = ccp(farX  , halfY);
+        vertices[sv + 11].p = ccp(farX  , halfY);*/
         
-        sv                  += 12;
+        sv                  += 6;
         sy                  -= barHeight;
-        if (sy - barHeight <= padding - barHeight)
+        scoreLabels[s].visible = YES;
+        if (sy - visibleRect.origin.y - barHeight <= padding - barHeight)
             break;
     }
-    verticeCount            = sv / 12;
+    barCount                = sv / 6;
     
     // Push our window data into VBOs.
     glDeleteBuffers(1, &vertexBuffer);
     glGenBuffers(1, &vertexBuffer);
     glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * verticeCount * 12, vertices, GL_DYNAMIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * barCount * 6, vertices, GL_DYNAMIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     
     // Free the client side data.
@@ -220,7 +265,10 @@
     glVertexPointer(2, GL_FLOAT, sizeof(Vertex), 0);
     glColorPointer(4, GL_UNSIGNED_BYTE, sizeof(Vertex), (GLvoid *)offsetof(Vertex, c));
     
-    glDrawArrays(GL_TRIANGLES, 0, verticeCount * 12);
+    glLineWidth(2.0f);
+    glDrawArrays(GL_LINES, 0, barCount * 6);
+    glDrawArrays(GL_TRIANGLES, 0, barCount * 6);
+    glLineWidth(1.0f);
     
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBlendFunc(CC_BLEND_SRC, CC_BLEND_DST);
@@ -251,7 +299,8 @@
 
 @implementation GraphNode
 
-@synthesize scores, dateFormatter, scoreFormat, comparator;
+@synthesize scores, comparator;
+@synthesize graphDataNode;
 
 
 - (id)initWithArray:(NSArray *)newScores {
@@ -266,18 +315,11 @@
     
     [self addChild:graphDataNode = [GraphDataNode new]];
     graphDataNode.contentSize = self.contentSize;
-    
-    self.padding            = 0;
-    self.barHeight          = [[Config get].largeFontSize unsignedIntValue];
+
     self.comparator         = @selector(compareByTopScore:);
-    self.scoreFormat        = @"%04d | %s";
-    self.dateFormatter      = [NSDateFormatter new];
-    [self.dateFormatter setDateStyle:NSDateFormatterShortStyle];
-    [self.dateFormatter setTimeStyle:NSDateFormatterShortStyle];
+    self.scores             = newScores;
 
-	self.scores             = newScores;
-
-	return self;
+    return self;
 }
 
 
@@ -289,14 +331,6 @@
     [self updateSortedScores];
 }
 
-
-- (void)setComparator:(SEL)newComparator {
-    
-    comparator              = newComparator;
-
-    [self updateSortedScores];
-}
-
 - (void)updateSortedScores {
     
     [sortedScores release];
@@ -305,33 +339,13 @@
     [graphDataNode updateWithSortedScores:sortedScores];
 }
 
-- (CGFloat)padding {
-    
-    return graphDataNode.padding;
-}
-
-- (void)setPadding:(CGFloat)aPadding {
-    
-    graphDataNode.padding   = aPadding;
-}
-
-- (CGFloat)barHeight {
-    
-    return graphDataNode.barHeight;
-}
-
-- (void)setBarHeight:(CGFloat)aBarHeight {
-    
-    graphDataNode.barHeight = aBarHeight;
-}
-
 - (void)draw {
     
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     DrawBoxFrom(CGPointZero, ccp(self.contentSize.width, self.contentSize.height),
-                ccc4(0x00, 0x00, 0x00, 0x66), ccc4(0x00, 0x00, 0x00, 0x99));
+                ccc4(0x00, 0x00, 0x00, 0x66), ccc4(0x00, 0x00, 0x00, 0xCC));
     DrawBorderFrom(CGPointZero, ccp(self.contentSize.width, self.contentSize.height),
-                   ccc4(0xff, 0xff, 0xff, 0x66), 1);
+                   ccc4(0xff, 0xff, 0xff, 0x66), 2);
     glBlendFunc(CC_BLEND_SRC, CC_BLEND_DST);
 }
 

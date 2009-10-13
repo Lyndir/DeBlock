@@ -259,7 +259,7 @@
     blockPoint.x += aBlock.contentSize.width / 2.0f;
     blockPoint.y += aBlock.contentSize.height;
     
-    NSInteger destroyedBlocks = [self destroyBlock:aBlock forced:!aBlock.needsLinksToDestroy];
+    NSInteger destroyedBlocks = [self destroyBlock:aBlock forced:NO];
     NSInteger points = powf(destroyedBlocks, 1.5f);
     if (points) {
         [DMConfig get].levelScore = [NSNumber numberWithInt:[[DMConfig get].levelScore intValue] + points];
@@ -276,8 +276,8 @@
     NSMutableSet *linkedBlocks = [[NSMutableSet new] autorelease];
 
     [linkedBlocks addObject:aBlock];
-    [aBlock getLinksInField:self toSet:linkedBlocks
-                    recurse:YES specialLinks:YES];
+    [aBlock getLinksInField:self forReason:DMScanReasonDestroying
+                      toSet:linkedBlocks];
 
     // No links and not forced, give up.
     if (!forced && [linkedBlocks count] <= 1)
@@ -507,7 +507,7 @@
                 continue;
             
             ++blocksLeft;
-            [block getLinksInField:self toSet:allLinkedBlocks recurse:YES specialLinks:YES];
+            [block getLinksInField:self forReason:DMScanReasonCheckState toSet:allLinkedBlocks];
         }
     NSUInteger linksLeft = [allLinkedBlocks count];
     [allLinkedBlocks release];

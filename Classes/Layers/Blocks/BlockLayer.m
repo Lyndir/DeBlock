@@ -47,7 +47,7 @@ static NSDictionary *blockColors;
 //                 [NSNumber numberWithLong:0xF2E63Dff],    [NSNumber numberWithUnsignedInt:DMBlockTypeThree],
 //                 [NSNumber numberWithLong:0xBF5F02ff],    [NSNumber numberWithUnsignedInt:DMBlockTypeFour],
 //                 [NSNumber numberWithLong:0xF23535ff],    [NSNumber numberWithUnsignedInt:DMBlockTypeFive],
-                                    
+
 //                 [NSNumber numberWithLong:0x312316ff],    [NSNumber numberWithUnsignedInt:DMBlockTypeOne],
 //                 [NSNumber numberWithLong:0xF2DBAEff],    [NSNumber numberWithUnsignedInt:DMBlockTypeTwo],
 //                 [NSNumber numberWithLong:0xBF6A39ff],    [NSNumber numberWithUnsignedInt:DMBlockTypeThree],
@@ -156,38 +156,36 @@ static NSDictionary *blockColors;
 }
 
 
-- (BOOL)needsLinksToDestroy {
+- (BOOL)isLinkedToAdjecentBlock:(BlockLayer *)block forReason:(DMScanReason)aReason {
+    
+    if (block.type != self.type)
+        // Block is not of the same type.
+        return NO;
+    
+    if (aReason == DMScanReasonFreezing && [self isKindOfClass:[SpecialBlockLayer class]])
+        // When freezing, don't link to special blocks.
+        return NO;
+    
+    if (!self.destructible)
+        // Indestructible block.
+        return NO;
     
     return YES;
 }
 
-
-- (NSMutableSet *)findLinkedBlocksInField:(FieldLayer *)field atRow:(NSInteger)aRow col:(NSInteger)aCol {
+- (NSMutableSet *)findLinkedBlocksInField:(FieldLayer *)field forReason:(DMScanReason)aReason
+                                    atRow:(NSInteger)aRow col:(NSInteger)aCol {
     
-    return [self findAdjecentBlocksInField:field atRow:aRow col:aCol];
-}
-
-
-- (NSMutableSet *)findAdjecentBlocksInField:(FieldLayer *)field atRow:(NSInteger)aRow col:(NSInteger)aCol {
-
     // Find all neighbouring blocks of the same type.
     NSMutableSet *linkedBlocks = [NSMutableSet setWithCapacity:4];
-    for (NSInteger r = aRow - 1; r <= aRow + 1; ++r) {
+    for (NSInteger r = aRow - 1; r <= aRow + 1; r+=2) {
         BlockLayer *block = [field blockAtRow:r col:aCol];
-        if (block == nil || r == aRow)
-            // Bad block, ignore.
-            continue;
-        
-        if (block.type == type)
+        if ([block isLinkedToAdjecentBlock:self forReason:aReason])
             [linkedBlocks addObject:block];
     }
-    for (NSInteger c = aCol - 1; c <= aCol + 1; ++c) {
+    for (NSInteger c = aCol - 1; c <= aCol + 1; c+=2) {
         BlockLayer *block = [field blockAtRow:aRow col:c];
-        if (block == nil || c == aCol)
-            // Bad block, ignore.
-            continue;
-        
-        if (block.type == type)
+        if ([block isLinkedToAdjecentBlock:self forReason:aReason])
             [linkedBlocks addObject:block];
     }
     
@@ -195,8 +193,8 @@ static NSDictionary *blockColors;
 }
 
 
-- (void)getLinksInField:(FieldLayer *)aField toSet:(NSMutableSet *)allLinkedBlocks
-                recurse:(BOOL)recurse specialLinks:(BOOL)specialLinks {
+- (void)getLinksInField:(FieldLayer *)aField forReason:(DMScanReason)aReason
+                  toSet:(NSMutableSet *)allLinkedBlocks {
     
     if (self.destroyed || !self.destructible)
         // Already destroyed or indestructible.
@@ -206,11 +204,7 @@ static NSDictionary *blockColors;
     NSInteger row, col;
     [aField getPositionOfBlock:self toRow:&row col:&col];
 
-    NSMutableSet *myLinkedBlocks;
-    if (specialLinks)
-        myLinkedBlocks = [self findLinkedBlocksInField:aField atRow:row col:col];
-    else
-        myLinkedBlocks = [self findAdjecentBlocksInField:aField atRow:row col:col];
+    NSMutableSet *myLinkedBlocks = [self findLinkedBlocksInField:aField forReason:aReason atRow:row col:col];
     [myLinkedBlocks minusSet:allLinkedBlocks];
     
     if (![myLinkedBlocks count])
@@ -219,10 +213,9 @@ static NSDictionary *blockColors;
 
     [allLinkedBlocks unionSet:myLinkedBlocks];
 
-    if (recurse)
-        for (BlockLayer *block in myLinkedBlocks)
-            [block getLinksInField:aField toSet:allLinkedBlocks
-                           recurse:recurse specialLinks:specialLinks];
+    for (BlockLayer *block in myLinkedBlocks)
+        [block getLinksInField:aField forReason:aReason
+                         toSet:allLinkedBlocks];
 }
 
 
@@ -488,8 +481,6 @@ static NSDictionary *blockColors;
         [properties appendFormat:@", invalid"];
     if (self.moving)
         [properties appendFormat:@", moving"];
-    if (!self.needsLinksToDestroy)
-        [properties appendFormat:@", canDestroyUnlinked"];
     if (properties.length)
         [properties deleteCharactersInRange:NSMakeRange(0, 2)];
     

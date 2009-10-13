@@ -39,13 +39,6 @@
     return self;
 }
 
-- (void)crumble {
-    
-    [AudioController vibrate];
-
-    [super crumble];
-}
-
 @end
 
 
@@ -72,14 +65,15 @@
     return @"B";
 }
 
-- (NSMutableSet *)findLinkedBlocksInField:(FieldLayer *)field atRow:(NSInteger)aRow col:(NSInteger)aCol {
+- (NSMutableSet *)findLinkedBlocksInField:(FieldLayer *)field forReason:(DMScanReason)aReason
+                                    atRow:(NSInteger)aRow col:(NSInteger)aCol {
     
     NSMutableSet *linkedBlocks = [NSMutableSet setWithCapacity:8];
     for (NSInteger r = aRow - 1; r <= aRow + 1; ++r) {
         for (NSInteger c = aCol - 1; c <= aCol + 1; ++c) {
             BlockLayer *block = [field blockAtRow:r col:c];
             if (block == nil || block == self)
-                // Bad block, ignore.
+                // Let's not destroy ourselves and non-existing blocks.
                 continue;
             
             [linkedBlocks addObject:block];
@@ -161,18 +155,26 @@
     return @"Z";
 }
 
-- (NSMutableSet *)findLinkedBlocksInField:(FieldLayer *)field atRow:(NSInteger)aRow col:(NSInteger)aCol {
+- (NSMutableSet *)findLinkedBlocksInField:(FieldLayer *)field forReason:(DMScanReason)aReason
+                                    atRow:(NSInteger)aRow col:(NSInteger)aCol {
     
     NSMutableSet *linkedBlocks = [NSMutableSet setWithCapacity:8];
     for (NSInteger r = 0; r < field.blockRows; ++r) {
         for (NSInteger c = 0; c < field.blockColumns; ++c) {
             BlockLayer *block = [field blockAtRow:r col:c];
             if (block == nil || block == self)
-                // Bad block, ignore.
+                // Let's not destroy ourselves and non-existing blocks.
                 continue;
             
-            if (block.type == self.type && block.destructible)
-                [linkedBlocks addObject:block];
+            if (![block isLinkedToAdjecentBlock:self forReason:aReason])
+                // Block is not linked to us by standard rules.
+                continue;
+            
+            if ([block isKindOfClass:[SpecialBlockLayer class]] && ![block isKindOfClass:[self class]])
+                // Don't zap specials (except for other zappers).
+                continue;
+            
+            [linkedBlocks addObject:block];
         }
     }
     
@@ -224,7 +226,8 @@
         return;
     
     NSMutableSet *linkedBlocks = [NSMutableSet new];
-    [self getLinksInField:field toSet:linkedBlocks recurse:YES specialLinks:NO];
+    [self getLinksInField:field forReason:DMScanReasonFreezing
+                    toSet:linkedBlocks];
 
     for (BlockLayer *block in linkedBlocks) {
         block.destructible  = NO;

@@ -26,6 +26,7 @@
 #import "GameLayer.h"
 #import "MenuLayer.h"
 #import "PlayerViewController.h"
+#import "ConfigMenuLayer.h"
 
 @interface DeblockAppDelegate : AbstractAppDelegate<MenuDelegate> {
 
@@ -33,7 +34,8 @@
     PlayerViewController            *playerVC;
     
     GameLayer                       *gameLayer;
-    MenuLayer                       *mainMenu, *newGameMenu, *pausedMenu, *gameOverMenu;
+    MenuLayer                       *mainMenu, *moreMenu, *newGameMenu, *pausedMenu, *gameOverMenu;
+    ConfigMenuLayer                 *configMenu;
     
     MenuItem                        *continueGame;
 }

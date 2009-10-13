@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		DA1B8FE91062A41400042397 /* PlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA1B8FE81062A41400042397 /* PlayerViewController.m */; };
 		DA27778B1054E96300C8EE17 /* libcocos2d-iphone.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA8893E61052EB7E00EA8E72 /* libcocos2d-iphone.a */; };
+		DA394BD2107086320045A428 /* Marimba_Deblock.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = DA394BD0107086320045A428 /* Marimba_Deblock.mp3 */; };
+		DA394BD3107086320045A428 /* Staccato_Deblock.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = DA394BD1107086320045A428 /* Staccato_Deblock.mp3 */; };
 		DA3A7302102A1A4400296606 /* block.cracked.1.png in Resources */ = {isa = PBXBuildFile; fileRef = DA3A72F5102A1A4400296606 /* block.cracked.1.png */; };
 		DA3A7303102A1A4400296606 /* block.cracked.2.png in Resources */ = {isa = PBXBuildFile; fileRef = DA3A72F6102A1A4400296606 /* block.cracked.2.png */; };
 		DA3A7304102A1A4400296606 /* block.cracked.3.png in Resources */ = {isa = PBXBuildFile; fileRef = DA3A72F7102A1A4400296606 /* block.cracked.3.png */; };
@@ -20,6 +22,9 @@
 		DA3A730A102A1A4400296606 /* block.cracked.9.png in Resources */ = {isa = PBXBuildFile; fileRef = DA3A72FD102A1A4400296606 /* block.cracked.9.png */; };
 		DA3A730B102A1A4400296606 /* block.cracked.10.png in Resources */ = {isa = PBXBuildFile; fileRef = DA3A72FE102A1A4400296606 /* block.cracked.10.png */; };
 		DA3A730C102A1A4400296606 /* block.whole.png in Resources */ = {isa = PBXBuildFile; fileRef = DA3A72FF102A1A4400296606 /* block.whole.png */; };
+		DA41D64710726B89001BAFAB /* ConfigMenuLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = DA41D64610726B89001BAFAB /* ConfigMenuLayer.m */; };
+		DA41D6CA107BD031001BAFAB /* Mjolnir_Deblock.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = DA41D6C9107BD031001BAFAB /* Mjolnir_Deblock.mp3 */; };
+		DA41D712107BD915001BAFAB /* NSString_SEL.m in Sources */ = {isa = PBXBuildFile; fileRef = DA41D711107BD915001BAFAB /* NSString_SEL.m */; };
 		DA5A781D10409E4200BB27DB /* clouds.png in Resources */ = {isa = PBXBuildFile; fileRef = DA5A781C10409E4200BB27DB /* clouds.png */; };
 		DA5A798610429C0300BB27DB /* PropertyAction.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A798510429C0300BB27DB /* PropertyAction.m */; };
 		DA63684110583A95001E2410 /* Absolute.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DA63683010583A95001E2410 /* Absolute.ttf */; };
@@ -40,6 +45,7 @@
 		DA9EE0A01029618800528A29 /* MenuItemSpacer.m in Sources */ = {isa = PBXBuildFile; fileRef = DA9EE09F1029618800528A29 /* MenuItemSpacer.m */; };
 		DAAA7509104F093B00117B12 /* title.gameover.png in Resources */ = {isa = PBXBuildFile; fileRef = DAAA7507104F093B00117B12 /* title.gameover.png */; };
 		DAAA750A104F093C00117B12 /* title.paused.png in Resources */ = {isa = PBXBuildFile; fileRef = DAAA7508104F093B00117B12 /* title.paused.png */; };
+		DAAB88AF10830EA6009E7211 /* Carriage_House_Deblock.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = DAAB88AE10830EA3009E7211 /* Carriage_House_Deblock.mp3 */; };
 		DAB2C56D10570F2900B6701A /* libz.1.2.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DAB2C56C10570F2900B6701A /* libz.1.2.3.dylib */; };
 		DAC8D42410446FA600438A8B /* clouds.1.png in Resources */ = {isa = PBXBuildFile; fileRef = DAC8D41E10446FA600438A8B /* clouds.1.png */; };
 		DAC8D42510446FA600438A8B /* clouds.2.png in Resources */ = {isa = PBXBuildFile; fileRef = DAC8D41F10446FA600438A8B /* clouds.2.png */; };
@@ -258,6 +264,8 @@
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
 		DA1B8FE71062A41400042397 /* PlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayerViewController.h; sourceTree = "<group>"; };
 		DA1B8FE81062A41400042397 /* PlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayerViewController.m; sourceTree = "<group>"; };
+		DA394BD0107086320045A428 /* Marimba_Deblock.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Marimba_Deblock.mp3; sourceTree = "<group>"; };
+		DA394BD1107086320045A428 /* Staccato_Deblock.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Staccato_Deblock.mp3; sourceTree = "<group>"; };
 		DA3A72F5102A1A4400296606 /* block.cracked.1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = block.cracked.1.png; sourceTree = "<group>"; };
 		DA3A72F6102A1A4400296606 /* block.cracked.2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = block.cracked.2.png; sourceTree = "<group>"; };
 		DA3A72F7102A1A4400296606 /* block.cracked.3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = block.cracked.3.png; sourceTree = "<group>"; };
@@ -269,6 +277,11 @@
 		DA3A72FD102A1A4400296606 /* block.cracked.9.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = block.cracked.9.png; sourceTree = "<group>"; };
 		DA3A72FE102A1A4400296606 /* block.cracked.10.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = block.cracked.10.png; sourceTree = "<group>"; };
 		DA3A72FF102A1A4400296606 /* block.whole.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = block.whole.png; sourceTree = "<group>"; };
+		DA41D64510726B89001BAFAB /* ConfigMenuLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConfigMenuLayer.h; sourceTree = "<group>"; };
+		DA41D64610726B89001BAFAB /* ConfigMenuLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConfigMenuLayer.m; sourceTree = "<group>"; };
+		DA41D6C9107BD031001BAFAB /* Mjolnir_Deblock.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Mjolnir_Deblock.mp3; sourceTree = "<group>"; };
+		DA41D710107BD915001BAFAB /* NSString_SEL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSString_SEL.h; sourceTree = "<group>"; };
+		DA41D711107BD915001BAFAB /* NSString_SEL.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSString_SEL.m; sourceTree = "<group>"; };
 		DA53049E100FCC14000D32DF /* splash.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = splash.png; sourceTree = "<group>"; };
 		DA53050410107849000D32DF /* GameLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameLayer.h; sourceTree = "<group>"; };
 		DA53050510107849000D32DF /* GameLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameLayer.m; sourceTree = "<group>"; };
@@ -359,6 +372,7 @@
 		DA9EE09F1029618800528A29 /* MenuItemSpacer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuItemSpacer.m; sourceTree = "<group>"; };
 		DAAA7507104F093B00117B12 /* title.gameover.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = title.gameover.png; sourceTree = "<group>"; };
 		DAAA7508104F093B00117B12 /* title.paused.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = title.paused.png; sourceTree = "<group>"; };
+		DAAB88AE10830EA3009E7211 /* Carriage_House_Deblock.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Carriage_House_Deblock.mp3; sourceTree = "<group>"; };
 		DAB2C56C10570F2900B6701A /* libz.1.2.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.2.3.dylib; path = /usr/lib/libz.1.2.3.dylib; sourceTree = "<absolute>"; };
 		DAC8D41E10446FA600438A8B /* clouds.1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = clouds.1.png; sourceTree = "<group>"; };
 		DAC8D41F10446FA600438A8B /* clouds.2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = clouds.2.png; sourceTree = "<group>"; };
@@ -593,6 +607,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				DA394BCE107086320045A428 /* Audio */,
 				DAF2B7E4105A41CE00B4B6D2 /* cocos2d */,
 				DAB2C591105710DA00B6701A /* Fonts */,
 				DA6A20911017B6D700B55AF8 /* Localizable.strings */,
@@ -618,6 +633,25 @@
 				DAB2C56C10570F2900B6701A /* libz.1.2.3.dylib */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		DA394BCE107086320045A428 /* Audio */ = {
+			isa = PBXGroup;
+			children = (
+				DA394BCF107086320045A428 /* Music */,
+			);
+			path = Audio;
+			sourceTree = "<group>";
+		};
+		DA394BCF107086320045A428 /* Music */ = {
+			isa = PBXGroup;
+			children = (
+				DAAB88AE10830EA3009E7211 /* Carriage_House_Deblock.mp3 */,
+				DA41D6C9107BD031001BAFAB /* Mjolnir_Deblock.mp3 */,
+				DA394BD0107086320045A428 /* Marimba_Deblock.mp3 */,
+				DA394BD1107086320045A428 /* Staccato_Deblock.mp3 */,
+			);
+			path = Music;
 			sourceTree = "<group>";
 		};
 		DA53049D100FCC14000D32DF /* Images */ = {
@@ -777,6 +811,8 @@
 				DA6A204C1017B67F00B55AF8 /* ShadeLayer.m */,
 				DA6A204D1017B67F00B55AF8 /* SwipeLayer.h */,
 				DA6A204E1017B67F00B55AF8 /* SwipeLayer.m */,
+				DA41D710107BD915001BAFAB /* NSString_SEL.h */,
+				DA41D711107BD915001BAFAB /* NSString_SEL.m */,
 			);
 			path = Utility;
 			sourceTree = "<group>";
@@ -786,6 +822,8 @@
 			children = (
 				DAF609FF1020AD9C00F53A37 /* MenuLayer.h */,
 				DAF60A001020AD9C00F53A37 /* MenuLayer.m */,
+				DA41D64510726B89001BAFAB /* ConfigMenuLayer.h */,
+				DA41D64610726B89001BAFAB /* ConfigMenuLayer.m */,
 				DAEB04CE1055BC8A00907387 /* MenuItemTitle.h */,
 				DAEB04CF1055BC8A00907387 /* MenuItemTitle.m */,
 				DA9EE09E1029618800528A29 /* MenuItemSpacer.h */,
@@ -1213,6 +1251,10 @@
 				DADA65071058C64100A5B07B /* Icon.png in Resources */,
 				DAD7DC0D1063DC6E00ABD531 /* splash_menu.png in Resources */,
 				DAD7DC0E1063DC6E00ABD531 /* splash_notitle.png in Resources */,
+				DA394BD2107086320045A428 /* Marimba_Deblock.mp3 in Resources */,
+				DA394BD3107086320045A428 /* Staccato_Deblock.mp3 in Resources */,
+				DA41D6CA107BD031001BAFAB /* Mjolnir_Deblock.mp3 in Resources */,
+				DAAB88AF10830EA6009E7211 /* Carriage_House_Deblock.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1322,6 +1364,8 @@
 				DA1B8FE91062A41400042397 /* PlayerViewController.m in Sources */,
 				DAD7DC791063E2E500ABD531 /* ButtonFontLabel.m in Sources */,
 				DA6E14121069F50400ECCA5A /* ScrollLayer.m in Sources */,
+				DA41D64710726B89001BAFAB /* ConfigMenuLayer.m in Sources */,
+				DA41D712107BD915001BAFAB /* NSString_SEL.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
