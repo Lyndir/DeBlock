@@ -475,7 +475,7 @@
 		DAF2B82B105A41CE00B4B6D2 /* Scheduler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Scheduler.m; sourceTree = "<group>"; };
 		DAF2B82C105A41CE00B4B6D2 /* Sprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Sprite.h; sourceTree = "<group>"; };
 		DAF2B82D105A41CE00B4B6D2 /* Sprite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Sprite.m; sourceTree = "<group>"; };
-		DAF2B82F105A41CE00B4B6D2 /* base64.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = base64.c; sourceTree = "<group>"; };
+		DAF2B82F105A41CE00B4B6D2 /* base64.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.objc; fileEncoding = 4; path = base64.c; sourceTree = "<group>"; };
 		DAF2B830105A41CE00B4B6D2 /* base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = base64.h; sourceTree = "<group>"; };
 		DAF2B831105A41CE00B4B6D2 /* ccArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ccArray.h; sourceTree = "<group>"; };
 		DAF2B832105A41CE00B4B6D2 /* ccHashSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ccHashSet.h; sourceTree = "<group>"; };
@@ -494,7 +494,7 @@
 		DAF2B840105A41CE00B4B6D2 /* FontManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FontManager.m; sourceTree = "<group>"; };
 		DAF2B841105A41CE00B4B6D2 /* ZFont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZFont.h; sourceTree = "<group>"; };
 		DAF2B842105A41CE00B4B6D2 /* ZFont.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZFont.m; sourceTree = "<group>"; };
-		DAF2B843105A41CE00B4B6D2 /* glu.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = glu.c; sourceTree = "<group>"; };
+		DAF2B843105A41CE00B4B6D2 /* glu.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.objc; fileEncoding = 4; path = glu.c; sourceTree = "<group>"; };
 		DAF2B844105A41CE00B4B6D2 /* glu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = glu.h; sourceTree = "<group>"; };
 		DAF2B845105A41CE00B4B6D2 /* OpenGL_Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenGL_Internal.h; sourceTree = "<group>"; };
 		DAF2B846105A41CE00B4B6D2 /* PVRTexture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PVRTexture.h; sourceTree = "<group>"; };
@@ -597,6 +597,7 @@
 		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
 			isa = PBXGroup;
 			children = (
+				DAF2B7E4105A41CE00B4B6D2 /* cocos2d */,
 				DA6A20291017B67F00B55AF8 /* iLibs */,
 				32CA4F630368D1EE00C91783 /* Prefix.pch */,
 				29B97316FDCFA39411CA2CEA /* main.m */,
@@ -608,7 +609,6 @@
 			isa = PBXGroup;
 			children = (
 				DA394BCE107086320045A428 /* Audio */,
-				DAF2B7E4105A41CE00B4B6D2 /* cocos2d */,
 				DAB2C591105710DA00B6701A /* Fonts */,
 				DA6A20911017B6D700B55AF8 /* Localizable.strings */,
 				DA6A20931017B6D700B55AF8 /* menu.png */,
@@ -1460,6 +1460,7 @@
 				SDKROOT = iphoneos3.0;
 				STRIP_INSTALLED_PRODUCT = NO;
 				VERSION_INFO_BUILDER = lhunath;
+				WARNING_CFLAGS = "-Wundeclared-selector";
 				ZERO_LINK = NO;
 			};
 			name = Debug;
@@ -1514,6 +1515,7 @@
 				SDKROOT = iphoneos3.0;
 				STRIP_INSTALLED_PRODUCT = YES;
 				VERSION_INFO_BUILDER = lhunath;
+				WARNING_CFLAGS = "-Wundeclared-selector";
 				ZERO_LINK = NO;
 			};
 			name = Release;
@@ -1569,6 +1571,7 @@
 				SDKROOT = iphoneos3.0;
 				STRIP_INSTALLED_PRODUCT = YES;
 				VERSION_INFO_BUILDER = lhunath;
+				WARNING_CFLAGS = "-Wundeclared-selector";
 				ZERO_LINK = NO;
 			};
 			name = Distribution;
@@ -1623,6 +1626,7 @@
 				SDKROOT = iphoneos3.0;
 				STRIP_INSTALLED_PRODUCT = NO;
 				VERSION_INFO_BUILDER = lhunath;
+				WARNING_CFLAGS = "-Wundeclared-selector";
 				ZERO_LINK = NO;
 			};
 			name = "Release Debugging";

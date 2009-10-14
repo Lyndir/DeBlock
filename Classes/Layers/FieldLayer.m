@@ -46,6 +46,9 @@
 - (void)doneCollapsingBlock:(BlockLayer *)block;
 - (void)collapsingFinished;
 
+- (void)blinkAll;
+- (void)destroyAll;
+
 @end
 
 
@@ -535,6 +538,7 @@
         }
         
         points += bonusPoints;
+        NSLog(@"score: %d, penalty: %d, bonus: %d, total: %d", [[DMConfig get].levelScore intValue], [[DMConfig get].levelPenalty intValue], bonusPoints, points);
         [[DMConfig get] recordScore:[[DMConfig get].score unsignedIntValue] + points];
         [[DeblockAppDelegate get].hudLayer updateHudWithScore:bonusPoints];
         [[DeblockAppDelegate get].gameLayer stopGame:endReason];

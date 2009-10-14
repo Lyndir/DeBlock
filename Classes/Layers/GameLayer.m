@@ -29,7 +29,8 @@
 
 @interface GameLayer (Private)
 
--(void) setPausedSilently:(BOOL)_paused;
+- (void)setPausedSilently:(BOOL)_paused;
+- (void)increaseTimedPenalty:(ccTime)dt;
 
 @end
 
@@ -69,12 +70,12 @@
     [[UIApplication sharedApplication] setStatusBarHidden:!paused animated:YES];
     
     if(paused) {
-        [self unschedule:@selector(increasePenalty:)];
+        [self unschedule:@selector(increaseTimedPenalty:)];
         [[DeblockAppDelegate get] hideHud];
         [fieldScroller runAction:[MoveTo actionWithDuration:0.5f
                                                 position:CGPointMake(0, fieldScroller.contentSize.height)]];
     } else {
-        [self schedule:@selector(increasePenalty:) interval:0.1f];
+        [self schedule:@selector(increaseTimedPenalty:) interval:0.1f];
         [[DeblockAppDelegate get] popAllLayers];
         [[DeblockAppDelegate get] revealHud];
         [fieldScroller runAction:[MoveTo actionWithDuration:0.5f
@@ -230,9 +231,13 @@
 }
 
 
-- (void)increasePenalty:(ccTime)dt {
+- (void)increaseTimedPenalty:(ccTime)dt {
     
+    if ([[DMConfig get].gameMode unsignedIntValue] != DbModeTimed)
+        // Don't increase penalty during non-timed games.
+        return;
     if (!running || paused)
+        // Don't increase penalty while game not running or paused.
         return;
     
     remainingPenaltyTime        += dt;

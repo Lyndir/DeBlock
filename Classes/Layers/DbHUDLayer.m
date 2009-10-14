@@ -49,7 +49,7 @@
     
     [super updateHudWithScore:0];
     
-    NSString *gameScore             = [NSString stringWithFormat:@"%04d", [[DMConfig get].score intValue]];
+    NSString *gameScore         = [NSString stringWithFormat:@"%04d", [[DMConfig get].score intValue]];
     NSString *levelScore        = [NSString stringWithFormat:@"%+04d", [[DMConfig get].levelScore intValue]];
     NSString *levelPenalty      = [NSString stringWithFormat:@"%+04d", [[DMConfig get].levelPenalty intValue]];
     

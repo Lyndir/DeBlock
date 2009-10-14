@@ -39,6 +39,16 @@
     return self;
 }
 
+- (BOOL)isLinkedToAdjecentBlock:(BlockLayer *)block forReason:(DMScanReason)aReason {
+    
+    if (aReason == DMScanReasonFreezing)
+        // When freezing, don't link to special blocks.
+        return NO;
+    
+    return [super isLinkedToAdjecentBlock:block forReason:aReason];
+}    
+    
+
 @end
 
 
@@ -86,6 +96,12 @@
 @end
 
 
+@interface MorphBlockLayer ()
+
+- (void)switchType:(ccTime)dt;
+
+@end
+
 @implementation MorphBlockLayer
 
 + (NSUInteger)minimumLevel {
@@ -127,6 +143,16 @@
     
     return @"M";
 }
+
+- (BOOL)isLinkedToAdjecentBlock:(BlockLayer *)block forReason:(DMScanReason)aReason {
+    
+    if (aReason == DMScanReasonCheckState && self.destructible)
+        // When checking game state, considder morphing blocks as linked to any adjecent block.
+        return YES;
+    
+    return [super isLinkedToAdjecentBlock:block forReason:aReason];
+}
+
 
 @end
 
@@ -183,6 +209,11 @@
 
 @end
 
+@interface FreezeBlockLayer ()
+
+- (void)freeze;
+
+@end
 
 @implementation FreezeBlockLayer
 

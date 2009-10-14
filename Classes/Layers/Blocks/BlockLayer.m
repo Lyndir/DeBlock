@@ -31,6 +31,13 @@
 #define kMinBlocks      3
 
 
+@interface BlockLayer ()
+
+- (void)randomEvent:(ccTime)dt;
+
+@end
+
+
 @implementation BlockLayer
 
 @synthesize type, destroyed, destructible, moveAction;
@@ -160,10 +167,6 @@ static NSDictionary *blockColors;
     
     if (block.type != self.type)
         // Block is not of the same type.
-        return NO;
-    
-    if (aReason == DMScanReasonFreezing && [self isKindOfClass:[SpecialBlockLayer class]])
-        // When freezing, don't link to special blocks.
         return NO;
     
     if (!self.destructible)

@@ -31,13 +31,18 @@
 
 @interface DeblockAppDelegate ()
 
+- (void)newGame:(id)caller;
 - (void)newClassicGame:(id)caller;
 - (void)newTimedGame:(id)caller;
 - (void)continueGame:(id)caller;
 - (void)resumeGame:(id)caller;
 - (void)stopGame:(id)caller;
 - (void)levelRedo:(id)caller;
-    
+- (void)more:(id)caller;
+- (void)configuration:(id)caller;
+- (void)strategy:(id)caller;
+- (void)statistics:(id)caller;
+
 @end
 
 

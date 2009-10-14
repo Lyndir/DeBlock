@@ -80,6 +80,7 @@
 
 - (void)updateWithSortedScores:(NSArray *)sortedScores;
 - (void)updateVertices;
+- (void)animate:(ccTime)dt;
 
 @end
 

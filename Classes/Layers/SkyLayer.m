@@ -30,6 +30,13 @@
 #define kCloudAnimation     @"clouds"
 #define kCloudTime          40
 
+
+@interface SkyLayer ()
+
+- (void)cloudDone:(Sprite *)cloud;
+
+@end
+
 @implementation SkyLayer
 
 
