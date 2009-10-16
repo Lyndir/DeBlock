@@ -228,7 +228,7 @@ extern unsigned long const ASIWWANBandwidthThrottleAmount;
 	NSConditionLock *authenticationLock;
 	
 	// This lock prevents the operation from being cancelled at an inopportune moment
-	NSLock *cancelledLock;
+	NSRecursiveLock *cancelledLock;
 	
 	// Called on the delegate when the request completes successfully
 	SEL didFinishSelector;
@@ -416,6 +416,15 @@ extern unsigned long const ASIWWANBandwidthThrottleAmount;
 - (void)attemptToApplyCredentialsAndResume;
 - (void)attemptToApplyProxyCredentialsAndResume;
 
+// Attempt to show the built-in authentication dialog, returns YES if credentials were supplied, NO if user cancelled dialog / dialog is disabled / running on main thread
+// Currently only used on iPhone OS
+- (BOOL)showProxyAuthenticationDialog;
+- (BOOL)showAuthenticationDialog;
+
+// Construct a basic authentication header from the username and password supplied, and add it to the request headers
+// Used when shouldPresentCredentialsBeforeChallenge is YES
+- (void)addBasicAuthenticationHeaderWithUsername:(NSString *)theUsername andPassword:(NSString *)thePassword;
+
 #pragma mark stream status handlers
 
 // CFnetwork event handlers
@@ -533,11 +542,19 @@ extern unsigned long const ASIWWANBandwidthThrottleAmount;
 + (void)reachabilityChanged:(NSNotification *)note;
 #endif
 
-
-- (BOOL)showProxyAuthenticationDialog;
-- (BOOL)showAuthenticationDialog;
-
+// Returns the maximum amount of data we can read as part of the current measurement period, and sleeps this thread if our allowance is used up
 + (unsigned long)maxUploadReadLength;
+
+#pragma mark miscellany 
+
+// Determines whether we're on iPhone OS 2.0 at runtime, currently used to determine whether we should apply a workaround for an issue with converting longs to doubles on iPhone OS 2
++ (BOOL)isiPhoneOS2;
+
+// Used for generating Authorization header when using basic authentication when shouldPresentCredentialsBeforeChallenge is true
+// And also by ASIS3Request
++ (NSString *)base64forData:(NSData *)theData;
+
+#pragma mark ===
 
 @property (retain) NSString *username;
 @property (retain) NSString *password;

@@ -8,8 +8,12 @@
 
 #import "ASITestCase.h"
 
+@class ASIHTTPRequest;
+
 @interface ASIHTTPRequestTests : ASITestCase {
 	float progress;
+	ASIHTTPRequest *cancelRequest;
+	NSDate *cancelStartDate;
 }
 
 - (void)testBasicDownload;
@@ -23,6 +27,7 @@
 - (void)testDownloadProgress;
 - (void)testUploadProgress;
 - (void)testCookies;
+- (void)testRemoveCredentialsFromKeychain;
 - (void)testBasicAuthentication;
 - (void)testDigestAuthentication;
 - (void)testNTLMHandshake;
@@ -40,4 +45,9 @@
 - (void)testThrottlingDownloadBandwidth;
 - (void)testThrottlingUploadBandwidth;
 - (void)testMainThreadDelegateAuthenticationFailure;
+//- (void)testCancelStressTest;
+//- (void)performCancelRequest;
+
+@property (retain,nonatomic) ASIHTTPRequest *cancelRequest;
+@property (retain, nonatomic) NSDate *cancelStartDate;
 @end

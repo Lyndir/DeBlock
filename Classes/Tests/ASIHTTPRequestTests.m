@@ -125,6 +125,14 @@
 		BOOL success = [[request responseString] isEqualToString:method];
 		GHAssertTrue(success,@"Failed to set the request method correctly");	
 	}
+	
+	// Test to ensure we don't change the request method when we have an unrecognised method already set
+	ASIHTTPRequest *request = [[[ASIHTTPRequest alloc] initWithURL:url] autorelease];
+	[request setRequestMethod:@"FINK"];
+	[request appendPostData:[@"King" dataUsingEncoding:NSUTF8StringEncoding]];
+	[request buildPostBody];
+	BOOL success = [[request requestMethod] isEqualToString:@"FINK"];
+	GHAssertTrue(success,@"Erroneously changed request method");	
 }
 
 - (void)testHTTPVersion
@@ -267,14 +275,6 @@
 	
 	BOOL success = (progress > 0.95);
 	GHAssertTrue(success,@"Failed to properly increment download progress %f != 1.0",progress);	
-}
-
-
-
-
-- (void)setProgress:(float)newProgress;
-{
-	progress = newProgress;
 }
 
 
@@ -453,9 +453,18 @@
 	GHAssertTrue(success,@"Cookie presented to the server when it should have been removed");
 }
 
+// Test fix for a crash if you tried to remove credentials that didn't exist
+- (void)testRemoveCredentialsFromKeychain
+{
+	[ASIHTTPRequest removeCredentialsForHost:@"apple.com" port:0 protocol:@"http" realm:@"Nothing to see here"];
+	[ASIHTTPRequest removeCredentialsForProxy:@"apple.com" port:0 realm:@"Nothing to see here"];
+	
+}
+
 
 - (void)testBasicAuthentication
 {
+	[ASIHTTPRequest removeCredentialsForHost:@"allseeing-i.com" port:0 protocol:@"http" realm:@"SECRET_STUFF"];
 	[ASIHTTPRequest clearSession];
 
 	NSURL *url = [NSURL URLWithString:@"http://allseeing-i.com/ASIHTTPRequest/tests/basic-authentication"];
@@ -463,13 +472,14 @@
 	BOOL success;
 	NSError *err;
 	
+	// Test authentication needed when no credentials supplied
 	request = [[[ASIHTTPRequest alloc] initWithURL:url] autorelease];
 	[request setUseKeychainPersistance:NO];
 	[request start];
-	
 	success = [[request error] code] == ASIAuthenticationErrorType;
 	GHAssertTrue(success,@"Failed to generate permission denied error with no credentials");
 	
+	// Test wrong credentials supplied
 	request = [[[ASIHTTPRequest alloc] initWithURL:url] autorelease];
 	[request setUseKeychainPersistance:NO];
 	[request setUsername:@"wrong"];
@@ -478,15 +488,18 @@
 	success = [[request error] code] == ASIAuthenticationErrorType;
 	GHAssertTrue(success,@"Failed to generate permission denied error with wrong credentials");
 	
+	// Test correct credentials supplied
 	request = [[[ASIHTTPRequest alloc] initWithURL:url] autorelease];
 	[request setUseSessionPersistance:YES];
 	[request setUseKeychainPersistance:YES];
+	[request setShouldPresentCredentialsBeforeChallenge:NO];
 	[request setUsername:@"secret_username"];
 	[request setPassword:@"secret_password"];
 	[request start];
 	err = [request error];
 	GHAssertNil(err,@"Failed to supply correct username and password");
 	
+	// Ensure credentials are not reused
 	request = [[[ASIHTTPRequest alloc] initWithURL:url] autorelease];
 	[request setUseSessionPersistance:NO];
 	[request setUseKeychainPersistance:NO];
@@ -494,6 +507,7 @@
 	success = [[request error] code] == ASIAuthenticationErrorType;
 	GHAssertTrue(success,@"Reused credentials when we shouldn't have");
 
+	// Ensure credentials stored in the session are reused
 	request = [[[ASIHTTPRequest alloc] initWithURL:url] autorelease];
 	[request setUseSessionPersistance:YES];
 	[request setUseKeychainPersistance:NO];
@@ -503,37 +517,81 @@
 	
 	[ASIHTTPRequest clearSession];
 	
+	// Ensure credentials stored in the session were wiped
 	request = [[[ASIHTTPRequest alloc] initWithURL:url] autorelease];
 	[request setUseKeychainPersistance:NO];
 	[request start];
 	success = [[request error] code] == ASIAuthenticationErrorType;
 	GHAssertTrue(success,@"Failed to clear credentials");
 	
-	// This test may show a dialog!
+	// Ensure credentials stored in the keychain are reused
 	request = [[[ASIHTTPRequest alloc] initWithURL:url] autorelease];
 	[request setUseKeychainPersistance:YES];
 	[request start];
 	err = [request error];
 	GHAssertNil(err,@"Failed to use stored credentials");
 	
-	// Tests shouldPresentCredentialsBeforeChallenge
+	[ASIHTTPRequest removeCredentialsForHost:@"allseeing-i.com" port:0 protocol:@"http" realm:@"SECRET_STUFF"];
+	
+	// Ensure credentials stored in the keychain were wiped
+	request = [[[ASIHTTPRequest alloc] initWithURL:url] autorelease];
+	[request setUseKeychainPersistance:YES];
+	[request setUseSessionPersistance:NO];
+	[request start];
+	success = [[request error] code] == ASIAuthenticationErrorType;
+	GHAssertTrue(success,@"Failed to clear credentials");
+	
+	// Tests shouldPresentCredentialsBeforeChallenge with credentials stored in the session
 	request = [[[ASIHTTPRequest alloc] initWithURL:url] autorelease];
 	[request setUseSessionPersistance:YES];
 	[request start];
-	
 	success = [request authenticationRetryCount] == 0;
 	GHAssertTrue(success,@"Didn't supply credentials before being asked for them when talking to the same server with shouldPresentCredentialsBeforeChallenge == YES");	
 	
+	// Ensure credentials stored in the session were not presented to the server before it asked for them
 	request = [[[ASIHTTPRequest alloc] initWithURL:url] autorelease];
 	[request setUseSessionPersistance:YES];
 	[request setShouldPresentCredentialsBeforeChallenge:NO];
 	[request start];
-	
 	success = [request authenticationRetryCount] == 1;
-	GHAssertTrue(success,@"Supplied credentials before being asked for them");	
+	GHAssertTrue(success,@"Supplied session credentials before being asked for them");	
+	
+	[ASIHTTPRequest clearSession];
+	
+	// Test credentials set on the request are sent before the server asks for them
+	request = [[[ASIHTTPRequest alloc] initWithURL:url] autorelease];
+	[request setUseSessionPersistance:NO];
+	[request setUsername:@"secret_username"];
+	[request setPassword:@"secret_password"];
+	[request setShouldPresentCredentialsBeforeChallenge:YES];
+	[request start];
+	success = [request authenticationRetryCount] == 0;
+	GHAssertTrue(success,@"Didn't supply credentials before being asked for them, even though they were set on the request and shouldPresentCredentialsBeforeChallenge == YES");	
+	
+	// Test credentials set on the request aren't sent before the server asks for them
+	request = [[[ASIHTTPRequest alloc] initWithURL:url] autorelease];
+	[request setUseSessionPersistance:NO];
+	[request setUsername:@"secret_username"];
+	[request setPassword:@"secret_password"];
+	[request setShouldPresentCredentialsBeforeChallenge:NO];
+	[request start];
+	success = [request authenticationRetryCount] == 1;
+	GHAssertTrue(success,@"Supplied request credentials before being asked for them");	
 	
 	
-	// Ok, now let's test on a different server
+	// Test credentials presented before a challenge are stored in the session store
+	request = [[[ASIHTTPRequest alloc] initWithURL:url] autorelease];
+	[request setUsername:@"secret_username"];
+	[request setPassword:@"secret_password"];
+	[request setShouldPresentCredentialsBeforeChallenge:YES];
+	[request start];
+	request = [[[ASIHTTPRequest alloc] initWithURL:url] autorelease];
+	[request start];
+	err = [request error];
+	GHAssertNil(err,@"Failed to use stored credentials");	
+	
+	
+	// Ok, now let's test on a different server to sanity check that the credentials from out previous requests are not being used
 	url = [NSURL URLWithString:@"https://selfsigned.allseeing-i.com/ASIHTTPRequest/tests/basic-authentication"];
 	request = [[[ASIHTTPRequest alloc] initWithURL:url] autorelease];
 	[request setUseSessionPersistance:YES];
@@ -549,6 +607,7 @@
 
 - (void)testDigestAuthentication
 {
+	[ASIHTTPRequest removeCredentialsForHost:@"allseeing-i.com" port:0 protocol:@"http" realm:@"Keep out"];
 	[ASIHTTPRequest clearSession];
 	
 	NSURL *url = [[[NSURL alloc] initWithString:@"http://allseeing-i.com/ASIHTTPRequest/tests/digest-authentication"] autorelease];
@@ -556,12 +615,14 @@
 	BOOL success;
 	NSError *err;
 	
+	// Test authentication needed when no credentials supplied
 	request = [[[ASIHTTPRequest alloc] initWithURL:url] autorelease];
 	[request setUseKeychainPersistance:NO];
 	[request start];
 	success = [[request error] code] == ASIAuthenticationErrorType;
 	GHAssertTrue(success,@"Failed to generate permission denied error with no credentials");
 	
+	// Test wrong credentials supplied
 	request = [[[ASIHTTPRequest alloc] initWithURL:url] autorelease];
 	[request setUseKeychainPersistance:NO];
 	[request setUsername:@"wrong"];
@@ -570,6 +631,7 @@
 	success = [[request error] code] == ASIAuthenticationErrorType;
 	GHAssertTrue(success,@"Failed to generate permission denied error with wrong credentials");
 	
+	// Test correct credentials supplied
 	request = [[[ASIHTTPRequest alloc] initWithURL:url] autorelease];
 	[request setUseSessionPersistance:YES];
 	[request setUseKeychainPersistance:YES];
@@ -579,6 +641,7 @@
 	err = [request error];
 	GHAssertNil(err,@"Failed to supply correct username and password");
 	
+	// Ensure credentials are not reused
 	request = [[[ASIHTTPRequest alloc] initWithURL:url] autorelease];
 	[request setUseSessionPersistance:NO];
 	[request setUseKeychainPersistance:NO];
@@ -586,6 +649,7 @@
 	success = [[request error] code] == ASIAuthenticationErrorType;
 	GHAssertTrue(success,@"Reused credentials when we shouldn't have");
 	
+	// Ensure credentials stored in the session are reused
 	request = [[[ASIHTTPRequest alloc] initWithURL:url] autorelease];
 	[request setUseSessionPersistance:YES];
 	[request setUseKeychainPersistance:NO];
@@ -595,11 +659,39 @@
 	
 	[ASIHTTPRequest clearSession];
 	
+	// Ensure credentials stored in the session were wiped
 	request = [[[ASIHTTPRequest alloc] initWithURL:url] autorelease];
 	[request setUseKeychainPersistance:NO];
 	[request start];
 	success = [[request error] code] == ASIAuthenticationErrorType;
 	GHAssertTrue(success,@"Failed to clear credentials");
+	
+	// Ensure credentials stored in the keychain are reused
+	request = [[[ASIHTTPRequest alloc] initWithURL:url] autorelease];
+	[request setUseKeychainPersistance:YES];
+	[request start];
+	err = [request error];
+	GHAssertNil(err,@"Failed to reuse credentials");
+	
+	[ASIHTTPRequest removeCredentialsForHost:@"allseeing-i.com" port:0 protocol:@"http" realm:@"Keep out"];
+	
+	// Ensure credentials stored in the keychain were wiped
+	request = [[[ASIHTTPRequest alloc] initWithURL:url] autorelease];
+	[request setUseKeychainPersistance:YES];
+	[request setUseSessionPersistance:NO];
+	[request start];
+	success = [[request error] code] == ASIAuthenticationErrorType;
+	GHAssertTrue(success,@"Failed to clear credentials");	
+	
+	
+	// Test credentials set on the request are sent before the server asks for them
+	request = [[[ASIHTTPRequest alloc] initWithURL:url] autorelease];
+	[request setUseSessionPersistance:YES];
+	[request setShouldPresentCredentialsBeforeChallenge:YES];
+	[request start];
+	success = [request authenticationRetryCount] == 0;
+	GHAssertTrue(success,@"Didn't supply credentials before being asked for them, even though they were set in the session and shouldPresentCredentialsBeforeChallenge == YES");	
+	
 }
 
 - (void)testNTLMHandshake
@@ -982,5 +1074,49 @@
 	
 }
 
+// This is a stress test that looks for thread-safety problems with cancelling requests
+// It will run for 30 seconds, creating a request, then cancelling it and creating another as soon as it gets some indication of progress
+// Uncomment to run on your local webserver. Do not use on a remote server, this test will create 1000s of requests!
 
+//- (void)testCancelStressTest
+//{
+//	[self setCancelStartDate:[NSDate dateWithTimeIntervalSinceNow:30]];
+//	[self performCancelRequest];
+//	while ([[self cancelStartDate] timeIntervalSinceNow] > 0) {
+//		[[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.25]];
+//	}
+//	NSLog(@"Stress test: DONE");
+//}
+//
+//- (void)performCancelRequest
+//{
+//	[self setCancelRequest:[ASIHTTPRequest requestWithURL:[NSURL URLWithString:@"http://127.0.0.1/ASIHTTPRequest/tests/the_great_american_novel.txt"]]];
+//	if ([[self cancelStartDate] timeIntervalSinceNow] > 0) {
+//		[[self cancelRequest] setUserInfo:[NSDictionary dictionaryWithObject:@"TryTryAgain" forKey:@"WhatShallIDoNext?"]];
+//		[[self cancelRequest] setDownloadProgressDelegate:self];
+//		[[self cancelRequest] setShowAccurateProgress:YES];
+//		NSLog(@"Stress test: Start request %@",[self cancelRequest]);
+//		[[self cancelRequest] startAsynchronous];
+//	}
+//}
+
+
+- (void)setProgress:(float)newProgress;
+{
+	progress = newProgress;
+	
+	// For cancel test
+	if (newProgress > 0 && [self cancelRequest]) {
+			
+		NSLog(@"Stress test: Cancel request %@",[self cancelRequest]);
+		[[self cancelRequest] cancel];
+		
+		[self setCancelRequest:nil];
+		[self performSelector:@selector(performCancelRequest) withObject:nil afterDelay:0.2];
+	}
+}
+
+
+@synthesize cancelRequest;
+@synthesize cancelStartDate;
 @end
