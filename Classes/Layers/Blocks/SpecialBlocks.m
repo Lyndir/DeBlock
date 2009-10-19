@@ -29,16 +29,6 @@
 
 @implementation SpecialBlockLayer
 
-- (id)initWithBlockSize:(CGSize)size {
-
-    if (!(self = [super initWithBlockSize:size]))
-        return nil;
-    
-    self.type = DMBlockTypeSpecial;
-    
-    return self;
-}
-
 - (BOOL)isLinkedToAdjecentBlock:(BlockLayer *)block forReason:(DMScanReason)aReason {
     
     if (aReason == DMScanReasonFreezing)
@@ -46,7 +36,12 @@
         return NO;
     
     return [super isLinkedToAdjecentBlock:block forReason:aReason];
-}    
+}
+
+- (BOOL)scoreMultiplier {
+    
+    return 0;
+}
     
 
 @end
@@ -54,25 +49,24 @@
 
 @implementation BombBlockLayer
 
-+ (NSUInteger)minimumLevel {
+
++ (NSUInteger)occurancePercentForLevel:(NSUInteger)level type:(DMBlockType)aType {
     
-    return 0;
+    // Start at 5%.  Every five levels, reduce by 1%.  Minimum is 1% (at level 20).
+    return max(1, 5 - level / 5);
 }
 
-- (id)initWithBlockSize:(CGSize)size {
+- (id)initWithType:(DMBlockType)aType blockSize:(CGSize)size {
     
-    if (!(self = [super initWithBlockSize:size]))
+    if (!(self = [super initWithType:aType blockSize:size]))
         return nil;
+    
+    self.type           = DMBlockTypeSpecial;
     
     [textures[0] release];
     textures[0]         = [[[TextureMgr sharedTextureMgr] addImage:@"block.whole.bomb.png"] retain];
     
     return self;
-}
-
-- (NSString *)labelString {
-    
-    return @"B";
 }
 
 - (NSMutableSet *)findLinkedBlocksInField:(FieldLayer *)field forReason:(DMScanReason)aReason
@@ -93,6 +87,11 @@
     return linkedBlocks;
 }
 
+- (BOOL)scoreMultiplier {
+    
+    return 1;
+}
+
 @end
 
 
@@ -104,17 +103,17 @@
 
 @implementation MorphBlockLayer
 
-+ (NSUInteger)minimumLevel {
++ (NSUInteger)occurancePercentForLevel:(NSUInteger)level type:(DMBlockType)aType {
     
-    return 2;
+    // Start at 0%.  Every 5 levels, add 1%.  Maximum is 7% (at level 35).
+    return min(7, level / 5);
 }
 
-- (id)initWithBlockSize:(CGSize)size {
+- (id)initWithType:(DMBlockType)aType blockSize:(CGSize)size {
     
-    if (!(self = [super initWithBlockSize:size]))
+    if (!(self = [super initWithType:aType blockSize:size]))
         return nil;
     
-    self.type = [[self class] randomType];
     [textures[0] release];
     textures[0]         = [[[TextureMgr sharedTextureMgr] addImage:@"block.whole.morph.png"] retain];
 
@@ -139,9 +138,9 @@
     self.type = [[self class] randomType];
 }
 
-- (NSString *)labelString {
+- (BOOL)scoreMultiplier {
     
-    return @"M";
+    return 1;
 }
 
 - (BOOL)isLinkedToAdjecentBlock:(BlockLayer *)block forReason:(DMScanReason)aReason {
@@ -159,26 +158,29 @@
 
 @implementation ZapBlockLayer
 
-+ (NSUInteger)minimumLevel {
++ (NSUInteger)occurancePercentForLevel:(NSUInteger)level type:(DMBlockType)aType {
     
-    return 5;
+    if ([self getBlocksOfClass:[self class] andType:aType])
+        // Don't allow multiple Zap blocks of the same type in the field.
+        return 0;
+    
+    if (level > 30)
+        // From level 30 on, no more zappers.
+        return 0;
+    
+    // Start at 0%.  Every 8 levels, add 1%.  Maximum is 3% (at level 24).
+    return min(3, level / 8);
 }
 
-- (id)initWithBlockSize:(CGSize)size {
+- (id)initWithType:(DMBlockType)aType blockSize:(CGSize)size {
     
-    if (!(self = [super initWithBlockSize:size]))
+    if (!(self = [super initWithType:aType blockSize:size]))
         return nil;
     
-    self.type = [[self class] randomType];
     [textures[0] release];
     textures[0]         = [[[TextureMgr sharedTextureMgr] addImage:@"block.whole.zap.png"] retain];
     
     return self;
-}
-
-- (NSString *)labelString {
-    
-    return @"Z";
 }
 
 - (NSMutableSet *)findLinkedBlocksInField:(FieldLayer *)field forReason:(DMScanReason)aReason
@@ -211,23 +213,24 @@
 
 @interface FreezeBlockLayer ()
 
+- (void)cool;
 - (void)freeze;
 
 @end
 
 @implementation FreezeBlockLayer
 
-+ (NSUInteger)minimumLevel {
++ (NSUInteger)occurancePercentForLevel:(NSUInteger)level type:(DMBlockType)aType {
     
-    return 10;
+    // Start at 0%.  Every 10 levels, add 1%.  Maximum is 15% (at level 75).
+    return min(15, level / 5);
 }
 
-- (id)initWithBlockSize:(CGSize)size {
+- (id)initWithType:(DMBlockType)aType blockSize:(CGSize)size {
     
-    if (!(self = [super initWithBlockSize:size]))
+    if (!(self = [super initWithType:aType blockSize:size]))
         return nil;
     
-    self.type = [[self class] randomType];
     [textures[0] release];
     textures[0]         = [[[TextureMgr sharedTextureMgr] addImage:@"block.whole.freeze.png"] retain];
     
@@ -238,17 +241,28 @@
     
     [super onEnter];
     
-    ccColor4B targetColor = [[self class] colorForType:DMBlockTypeFrozen];
-    [self runAction:[Sequence actionOne:[TintTo actionWithDuration:10 red:targetColor.r green:targetColor.g blue:targetColor.b]
+    timeLeft = 10;
+    [label setString:[NSString stringWithFormat:@"%d", max(0, timeLeft)]];
+    [self runAction:[Sequence actionOne:[Repeat actionWithAction:[Sequence actionOne:[DelayTime actionWithDuration:1]
+                                                                                 two:[CallFunc actionWithTarget:self selector:@selector(cool)]]
+                                                           times:timeLeft]
                                     two:[CallFunc actionWithTarget:self selector:@selector(freeze)]]];
 }
 
-- (NSString *)labelString {
+- (BOOL)scoreMultiplier {
     
-    return @"F";
+    return 1;
+}
+
+- (void)cool {
+    
+    --timeLeft;
+    [label setString:[NSString stringWithFormat:@"%d", max(0, timeLeft)]];
 }
 
 - (void)freeze {
+
+    [label setString:@""];
 
     NSInteger row, col;
     FieldLayer *field = [DeblockAppDelegate get].gameLayer.fieldLayer;

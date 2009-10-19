@@ -15,17 +15,17 @@
  */
 
 //
-//  StatsLayer.m
+//  ScoresLayer.m
 //  Deblock
 //
 //  Created by Maarten Billemont on 03/09/09.
 //  Copyright 2009 lhunath (Maarten Billemont). All rights reserved.
 //
 
-#import "StatsLayer.h"
+#import "ScoresLayer.h"
 
 
-@implementation StatsLayer
+@implementation ScoresLayer
 
 
 - (id)init {
@@ -34,13 +34,21 @@
         return nil;
     
     self.background = [Sprite spriteWithFile:@"splash.png"];
+    
+    graph = [GraphNode new];
+    [self addChild:graph];
+    
+    return self;
+}
 
+- (void)onEnter {
+    
     NSMutableArray *scores = [NSMutableArray arrayWithCapacity:[[DMConfig get].userScoreHistory count]];
     for (NSString *user in [[DMConfig get].userScoreHistory allKeys]) {
         NSDictionary *userScores = [[DMConfig get].userScoreHistory objectForKey:user];
         NSNumber *topUserScore = nil;
         NSDate *topUserScoreDate = nil;
-
+        
         for (NSString *dateEncoded in [userScores allKeys]) {
             NSDate *date = [NSDate dateWithTimeIntervalSince1970:[dateEncoded floatValue]];
             NSNumber *currentUserScore = [userScores objectForKey:dateEncoded];
@@ -53,19 +61,18 @@
         [scores addObject:[Score scoreWithScore:[topUserScore intValue] by:user at:topUserScoreDate]];
     }
     
-    graph = [[GraphNode alloc] initWithArray:scores];
-    [self addChild:graph];
+    [graph setScores:scores];
     
-    return self;
+    [super onEnter];
 }
 
-+ (StatsLayer *)get {
++ (ScoresLayer *)get {
 
-    static StatsLayer *statsLayer = nil;
-    if (statsLayer == nil)
-        statsLayer = [self new];
+    static ScoresLayer *scoresLayer = nil;
+    if (scoresLayer == nil)
+        scoresLayer = [self new];
 
-    return statsLayer;
+    return scoresLayer;
 }
 
 

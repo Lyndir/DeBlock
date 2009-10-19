@@ -47,6 +47,7 @@
 - (void)showDirector;
 
 - (void)showMainMenu;
+- (void)showScores;
 - (void)showGameOverMenu;
 
 @end

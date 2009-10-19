@@ -24,7 +24,7 @@
 
 #import "DeblockAppDelegate.h"
 #import "DbHUDLayer.h"
-#import "StatsLayer.h"
+#import "ScoresLayer.h"
 #import "MenuItemSpacer.h"
 #import "MenuItemTitle.h"
 
@@ -36,12 +36,13 @@
 - (void)newTimedGame:(id)caller;
 - (void)continueGame:(id)caller;
 - (void)resumeGame:(id)caller;
+- (void)endGame:(id)caller;
 - (void)stopGame:(id)caller;
 - (void)levelRedo:(id)caller;
 - (void)more:(id)caller;
 - (void)configuration:(id)caller;
 - (void)strategy:(id)caller;
-- (void)statistics:(id)caller;
+- (void)scores:(id)caller;
 
 @end
 
@@ -105,7 +106,7 @@
                  [MenuItemFont itemFromString:@"Configuration" target:self selector:@selector(configuration:)],
                  [MenuItemSpacer spacerSmall],
                  [MenuItemFont itemFromString:@"Strategy" target:self selector:@selector(strategy:)],
-                 [MenuItemFont itemFromString:@"Statistics" target:self selector:@selector(statistics:)],
+                 [MenuItemFont itemFromString:@"Scores" target:self selector:@selector(scores:)],
                  nil] retain];
     moreMenu.background         = [Sprite spriteWithFile:@"splash.png"];
     moreMenu.outerPadding       = margin(100, 20, 10, 20);
@@ -142,16 +143,17 @@
     pausedMenu = [[MenuLayer menuWithDelegate:self logo:[MenuItemImage itemFromNormalImage:@"title.paused.png"
                                                                              selectedImage:@"title.paused.png"]
                                         items:
-                   [MenuItemFont itemFromString:@"Resume Game" target:self selector:@selector(resumeGame:)],
                    [MenuItemFont itemFromString:@"Restart Level" target:self selector:@selector(levelRedo:)],
                    [MenuItemSpacer spacerSmall],
-                   [MenuItemFont itemFromString:@"End Game" target:self selector:@selector(stopGame:)],
+                   [MenuItemFont itemFromString:@"Main Menu" target:self selector:@selector(stopGame:)],
+                   [MenuItemFont itemFromString:@"End Game" target:self selector:@selector(endGame:)],
                    nil] retain];
+    [pausedMenu setBackButtonTarget:self selector:@selector(resumeGame:)];
     
     gameOverMenu = [[MenuLayer menuWithDelegate:self logo:[MenuItemImage itemFromNormalImage:@"title.gameover.png"
                                                                                selectedImage:@"title.gameover.png"]
                                           items:
-                     [MenuItemFont itemFromString:@"Stop Game" target:self selector:@selector(stopGame:)],
+                     [MenuItemFont itemFromString:@"End Game" target:self selector:@selector(endGame:)],
                      [MenuItemFont itemFromString:@"Retry Level" target:self selector:@selector(levelRedo:)],
                      nil] retain];
     
@@ -203,6 +205,7 @@
 
 - (void)hudMenuPressed {
     
+    [self pushLayer:mainMenu hidden:YES];
     [self pushLayer:pausedMenu];
 }
 
@@ -210,6 +213,13 @@
 - (void)showMainMenu {
 
     [self pushLayer:mainMenu];
+}
+
+
+- (void)showScores {
+    
+    [self pushLayer:mainMenu hidden:YES];
+    [self pushLayer:[ScoresLayer get]];
 }
 
 
@@ -251,6 +261,12 @@
 
 - (void)stopGame:(id)caller {
     
+    [gameLayer stopGame:DbEndReasonStopped];
+}
+
+
+- (void)endGame:(id)caller {
+    
     [gameLayer stopGame:DbEndReasonEnded];
 }
 
@@ -278,9 +294,9 @@
 }
 
 
-- (void)statistics:(id)caller {
+- (void)scores:(id)caller {
     
-    [[DeblockAppDelegate get] pushLayer:[StatsLayer get]];
+    [self pushLayer:[ScoresLayer get]];
 }
 
 

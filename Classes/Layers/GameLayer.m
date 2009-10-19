@@ -113,10 +113,11 @@
 
 - (void)startGame {
 
-    if(running)
-        @throw [NSException exceptionWithName:NSInternalInconsistencyException
-                                       reason:@"Tried to start a game while one's still running."
-                                     userInfo:nil];
+    if(running) {
+        NSLog(@"WARN: Tried to start a game while one's still running.");
+        return;
+    }
+    
     endReason                   = DbEndReasonEnded;
     penaltyInterval             = 2;
     [DMConfig get].levelScore   = [NSNumber numberWithInt:0];
@@ -214,6 +215,9 @@
 
     switch (endReason) {
         case DbEndReasonEnded:
+            [[DeblockAppDelegate get] showScores];
+            break;
+        case DbEndReasonStopped:
             [[DeblockAppDelegate get] showMainMenu];
             break;
         case DbEndReasonGameOver:

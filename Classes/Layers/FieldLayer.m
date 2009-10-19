@@ -103,14 +103,18 @@
     gravityRow      = 0;
     gravityColumn   = blockColumns / 2;
     blockGrid       = malloc(sizeof(BlockLayer **) * blockRows);
-    
+    for (NSInteger row = 0; row < blockRows; ++row) {
+        blockGrid[row] = malloc(sizeof(BlockLayer *) * blockColumns);
+        for (NSInteger col = 0; col < blockColumns; ++col)
+            // Nil the grid so we can iterate through it before it's been completely filled up.
+            blockGrid[row][col] = nil;
+    }
+            
     // Build field of blocks.
     CGSize blockSize        = CGSizeMake((self.contentSize.width   - blockPadding) / blockColumns  - blockPadding,
                                          (self.contentSize.height  - blockPadding) / blockRows     - blockPadding);
     
     for (NSInteger row = 0; row < blockRows; ++row) {
-        blockGrid[row] = malloc(sizeof(BlockLayer *) * blockColumns);
-        
         for (NSInteger col = 0; col < blockColumns; ++col) {
             
             BlockLayer *block = [BlockLayer randomBlockForLevel:[[DMConfig get].level intValue] withSize:blockSize];
@@ -287,10 +291,13 @@
         return 0;
     
     // Destroy this block and those linked to it.
-    for (BlockLayer *block in linkedBlocks)
+    float multiplier = 1;
+    for (BlockLayer *block in linkedBlocks) {
+        multiplier *= [block scoreMultiplier];
         [self destroySingleBlock:block];
+    }
 
-    return [linkedBlocks count] - 1;
+    return ([linkedBlocks count] - 1) * multiplier;
 }
 
 
@@ -538,7 +545,6 @@
         }
         
         points += bonusPoints;
-        NSLog(@"score: %d, penalty: %d, bonus: %d, total: %d", [[DMConfig get].levelScore intValue], [[DMConfig get].levelPenalty intValue], bonusPoints, points);
         [[DMConfig get] recordScore:[[DMConfig get].score unsignedIntValue] + points];
         [[DeblockAppDelegate get].hudLayer updateHudWithScore:bonusPoints];
         [[DeblockAppDelegate get].gameLayer stopGame:endReason];

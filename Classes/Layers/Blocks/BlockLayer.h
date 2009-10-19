@@ -46,6 +46,7 @@ typedef enum DMScanReason {
 
 @protected
     Texture2D                                   **textures;
+    Label                                       *label;
 
 @private
     DMBlockType                                 type;
@@ -58,7 +59,6 @@ typedef enum DMScanReason {
     ccColor4F                                   modColor;
     
     IntervalAction                              *moveAction;
-    //Label                                     *label;
     
     ParticleSystem                              *dropEmitter;
 }
@@ -78,21 +78,22 @@ typedef enum DMScanReason {
 @property (readonly) NSUInteger                 frames;
 @property (readwrite) ccColor4F                 modColor;
 
-+ (NSUInteger)minimumLevel;
 + (id)randomBlockForLevel:(NSUInteger)level withSize:(CGSize)size;
++ (NSUInteger)occurancePercentForLevel:(NSUInteger)level type:(DMBlockType)aType;
 + (ccColor4B)colorForType:(DMBlockType)aType;
-
-- (id)initWithBlockSize:(CGSize)size;
-
 + (DMBlockType)randomType;
-- (NSString *)labelString;
++ (NSUInteger)getBlocksOfClass:(Class)blockClass andType:(DMBlockType)aType;
+
+- (id)initWithType:(DMBlockType)aType blockSize:(CGSize)size;
+
 - (BOOL)moving;
+- (BOOL)scoreMultiplier;
 
 - (BOOL)isLinkedToAdjecentBlock:(BlockLayer *)block forReason:(DMScanReason)aReason;
 - (NSMutableSet *)findLinkedBlocksInField:(FieldLayer *)field forReason:(DMScanReason)aReason
                                     atRow:(NSInteger)aRow col:(NSInteger)aCol;
 - (void)getLinksInField:(FieldLayer *)aField forReason:(DMScanReason)aReason
-                  toSet:(NSMutableSet *)allLinkedBlocks;
+                   toSet:(NSMutableSet *)allLinkedBlocks;
 
 - (void)blink;
 - (void)crumble;

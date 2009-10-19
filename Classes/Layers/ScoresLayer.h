@@ -15,7 +15,7 @@
  */
 
 //
-//  StatsLayer.h
+//  ScoresLayer.h
 //  Deblock
 //
 //  Created by Maarten Billemont on 03/09/09.
@@ -26,12 +26,12 @@
 #import "GraphNode.h"
 
 
-@interface StatsLayer : ShadeLayer {
+@interface ScoresLayer : ShadeLayer {
 
 @private
     GraphNode      *graph;
 }
 
-+ (StatsLayer *)get;
++ (ScoresLayer *)get;
 
 @end

@@ -28,6 +28,7 @@
 
 typedef enum DbEndReason {
     DbEndReasonEnded,
+    DbEndReasonStopped,
     DbEndReasonGameOver,
     DbEndReasonNextField,
 } DbEndReason;

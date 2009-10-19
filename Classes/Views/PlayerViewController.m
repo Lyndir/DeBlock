@@ -31,7 +31,7 @@
     self.playerField                    = [[[UITextField alloc] initWithFrame:CGRectZero] autorelease];
     self.playerField.textAlignment      = UITextAlignmentCenter;
     self.playerField.font               = [UIFont fontWithName:@"Courier" size:[[Config get].largeFontSize intValue]];
-    self.playerField.text               = @"lhunath";
+    self.playerField.text               = [DMConfig get].userName;
     [self.playerField sizeToFit];
     self.playerField.center             = ccp(self.view.center.x, 100);
     self.playerField.autoresizingMask   = UIViewAutoresizingFlexibleWidth;

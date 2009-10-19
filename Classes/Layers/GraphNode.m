@@ -123,13 +123,15 @@
 
 - (void)setScoreFormat:(NSString *)aScoreFormat {
     
-    scoreFormat = aScoreFormat;
+    [scoreFormat release];
+    scoreFormat = [aScoreFormat retain];
     [self updateVertices];
 }
 
 - (void)setDateFormatter:(NSDateFormatter *)aDateFormatter {
     
-    dateFormatter = aDateFormatter;
+    [dateFormatter release];
+    dateFormatter = [aDateFormatter retain];
     [self updateVertices];
 }
 
@@ -291,20 +293,13 @@
 @end
 
 
-@interface GraphNode ()
-
-- (void)updateSortedScores;
-
-@end
-
-
 @implementation GraphNode
 
-@synthesize scores, comparator;
+@synthesize comparator;
 @synthesize graphDataNode;
 
 
-- (id)initWithArray:(NSArray *)newScores {
+- (id)init {
     
     if (!(self = [super init]))
         return nil;
@@ -318,7 +313,6 @@
     graphDataNode.contentSize = self.contentSize;
 
     self.comparator         = @selector(compareByTopScore:);
-    self.scores             = newScores;
 
     return self;
 }
@@ -326,19 +320,12 @@
 
 - (void)setScores:(NSArray *)newScores {
     
-    [scores release];
-    scores                  = [newScores retain];
-    
-    [self updateSortedScores];
-}
-
-- (void)updateSortedScores {
-    
     [sortedScores release];
-    sortedScores        = [[scores sortedArrayUsingSelector:comparator] retain];
+    sortedScores        = [[newScores sortedArrayUsingSelector:comparator] retain];
     
     [graphDataNode updateWithSortedScores:sortedScores];
 }
+
 
 - (void)draw {
     

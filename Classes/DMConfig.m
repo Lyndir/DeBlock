@@ -70,70 +70,96 @@
                                 
                                 [NSNumber numberWithInt:10],                                    cFlawlessBonus,
 
-                                [[[UIDevice currentDevice].name
-                                  componentsSeparatedByString:@"’"]
+                                [[[[UIDevice currentDevice] name]
+                                  componentsSeparatedByCharactersInSet:
+                                  [NSCharacterSet whitespaceCharacterSet]]
                                  objectAtIndex:0],                                              cUserName,
-                                [NSDictionary dictionary],                                      cUserScoreHistory,
+                                [NSDictionary dictionaryWithObjectsAndKeys:
+                                 [NSDictionary dictionaryWithObjectsAndKeys:
+                                  [NSNumber numberWithInt:4763],
+                                  [NSString stringWithFormat:@"%f",
+                                   [[NSDate dateWithTimeIntervalSinceNow:
+                                     random() % 10000]
+                                    timeIntervalSince1970]],
+                                  nil],
+                                 @"John",
+                                 
+                                 [NSDictionary dictionaryWithObjectsAndKeys:
+                                  [NSNumber numberWithInt:4961],
+                                  [NSString stringWithFormat:@"%f",
+                                   [[NSDate dateWithTimeIntervalSinceNow:
+                                     random() % 10000]
+                                    timeIntervalSince1970]],
+                                  nil],
+                                 @"Aeryn",
+                                 
+                                 [NSDictionary dictionaryWithObjectsAndKeys:
+                                  [NSNumber numberWithInt:4689],
+                                  [NSString stringWithFormat:@"%f",
+                                   [[NSDate dateWithTimeIntervalSinceNow:
+                                     random() % 10000]
+                                    timeIntervalSince1970]],
+                                  nil],
+                                 @"D'Argo",
+                                 
+                                 [NSDictionary dictionaryWithObjectsAndKeys:
+                                  [NSNumber numberWithInt:7386],
+                                  [NSString stringWithFormat:@"%f",
+                                   [[NSDate dateWithTimeIntervalSinceNow:
+                                     random() % 10000]
+                                    timeIntervalSince1970]],
+                                  nil],
+                                 @"Zhaan",
+                                 
+                                 [NSDictionary dictionaryWithObjectsAndKeys:
+                                  [NSNumber numberWithInt:1497],
+                                  [NSString stringWithFormat:@"%f",
+                                   [[NSDate dateWithTimeIntervalSinceNow:
+                                     random() % 10000]
+                                    timeIntervalSince1970]],
+                                  nil],
+                                 @"Rygel",
+                                 
+                                 [NSDictionary dictionaryWithObjectsAndKeys:
+                                  [NSNumber numberWithInt:2892],
+                                  [NSString stringWithFormat:@"%f",
+                                   [[NSDate dateWithTimeIntervalSinceNow:
+                                     random() % 10000]
+                                    timeIntervalSince1970]],
+                                  nil],
+                                 @"Chiana",
+                                 
+                                 [NSDictionary dictionaryWithObjectsAndKeys:
+                                  [NSNumber numberWithInt:16744],
+                                  [NSString stringWithFormat:@"%f",
+                                   [[NSDate dateWithTimeIntervalSinceNow:
+                                     random() % 10000]
+                                    timeIntervalSince1970]],
+                                  nil],
+                                 @"Pilot",
+                                 
+                                 [NSDictionary dictionaryWithObjectsAndKeys:
+                                  [NSNumber numberWithInt:382],
+                                  [NSString stringWithFormat:@"%f",
+                                   [[NSDate dateWithTimeIntervalSinceNow:
+                                     random() % 10000]
+                                    timeIntervalSince1970]],
+                                  nil],
+                                 @"Crais",
+                                 
+                                 [NSDictionary dictionaryWithObjectsAndKeys:
+                                  [NSNumber numberWithInt:3790],
+                                  [NSString stringWithFormat:@"%f",
+                                   [[NSDate dateWithTimeIntervalSinceNow:
+                                     random() % 10000]
+                                    timeIntervalSince1970]],
+                                  nil],
+                                 @"Scorpius",
+
+                                 nil],                                                          cUserScoreHistory,
 
                                 nil
                                 ]];
-    
-    self.userScoreHistory = [NSDictionary dictionaryWithObjectsAndKeys:
-                             [NSDictionary dictionaryWithObjectsAndKeys:
-                              [NSNumber numberWithInt:random() % 1500],
-                              [NSString stringWithFormat:@"%f", [[NSDate dateWithTimeIntervalSinceNow:random() % 10000] timeIntervalSince1970]],
-                              nil],
-                             @"John",
-
-                             [NSDictionary dictionaryWithObjectsAndKeys:
-                              [NSNumber numberWithInt:random() % 1500],
-                              [NSString stringWithFormat:@"%f", [[NSDate dateWithTimeIntervalSinceNow:random() % 10000] timeIntervalSince1970]],
-                              nil],
-                             @"Aeryn",
-                             
-                             [NSDictionary dictionaryWithObjectsAndKeys:
-                              [NSNumber numberWithInt:random() % 1500],
-                              [NSString stringWithFormat:@"%f", [[NSDate dateWithTimeIntervalSinceNow:random() % 10000] timeIntervalSince1970]],
-                              nil],
-                             @"D'Argo",
-                             
-                             [NSDictionary dictionaryWithObjectsAndKeys:
-                              [NSNumber numberWithInt:random() % 1500],
-                              [NSString stringWithFormat:@"%f", [[NSDate dateWithTimeIntervalSinceNow:random() % 10000] timeIntervalSince1970]],
-                              nil],
-                             @"Zhaan",
-                             
-                             [NSDictionary dictionaryWithObjectsAndKeys:
-                              [NSNumber numberWithInt:random() % 1500],
-                              [NSString stringWithFormat:@"%f", [[NSDate dateWithTimeIntervalSinceNow:random() % 10000] timeIntervalSince1970]],
-                              nil],
-                             @"Rygel",
-                             
-                             [NSDictionary dictionaryWithObjectsAndKeys:
-                              [NSNumber numberWithInt:random() % 1500],
-                              [NSString stringWithFormat:@"%f", [[NSDate dateWithTimeIntervalSinceNow:random() % 10000] timeIntervalSince1970]],
-                              nil],
-                             @"Chiana",
-                             
-                             [NSDictionary dictionaryWithObjectsAndKeys:
-                              [NSNumber numberWithInt:random() % 1500],
-                              [NSString stringWithFormat:@"%f", [[NSDate dateWithTimeIntervalSinceNow:random() % 10000] timeIntervalSince1970]],
-                              nil],
-                             @"Pilot",
-                             
-                             [NSDictionary dictionaryWithObjectsAndKeys:
-                              [NSNumber numberWithInt:random() % 1500],
-                              [NSString stringWithFormat:@"%f", [[NSDate dateWithTimeIntervalSinceNow:random() % 10000] timeIntervalSince1970]],
-                              nil],
-                             @"Crais",
-                             
-                             [NSDictionary dictionaryWithObjectsAndKeys:
-                              [NSNumber numberWithInt:random() % 1500],
-                              [NSString stringWithFormat:@"%f", [[NSDate dateWithTimeIntervalSinceNow:random() % 10000] timeIntervalSince1970]],
-                              nil],
-                             @"Scorpius",
-                             
-                             nil];
     
     return self;
 }
@@ -154,6 +180,7 @@
         score = 0;
     
     [super recordScore:score];
+    [self saveScore];
 }
 
 - (void)saveScore {
@@ -173,6 +200,7 @@
     // Store the user's new scores in the score history.
     [newUserScores setObject:newCurrentUserScores forKey:[self userName]];
     [self setUserScoreHistory:newUserScores];
+    NSLog(@"user score history:\n%@", [self userScoreHistory]);
 
     // Clean up. 
     [newCurrentUserScores release];

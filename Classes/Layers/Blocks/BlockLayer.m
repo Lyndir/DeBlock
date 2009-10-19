@@ -80,36 +80,71 @@ static NSDictionary *blockColors;
 }
 
 
-+ (NSUInteger)minimumLevel {
-    
-    return 0;
-}
-
-
 + (id)randomBlockForLevel:(NSUInteger)level withSize:(CGSize)size {
 
-    id class;
-    switch (random() % 50) {
-        case 1:
-            class = [BombBlockLayer class];
-            break;
-        case 2:
-            class = [MorphBlockLayer class];
-            break;
-        case 3:
-            class = [ZapBlockLayer class];
-            break;
-        case 4:
-            class = [FreezeBlockLayer class];
-            break;
-        default:
-            class = [BlockLayer class];
+    DMBlockType aType = [self randomType];
+    Class specialTypes[] = {
+        [BombBlockLayer class],
+        [MorphBlockLayer class],
+        [ZapBlockLayer class],
+        [FreezeBlockLayer class],
+        [BlockLayer class]
+    };
+    NSUInteger specialTypeCount = sizeof(specialTypes) / sizeof(Class) - 1;
+    Class *types = malloc(sizeof(Class) * 100);
+    NSUInteger specialType = 0, j = 0;
+    for (NSUInteger i = 0; i < 100; ++i) {
+        if (specialType < specialTypeCount) {
+            while (++j > [specialTypes[specialType] occurancePercentForLevel:level type:aType]) {
+                j = 0;
+                ++specialType;
+                
+                if (specialType >= specialTypeCount)
+                    break;
+            }
+        }
+        
+        types[i] = specialTypes[specialType];
     }
     
-    if (level < [class minimumLevel])
-        class = [BlockLayer class];
+    Class blockClass = types[random() % 100];
+    free(types);
     
-    return [[[class alloc] initWithBlockSize:size] autorelease];
+    NSUInteger count = [self getBlocksOfClass:blockClass andType:aType];
+    if (blockClass == [ZapBlockLayer class]) {
+        NSLog(@"zapper blocks of type %d: %d", aType, count);
+        NSLog(@"+");
+    }
+    
+    return [[[blockClass alloc] initWithType:aType
+                                   blockSize:size] autorelease];
+}
+
++ (NSUInteger)getBlocksOfClass:(Class)blockClass andType:(DMBlockType)aType {
+
+    NSUInteger counter = 0;
+    FieldLayer *field = [DeblockAppDelegate get].gameLayer.fieldLayer;
+
+    for (NSInteger row = 0; row < field.blockRows; ++row)
+        for (NSInteger col = 0; col < field.blockColumns; ++col) {
+            BlockLayer *block = [field blockAtRow:row col:col];
+            if ([block class] == blockClass && block.type == aType)
+                ++counter;
+        }
+
+    return counter;
+}
+
++ (void)resetLevelBlockTypes {
+    
+    static NSUInteger *levelBlockTypes;
+    free(levelBlockTypes);
+    levelBlockTypes = malloc(sizeof(NSUInteger) * DMBlockTypeCount);
+}
+
++ (NSUInteger)occurancePercentForLevel:(NSUInteger)level type:(DMBlockType)aType {
+    
+    return 0;
 }
 
 + (ccColor4B)colorForType:(DMBlockType)aType {
@@ -117,13 +152,19 @@ static NSDictionary *blockColors;
     return ccc4l([[blockColors objectForKey:[NSNumber numberWithUnsignedInt:aType]] longValue]);
 }
 
-- (id)initWithBlockSize:(CGSize)size {
++ (DMBlockType)randomType {
+    
+    DMBlockType typeRange = DMBlockTypeCount * [[DMConfig get].level intValue] / kAllBlocksLevel;
+    return random() % ((int)fmaxf(fminf(typeRange, DMBlockTypeCount), kMinBlocks));
+}
+
+- (id)initWithType:(DMBlockType)aType blockSize:(CGSize)size {
 
     if (!(self = [super init]))
         return nil;
     
+    self.type           = aType;
     self.contentSize    = size;
-    self.type           = [[self class] randomType];
     self.destroyed      = NO;
     self.destructible   = YES;
     self.modColor       = ccc4f(1, 1, 1, 1);
@@ -135,12 +176,12 @@ static NSDictionary *blockColors;
     for (NSUInteger i = 1; i < 11; ++i)
         textures[i]     = [[[TextureMgr sharedTextureMgr] addImage:[NSString stringWithFormat:@"block.cracked.%d.png", i]] retain];
 
-    /*label               = [[Label alloc] initWithString:[self labelString] dimensions:size
+    label               = [[Label alloc] initWithString:@"" dimensions:size
                                               alignment:UITextAlignmentCenter
                                                fontName:[Config get].fixedFontName
-                                               fontSize:[[Config get].smallFontSize unsignedIntValue]];
+                                               fontSize:size.height * 3 / 4];
     label.position      = ccp(size.width / 2, size.height / 2);
-    [self addChild:label];*/
+    [self addChild:label];
     
     self.isTouchEnabled      = YES;
     
@@ -150,16 +191,9 @@ static NSDictionary *blockColors;
 }
 
 
-+ (DMBlockType)randomType {
+- (BOOL)scoreMultiplier {
     
-    DMBlockType typeRange = DMBlockTypeCount * [[DMConfig get].level intValue] / kAllBlocksLevel;
-    return random() % ((int)fmaxf(fminf(typeRange, DMBlockTypeCount), kMinBlocks));
-}
-
-
-- (NSString *)labelString {
-    
-    return @"";
+    return 1;
 }
 
 

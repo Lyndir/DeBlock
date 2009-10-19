@@ -82,20 +82,17 @@
 @interface GraphNode : CocosNode {
 
 @private
-    NSArray                                     *scores, *sortedScores;
+    NSArray                                     *sortedScores;
     SEL                                         comparator;
     
     GraphDataNode                               *graphDataNode;
 }
 
-/** An array of Score objects. */
-@property (readwrite, retain) NSArray           *scores;
 /** The method on the Score object that will determine the order of rendered score appearance. */
 @property (readwrite) SEL                       comparator;
 /** The node that displays the actual graph data. */
 @property (readonly) GraphDataNode              *graphDataNode;
 
-/** @param newData  An array of Score objects. */
-- (id)initWithArray:(NSArray *)newData;
+- (void)setScores:(NSArray *)newScores;
 
 @end

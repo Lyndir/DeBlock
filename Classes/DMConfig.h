@@ -45,6 +45,8 @@
 
 + (DMConfig *)get;
 
+- (void)saveScore;
+
 @property (readwrite, retain) NSNumber          *level;
 @property (readwrite, retain) NSNumber          *levelScore;
 @property (readwrite, retain) NSNumber          *levelPenalty;
