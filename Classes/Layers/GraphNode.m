@@ -94,7 +94,7 @@
 
 - (id)init {
 
-    if (!(self = [super init]))
+    if (!(self = [super initWithContentSize:CGSizeZero direction:ScrollContentDirectionTopToBottom]))
         return nil;
     
     self.padding            = 0;
@@ -110,14 +110,15 @@
 - (void)setBarHeight:(CGFloat)aBarHeight {
     
     barHeight = aBarHeight;
-    self.scrollableContentSize  = CGSizeMake(self.contentSize.width, padding * 2 + scoreCount * barHeight);
+    self.scrollContentSize  = CGSizeMake(self.contentSize.width, padding * 2 + scoreCount * barHeight);
+    self.scrollStep         = ccp(0, barHeight);
     [self updateVertices];
 }
 
 - (void)setPadding:(CGFloat)aPadding {
     
     padding = aPadding;
-    self.scrollableContentSize  = CGSizeMake(self.contentSize.width, padding * 2 + scoreCount * barHeight);
+    self.scrollContentSize  = CGSizeMake(self.contentSize.width, padding * 2 + scoreCount * barHeight);
     [self updateVertices];
 }
 
@@ -147,7 +148,7 @@
     
     self.sortedScores           = newSortedScores;
     scoreCount                  = [sortedScores count];
-    self.scrollableContentSize  = CGSizeMake(self.contentSize.width, scoreCount * barHeight);
+    self.scrollContentSize      = CGSizeMake(self.contentSize.width, scoreCount * barHeight);
 
     // Find the top score.
     topScore                    = ((Score *)[sortedScores lastObject]).score;

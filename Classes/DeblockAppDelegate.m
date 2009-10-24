@@ -27,6 +27,7 @@
 #import "ScoresLayer.h"
 #import "MenuItemSpacer.h"
 #import "MenuItemTitle.h"
+#import "StrategyLayer.h"
 
 
 @interface DeblockAppDelegate ()
@@ -291,6 +292,7 @@
 
 - (void)strategy:(id)caller {
     
+    [self pushLayer:[StrategyLayer node]];
 }
 
 

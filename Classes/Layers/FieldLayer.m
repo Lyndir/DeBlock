@@ -280,18 +280,17 @@
 
 - (NSInteger)destroyBlock:(BlockLayer *)aBlock forced:(BOOL)forced {
     
-    NSMutableSet *linkedBlocks = [[NSMutableSet new] autorelease];
-
-    [linkedBlocks addObject:aBlock];
+    NSMutableSet *linkedBlocks = [NSMutableSet set];
     [aBlock getLinksInField:self forReason:DMScanReasonDestroying
                       toSet:linkedBlocks];
 
     // No links and not forced, give up.
-    if (!forced && [linkedBlocks count] <= 1)
+    if (!forced && ![linkedBlocks count])
         return 0;
     
     // Destroy this block and those linked to it.
     float multiplier = 1;
+    [linkedBlocks addObject:aBlock];
     for (BlockLayer *block in linkedBlocks) {
         multiplier *= [block scoreMultiplier];
         [self destroySingleBlock:block];

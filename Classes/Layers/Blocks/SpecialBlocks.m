@@ -76,8 +76,8 @@
     for (NSInteger r = aRow - 1; r <= aRow + 1; ++r) {
         for (NSInteger c = aCol - 1; c <= aCol + 1; ++c) {
             BlockLayer *block = [field blockAtRow:r col:c];
-            if (block == nil || block == self)
-                // Let's not destroy ourselves and non-existing blocks.
+            if (block == nil)
+                // No block there.
                 continue;
             
             [linkedBlocks addObject:block];
