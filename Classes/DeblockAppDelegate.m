@@ -133,6 +133,7 @@
                                            settings:
                    @selector(music),
                    @selector(soundFx),
+                   @selector(compete),
                    nil] retain];
     configMenu.background       = [Sprite spriteWithFile:@"splash.png"];
     configMenu.outerPadding     = margin(110, 20, 10, 20);
@@ -173,11 +174,42 @@
     [[Director sharedDirector] runWithScene:uiScene];
 }
 
+
+- (void)didLoad:(MenuLayer *)menuLayer {
+
+    if (menuLayer == configMenu) {
+        [configMenu.menu alignItemsInColumns:
+         [NSNumber numberWithUnsignedInt:1],
+         [NSNumber numberWithUnsignedInt:1],
+         [NSNumber numberWithUnsignedInt:2],
+         [NSNumber numberWithUnsignedInt:2],
+         [NSNumber numberWithUnsignedInt:2],
+         nil];
+    }
+}
+
+
 - (void)didEnter:(MenuLayer *)menuLayer {
     
     if (menuLayer == mainMenu) {
         [continueGame setIsEnabled:[[DMConfig get].level intValue] > 1];
     }
+}
+
+
+- (NSString *)labelForSetting:(SEL)setting {
+    
+    if (setting == @selector(music))
+        return @"Music";
+
+    else if (setting == @selector(soundFx))
+        return @"Sound Effects";
+    
+    else if (setting == @selector(compete))
+        return @"Compete Online";
+    
+    else
+        return nil;
 }
 
 

@@ -28,7 +28,7 @@
 #import "PlayerViewController.h"
 #import "ConfigMenuLayer.h"
 
-@interface DeblockAppDelegate : AbstractAppDelegate<MenuDelegate> {
+@interface DeblockAppDelegate : AbstractAppDelegate<MenuDelegate, ConfigMenuDelegate> {
 
 @private
     PlayerViewController            *playerVC;

@@ -24,6 +24,8 @@
 
 #import "Config.h"
 
+#define cCompete          	NSStringFromSelector(@selector(compete))
+
 #define cLevel          	NSStringFromSelector(@selector(level))
 #define cLevelScore         NSStringFromSelector(@selector(levelScore))
 #define cLevelPenalty       NSStringFromSelector(@selector(levelPenalty))
@@ -46,6 +48,8 @@
 + (DMConfig *)get;
 
 - (void)saveScore;
+
+@property (readwrite, retain) NSNumber          *compete;
 
 @property (readwrite, retain) NSNumber          *level;
 @property (readwrite, retain) NSNumber          *levelScore;

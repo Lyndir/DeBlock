@@ -27,6 +27,7 @@
 
 @implementation DMConfig
 
+@dynamic compete;
 @dynamic level, levelScore, levelPenalty;
 @dynamic gameMode;
 @dynamic skyColorFrom, skyColorTo;
@@ -42,6 +43,8 @@
     [defaults registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
                                 [NSNumber numberWithLong:0x38343C00],                           cShadeColor,
 
+                                [NSNumber numberWithBool:NO],                                   cCompete,
+                                
                                 [NSArray arrayWithObjects:
                                  @"Carriage_House_Deblock.mp3",
                                  @"Marimba_Deblock.mp3",
