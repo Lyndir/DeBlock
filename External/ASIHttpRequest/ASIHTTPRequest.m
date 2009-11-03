@@ -912,6 +912,15 @@ static BOOL isiPhoneOS2;
 #pragma mark upload/download progress
 
 
+- (void)setMaxValue:(double)max
+{
+    // This method only exists as a dummy to silence -Wundeclared-selector warnings in -setUploadProgressDelegate
+}
+- (void)setDoubleValue:(double)progress
+{
+    // This method only exists as a dummy to silence -Wundeclared-selector warnings in -setUploadProgressDelegate
+}
+
 - (void)updateProgressIndicators
 {
 	
@@ -924,7 +933,6 @@ static BOOL isiPhoneOS2;
 	}
 	
 }
-
 
 - (void)setUploadProgressDelegate:(id)newDelegate
 {
@@ -1195,12 +1203,12 @@ static BOOL isiPhoneOS2;
 	}
 	// Let the queue know we are done
 	if ([queue respondsToSelector:@selector(requestDidFinish:)]) {
-		[queue performSelectorOnMainThread:@selector(requestDidFinish:) withObject:self waitUntilDone:[NSThread isMainThread]];		
+		[(NSObject*)queue performSelectorOnMainThread:@selector(requestDidFinish:) withObject:self waitUntilDone:[NSThread isMainThread]];		
 	}
 	
 	// Let the delegate know we are done
 	if (didFinishSelector && [delegate respondsToSelector:didFinishSelector]) {
-		[delegate performSelectorOnMainThread:didFinishSelector withObject:self waitUntilDone:[NSThread isMainThread]];		
+		[(NSObject*)delegate performSelectorOnMainThread:didFinishSelector withObject:self waitUntilDone:[NSThread isMainThread]];		
 	}
 }
 
@@ -1221,7 +1229,7 @@ static BOOL isiPhoneOS2;
 
 		// Let the queue know something went wrong
 		if ([queue respondsToSelector:@selector(requestDidFail:)]) {
-			[queue performSelectorOnMainThread:@selector(requestDidFail:) withObject:mRequest waitUntilDone:[NSThread isMainThread]];		
+			[(NSObject*)queue performSelectorOnMainThread:@selector(requestDidFail:) withObject:mRequest waitUntilDone:[NSThread isMainThread]];		
 		}
 	
 	} else {
@@ -1229,12 +1237,12 @@ static BOOL isiPhoneOS2;
 		
 		// Let the queue know something went wrong
 		if ([queue respondsToSelector:@selector(requestDidFail:)]) {
-			[queue performSelectorOnMainThread:@selector(requestDidFail:) withObject:self waitUntilDone:[NSThread isMainThread]];		
+			[(NSObject*)queue performSelectorOnMainThread:@selector(requestDidFail:) withObject:self waitUntilDone:[NSThread isMainThread]];		
 		}
 		
 		// Let the delegate know something went wrong
 		if (didFailSelector && [delegate respondsToSelector:didFailSelector]) {
-			[delegate performSelectorOnMainThread:didFailSelector withObject:self waitUntilDone:[NSThread isMainThread]];	
+			[(NSObject*)delegate performSelectorOnMainThread:didFailSelector withObject:self waitUntilDone:[NSThread isMainThread]];	
 		}
 	}
 }
@@ -1805,7 +1813,7 @@ static BOOL isiPhoneOS2;
 	}
 	
 	if ([authenticationDelegate respondsToSelector:@selector(authenticationNeededForRequest:)]) {
-		[authenticationDelegate performSelectorOnMainThread:@selector(authenticationNeededForRequest:) withObject:self waitUntilDone:[NSThread isMainThread]];
+		[(NSObject*)authenticationDelegate performSelectorOnMainThread:@selector(authenticationNeededForRequest:) withObject:self waitUntilDone:[NSThread isMainThread]];
 		[[self authenticationLock] lockWhenCondition:2];
 		[[self authenticationLock] unlockWithCondition:1];
 		
@@ -2046,7 +2054,7 @@ static BOOL isiPhoneOS2;
 				bufferSize = 1;
 			} else if (maxSize/4 < bufferSize) {
 				// We were going to fetch more data that we should be allowed, so we'll reduce the size of our read
-				bufferSize = maxSize/4;
+				bufferSize = (int)(maxSize/4);
 			}
 		}
 		if (bufferSize < 1) {
@@ -2248,7 +2256,7 @@ static BOOL isiPhoneOS2;
 {
 	[sessionCredentialsLock lock];
 	NSMutableArray *sessionCredentialsList = [[self class] sessionProxyCredentialsStore];
-	int i;
+	NSUInteger i;
 	for (i=0; i<[sessionCredentialsList count]; i++) {
 		NSDictionary *theCredentials = [sessionCredentialsList objectAtIndex:i];
 		if ([theCredentials objectForKey:@"Credentials"] == credentials) {
@@ -2264,7 +2272,7 @@ static BOOL isiPhoneOS2;
 {
 	[sessionCredentialsLock lock];
 	NSMutableArray *sessionCredentialsList = [[self class] sessionCredentialsStore];
-	int i;
+	NSUInteger i;
 	for (i=0; i<[sessionCredentialsList count]; i++) {
 		NSDictionary *theCredentials = [sessionCredentialsList objectAtIndex:i];
 		if ([theCredentials objectForKey:@"Credentials"] == credentials) {
@@ -2869,7 +2877,7 @@ static BOOL isiPhoneOS2;
 	for (NSNumber *bytes in bandwidthUsageTracker) {
 		totalBytes += [bytes unsignedLongValue];
 	}
-	averageBandwidthUsedPerSecond = totalBytes/measurements;		
+	averageBandwidthUsedPerSecond = (unsigned long)(totalBytes/measurements);
 }
 
 + (unsigned long)averageBandwidthUsedPerSecond
@@ -2952,7 +2960,7 @@ static BOOL isiPhoneOS2;
 	[bandwidthThrottlingLock lock];
 	
 	// We'll split our bandwidth allowance into 4 (which is the default for an ASINetworkQueue's max concurrent operations count) to give all running requests a fighting chance of reading data this cycle
-	long long toRead = maxBandwidthPerSecond/4;
+	unsigned long toRead = maxBandwidthPerSecond/4;
 	if (maxBandwidthPerSecond > 0 && (bandwidthUsedInLastSecond + toRead > maxBandwidthPerSecond)) {
 		toRead = maxBandwidthPerSecond-bandwidthUsedInLastSecond;
 		if (toRead < 0) {

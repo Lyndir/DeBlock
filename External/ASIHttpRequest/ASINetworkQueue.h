@@ -7,8 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "ASIHTTPRequest.h"
 
-@interface ASINetworkQueue : NSOperationQueue {
+@interface ASINetworkQueue : NSOperationQueue<ASINetworkQueueDelegate> {
 	
 	// Delegate will get didFail + didFinish messages (if set)
 	id delegate;
@@ -53,8 +54,6 @@
 	// Set to YES if the size of a requests in the queue varies greatly for much more accurate results
 	// Default for requests in the queue is NO
 	BOOL showAccurateProgress;
-
-	
 }
 
 // Convenience constructor
@@ -62,21 +61,6 @@
 
 // Used internally to manage HEAD requests when showAccurateProgress is YES, do not use!
 - (void)addHEADOperation:(NSOperation *)operation;
-
-// Called at the start of a request to add on the size of this upload to the total
-- (void)incrementUploadSizeBy:(unsigned long long)bytes;
-
-// Called during a request when data is written to the upload stream to increment the progress indicator
-- (void)incrementUploadProgressBy:(unsigned long long)bytes;
-
-// Called at the start of a request to add on the size of this download to the total
-- (void)incrementDownloadSizeBy:(unsigned long long)bytes;
-
-// Called during a request when data is received to increment the progress indicator
-- (void)incrementDownloadProgressBy:(unsigned long long)bytes;
-
-// Called during a request when authorisation fails to cancel any progress so far
-- (void)decrementUploadProgressBy:(unsigned long long)bytes;
 
 // Called when the first chunk of data is written to the upload buffer
 // We ignore the first part chunk when tracking upload progress, as kCFStreamPropertyHTTPRequestBytesWrittenCount reports the amount of data written to the buffer, not the amount sent

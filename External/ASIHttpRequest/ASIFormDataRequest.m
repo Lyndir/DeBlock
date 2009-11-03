@@ -152,8 +152,8 @@
 	NSData *endItemBoundary = [[NSString stringWithFormat:@"\r\n--%@\r\n",stringBoundary] dataUsingEncoding:[self stringEncoding]];
 	NSEnumerator *e = [[self postData] keyEnumerator];
 	NSString *key;
-	int i=0;
-	while (key = [e nextObject]) {
+	NSUInteger i=0;
+	while ((key = [e nextObject])) {
 		[self appendPostData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"\r\n\r\n",key] dataUsingEncoding:[self stringEncoding]]];
 		[self appendPostData:[[[self postData] objectForKey:key] dataUsingEncoding:[self stringEncoding]]];
 		i++;
@@ -165,7 +165,7 @@
 	// Adds files to upload
 	e = [fileData keyEnumerator];
 	i=0;
-	while (key = [e nextObject]) {
+	while ((key = [e nextObject])) {
 		NSDictionary *fileInfo = [[self fileData] objectForKey:key];
 		id file = [fileInfo objectForKey:@"data"];
 		NSString *contentType = [fileInfo objectForKey:@"contentType"];
@@ -207,7 +207,7 @@
 	NSString *key;
 	int i=0;
 	int count = [[self postData] count]-1;
-	while (key = [e nextObject]) {
+	while ((key = [e nextObject])) {
         NSString *data = [NSString stringWithFormat:@"%@=%@%@", [self encodeURL:key], [self encodeURL:[[self postData] objectForKey:key]],(i<count ?  @"&" : @"")]; 
 		[self appendPostData:[data dataUsingEncoding:[self stringEncoding]]];
 		i++;

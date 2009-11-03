@@ -14,6 +14,9 @@ NSLock *dialogLock = nil;
 
 @interface ASIAuthenticationDialog ()
 - (void)show;
+
+- (void)cancelAuthenticationFromDialog:(id)sender;
+- (void)loginWithCredentialsFromDialog:(id)sender;
 @end
 
 @implementation ASIAuthenticationDialog
@@ -71,9 +74,9 @@ NSLock *dialogLock = nil;
 		[label setText:@"Login to this secure server."];
 	}
 	[label setTextColor:[UIColor blackColor]];
-	[label setFont:[UIFont systemFontOfSize:13.0]];
-	[label setShadowColor:[UIColor colorWithRed:1 green:1 blue:1 alpha:0.5]];
-	[label setShadowOffset:CGSizeMake(0, 1.0)];
+	[label setFont:[UIFont systemFontOfSize:13.0f]];
+	[label setShadowColor:[UIColor colorWithRed:1 green:1 blue:1 alpha:0.5f]];
+	[label setShadowOffset:CGSizeMake(0, 1.0f)];
 	[label setOpaque:NO];
 	[label setBackgroundColor:nil];
 	[label setTextAlignment:UITextAlignmentCenter];
@@ -95,9 +98,9 @@ NSLock *dialogLock = nil;
 		[label setText:[[[self request] url] host]];
 	}
 	[label setTextColor:[UIColor whiteColor]];
-	[label setFont:[UIFont boldSystemFontOfSize:22.0]];
-	[label setShadowColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:0.5]];
-	[label setShadowOffset:CGSizeMake(0, -1.0)];
+	[label setFont:[UIFont boldSystemFontOfSize:22.0f]];
+	[label setShadowColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:0.5f]];
+	[label setShadowOffset:CGSizeMake(0, -1.0f)];
 	[label setOpaque:NO];
 	[label setBackgroundColor:nil];
 	[label setTextAlignment:UITextAlignmentCenter];

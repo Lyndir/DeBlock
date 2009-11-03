@@ -44,16 +44,58 @@ extern NSString* const NetworkRequestErrorDomain;
 // This number is not official, as far as I know there is no officially documented bandwidth limit
 extern unsigned long const ASIWWANBandwidthThrottleAmount;
 
+@class ASIHTTPRequest;
+
+@protocol ASIHTTPRequestDelegate
+
+- (void)requestFinished:(ASIHTTPRequest *)request;
+- (void)requestFailed:(ASIHTTPRequest *)request;
+
+@optional
+- (void)proxyAuthenticationNeededForRequest:(ASIHTTPRequest *)request;
+- (void)authenticationNeededForRequest:(ASIHTTPRequest *)request;
+
+@end
+
+@protocol ASINetworkQueueDelegate
+
+// Called at the start of a request to add on the size of this upload to the total
+- (void)incrementUploadSizeBy:(unsigned long long)bytes;
+
+// Called during a request when data is written to the upload stream to increment the progress indicator
+- (void)incrementUploadProgressBy:(unsigned long long)bytes;
+
+// Called at the start of a request to add on the size of this download to the total
+- (void)incrementDownloadSizeBy:(unsigned long long)bytes;
+
+// Called during a request when data is received to increment the progress indicator
+- (void)incrementDownloadProgressBy:(unsigned long long)bytes;
+
+// Called during a request when authorisation fails to cancel any progress so far
+- (void)decrementUploadProgressBy:(unsigned long long)bytes;
+
+// Called when the request has finished loading.
+- (void)requestDidFinish:(ASIHTTPRequest *)request;
+
+// Called when the request encountered a network error and was aborted.
+- (void)requestDidFail:(ASIHTTPRequest *)request;
+
+@optional
+- (void)proxyAuthenticationNeededForRequest:(ASIHTTPRequest *)request;
+- (void)authenticationNeededForRequest:(ASIHTTPRequest *)request;
+
+@end
+
 @interface ASIHTTPRequest : NSOperation {
 	
 	// The url for this operation, should include GET params in the query string where appropriate
 	NSURL *url; 
 	
 	// The delegate, you need to manage setting and talking to your delegate in your subclasses
-	id delegate;
+	id<ASIHTTPRequestDelegate, NSObject> delegate;
 	
 	// A queue delegate that should *ALSO* be notified of delegate message (used by ASINetworkQueue)
-	id queue;
+	id<ASINetworkQueueDelegate, NSObject> queue;
 	
 	// HTTP method to use (GET / POST / PUT / DELETE / HEAD). Defaults to GET
 	NSString *requestMethod;
@@ -568,7 +610,7 @@ extern unsigned long const ASIWWANBandwidthThrottleAmount;
 @property (assign) int proxyPort;
 
 @property (retain,setter=setURL:) NSURL *url;
-@property (assign) id delegate;
+@property (assign) id<ASIHTTPRequestDelegate, NSObject> delegate;
 @property (assign) id queue;
 @property (assign) id uploadProgressDelegate;
 @property (assign) id downloadProgressDelegate;

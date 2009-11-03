@@ -7,7 +7,6 @@
 //
 
 #import "ASINetworkQueue.h"
-#import "ASIHTTPRequest.h"
 
 // Private stuff
 @interface ASINetworkQueue ()
@@ -85,6 +84,11 @@
 	[self setDownloadProgressTotalBytes:0];
 	[super cancelAllOperations];
 	[self updateNetworkActivityIndicator];
+}
+
+- (void)setMaxValue:(double)max
+{
+    // This method only exists as a dummy to silence -Wundeclared-selector warnings in -setUploadProgressDelegate
 }
 
 - (void)setUploadProgressDelegate:(id)newDelegate
