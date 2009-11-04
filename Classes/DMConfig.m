@@ -27,7 +27,7 @@
 
 @implementation DMConfig
 
-@dynamic compete;
+@dynamic compete, wsUrl;
 @dynamic level, levelScore, levelPenalty;
 @dynamic gameMode;
 @dynamic skyColorFrom, skyColorTo;
@@ -44,6 +44,7 @@
                                 [NSNumber numberWithLong:0x38343C00],                           cShadeColor,
 
                                 [NSNumber numberWithBool:NO],                                   cCompete,
+                                @"https://lhunath-deblock.appspot.com",                         cWsUrl,
                                 
                                 [NSArray arrayWithObjects:
                                  @"Carriage_House_Deblock.mp3",

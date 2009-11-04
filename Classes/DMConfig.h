@@ -25,6 +25,7 @@
 #import "Config.h"
 
 #define cCompete          	NSStringFromSelector(@selector(compete))
+#define cWsUrl          	NSStringFromSelector(@selector(wsUrl))
 
 #define cLevel          	NSStringFromSelector(@selector(level))
 #define cLevelScore         NSStringFromSelector(@selector(levelScore))
@@ -38,7 +39,7 @@
 #define cFlawlessBonus      NSStringFromSelector(@selector(flawlessBonus))
 
 #define cUserName           NSStringFromSelector(@selector(userName))
-#define cUserScoreHistory       NSStringFromSelector(@selector(userScoreHistory))
+#define cUserScoreHistory   NSStringFromSelector(@selector(userScoreHistory))
 
 
 @interface DMConfig : Config {
@@ -50,6 +51,7 @@
 - (void)saveScore;
 
 @property (readwrite, retain) NSNumber          *compete;
+@property (readwrite, retain) NSString          *wsUrl;
 
 @property (readwrite, retain) NSNumber          *level;
 @property (readwrite, retain) NSNumber          *levelScore;

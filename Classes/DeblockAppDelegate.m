@@ -28,6 +28,7 @@
 #import "MenuItemSpacer.h"
 #import "MenuItemTitle.h"
 #import "StrategyLayer.h"
+#import "DeblockWSController.h"
 
 
 @interface DeblockAppDelegate ()
@@ -81,6 +82,7 @@
 
 - (void)prepareUi {
     
+    [[DeblockWSController get] reloadScores];
     playerVC = [PlayerViewController new];
     [window addSubview:playerVC.view];
     [window makeKeyAndVisible];
