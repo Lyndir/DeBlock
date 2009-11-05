@@ -174,8 +174,8 @@
 		DA1AC41D108C89AA00C9AD7B /* ShadeLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = DA1AC3F0108C89AA00C9AD7B /* ShadeLayer.m */; };
 		DA1AC41E108C89AA00C9AD7B /* SwipeLayer.h in Headers */ = {isa = PBXBuildFile; fileRef = DA1AC3F1108C89AA00C9AD7B /* SwipeLayer.h */; };
 		DA1AC41F108C89AA00C9AD7B /* SwipeLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = DA1AC3F2108C89AA00C9AD7B /* SwipeLayer.m */; };
-		DA1AC420108C89AA00C9AD7B /* Utility.h in Headers */ = {isa = PBXBuildFile; fileRef = DA1AC3F3108C89AA00C9AD7B /* Utility.h */; };
-		DA1AC421108C89AA00C9AD7B /* Utility.m in Sources */ = {isa = PBXBuildFile; fileRef = DA1AC3F4108C89AA00C9AD7B /* Utility.m */; };
+		DA1AC420108C89AA00C9AD7B /* GLUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = DA1AC3F3108C89AA00C9AD7B /* GLUtils.h */; };
+		DA1AC421108C89AA00C9AD7B /* GLUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = DA1AC3F4108C89AA00C9AD7B /* GLUtils.m */; };
 		DA1AC45F108C8C0B00C9AD7B /* FontLabel.h in Headers */ = {isa = PBXBuildFile; fileRef = DA1AC454108C8C0B00C9AD7B /* FontLabel.h */; };
 		DA1AC460108C8C0B00C9AD7B /* FontLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = DA1AC455108C8C0B00C9AD7B /* FontLabel.m */; };
 		DA1AC461108C8C0B00C9AD7B /* FontLabelStringDrawing.h in Headers */ = {isa = PBXBuildFile; fileRef = DA1AC456108C8C0B00C9AD7B /* FontLabelStringDrawing.h */; };
@@ -299,6 +299,17 @@
 		DADC1DC810A0FA8A00593BF9 /* CJSONSerializer.h in Headers */ = {isa = PBXBuildFile; fileRef = DADC1DB610A0FA8A00593BF9 /* CJSONSerializer.h */; };
 		DADC1DC910A0FA8A00593BF9 /* CJSONSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = DADC1DB710A0FA8A00593BF9 /* CJSONSerializer.m */; };
 		DADC1DE510A165D800593BF9 /* libTouchJSON.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DADC1DA010A0FA6100593BF9 /* libTouchJSON.a */; };
+		DADC1E7310A37AEE00593BF9 /* Secret.plist in Resources */ = {isa = PBXBuildFile; fileRef = DADC1E7210A37AEE00593BF9 /* Secret.plist */; };
+		DADC1E8510A37E5100593BF9 /* Layout.h in Headers */ = {isa = PBXBuildFile; fileRef = DADC1E7D10A37E5100593BF9 /* Layout.h */; };
+		DADC1E8610A37E5100593BF9 /* Layout.m in Sources */ = {isa = PBXBuildFile; fileRef = DADC1E7E10A37E5100593BF9 /* Layout.m */; };
+		DADC1E8710A37E5100593BF9 /* NSData_MBBase64.h in Headers */ = {isa = PBXBuildFile; fileRef = DADC1E7F10A37E5100593BF9 /* NSData_MBBase64.h */; };
+		DADC1E8810A37E5100593BF9 /* NSData_MBBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = DADC1E8010A37E5100593BF9 /* NSData_MBBase64.m */; };
+		DADC1E8910A37E5100593BF9 /* NSString_NSArrayFormat.h in Headers */ = {isa = PBXBuildFile; fileRef = DADC1E8110A37E5100593BF9 /* NSString_NSArrayFormat.h */; };
+		DADC1E8A10A37E5100593BF9 /* NSString_NSArrayFormat.m in Sources */ = {isa = PBXBuildFile; fileRef = DADC1E8210A37E5100593BF9 /* NSString_NSArrayFormat.m */; };
+		DADC1E9910A3837400593BF9 /* CryptUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = DADC1E9510A3837400593BF9 /* CryptUtils.h */; };
+		DADC1E9A10A3837400593BF9 /* CryptUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = DADC1E9610A3837400593BF9 /* CryptUtils.m */; };
+		DADC1E9B10A3837400593BF9 /* Utils.h in Headers */ = {isa = PBXBuildFile; fileRef = DADC1E9710A3837400593BF9 /* Utils.h */; };
+		DADC1E9C10A3837400593BF9 /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = DADC1E9810A3837400593BF9 /* Utils.m */; };
 		DAEC2F191058D11C005475FB /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAEC2F181058D11C005475FB /* AVFoundation.framework */; };
 		DAEC2F1B1058D11D005475FB /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAEC2F1A1058D11D005475FB /* AudioToolbox.framework */; };
 		DAEC2F1D1058D11D005475FB /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAEC2F1C1058D11D005475FB /* CoreGraphics.framework */; };
@@ -334,14 +345,14 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = DADC1CD110A0BE2000593BF9 /* ASIHttpRequest */;
+			remoteGlobalIDString = DADC1CD110A0BE2000593BF9;
 			remoteInfo = ASIHttpRequest;
 		};
 		DADC1DE310A165D300593BF9 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = DADC1D9F10A0FA6100593BF9 /* TouchJSON */;
+			remoteGlobalIDString = DADC1D9F10A0FA6100593BF9;
 			remoteInfo = TouchJSON;
 		};
 /* End PBXContainerItemProxy section */
@@ -546,8 +557,8 @@
 		DA1AC3F0108C89AA00C9AD7B /* ShadeLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShadeLayer.m; sourceTree = "<group>"; };
 		DA1AC3F1108C89AA00C9AD7B /* SwipeLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwipeLayer.h; sourceTree = "<group>"; };
 		DA1AC3F2108C89AA00C9AD7B /* SwipeLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SwipeLayer.m; sourceTree = "<group>"; };
-		DA1AC3F3108C89AA00C9AD7B /* Utility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utility.h; sourceTree = "<group>"; };
-		DA1AC3F4108C89AA00C9AD7B /* Utility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Utility.m; sourceTree = "<group>"; };
+		DA1AC3F3108C89AA00C9AD7B /* GLUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLUtils.h; sourceTree = "<group>"; };
+		DA1AC3F4108C89AA00C9AD7B /* GLUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GLUtils.m; sourceTree = "<group>"; };
 		DA1AC44E108C8BD500C9AD7B /* libFontLabel.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libFontLabel.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA1AC454108C8C0B00C9AD7B /* FontLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FontLabel.h; sourceTree = "<group>"; };
 		DA1AC455108C8C0B00C9AD7B /* FontLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FontLabel.m; sourceTree = "<group>"; };
@@ -686,6 +697,17 @@
 		DADC1DB710A0FA8A00593BF9 /* CJSONSerializer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CJSONSerializer.m; sourceTree = "<group>"; };
 		DADC1DB810A0FA8A00593BF9 /* LICENSE.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
 		DADC1DB910A0FA8A00593BF9 /* README.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.txt; sourceTree = "<group>"; };
+		DADC1E7210A37AEE00593BF9 /* Secret.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Secret.plist; sourceTree = "<group>"; };
+		DADC1E7D10A37E5100593BF9 /* Layout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Layout.h; sourceTree = "<group>"; };
+		DADC1E7E10A37E5100593BF9 /* Layout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Layout.m; sourceTree = "<group>"; };
+		DADC1E7F10A37E5100593BF9 /* NSData_MBBase64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSData_MBBase64.h; sourceTree = "<group>"; };
+		DADC1E8010A37E5100593BF9 /* NSData_MBBase64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSData_MBBase64.m; sourceTree = "<group>"; };
+		DADC1E8110A37E5100593BF9 /* NSString_NSArrayFormat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSString_NSArrayFormat.h; sourceTree = "<group>"; };
+		DADC1E8210A37E5100593BF9 /* NSString_NSArrayFormat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSString_NSArrayFormat.m; sourceTree = "<group>"; };
+		DADC1E9510A3837400593BF9 /* CryptUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CryptUtils.h; sourceTree = "<group>"; };
+		DADC1E9610A3837400593BF9 /* CryptUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CryptUtils.m; sourceTree = "<group>"; };
+		DADC1E9710A3837400593BF9 /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = "<group>"; };
+		DADC1E9810A3837400593BF9 /* Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Utils.m; sourceTree = "<group>"; };
 		DAEC2F181058D11C005475FB /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		DAEC2F1A1058D11D005475FB /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		DAEC2F1C1058D11D005475FB /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -823,6 +845,7 @@
 				DA53049D100FCC14000D32DF /* Images */,
 				DA7051DE101DD01100399CC3 /* Entitlements.plist */,
 				8D1107310486CEB800E47090 /* Info.plist */,
+				DADC1E7210A37AEE00593BF9 /* Secret.plist */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -1020,6 +1043,7 @@
 		DA1AC3A6108C89AA00C9AD7B /* Backend */ = {
 			isa = PBXGroup;
 			children = (
+				DADC1E7C10A37E5100593BF9 /* Utility */,
 				DA1AC3A7108C89AA00C9AD7B /* AbstractAppDelegate.h */,
 				DA1AC3A8108C89AA00C9AD7B /* AbstractAppDelegate.m */,
 				DA1AC3A9108C89AA00C9AD7B /* AudioController.h */,
@@ -1146,8 +1170,8 @@
 				DA1AC3F0108C89AA00C9AD7B /* ShadeLayer.m */,
 				DA1AC3F1108C89AA00C9AD7B /* SwipeLayer.h */,
 				DA1AC3F2108C89AA00C9AD7B /* SwipeLayer.m */,
-				DA1AC3F3108C89AA00C9AD7B /* Utility.h */,
-				DA1AC3F4108C89AA00C9AD7B /* Utility.m */,
+				DA1AC3F3108C89AA00C9AD7B /* GLUtils.h */,
+				DA1AC3F4108C89AA00C9AD7B /* GLUtils.m */,
 			);
 			path = Utility;
 			sourceTree = "<group>";
@@ -1362,6 +1386,23 @@
 			path = JSON;
 			sourceTree = "<group>";
 		};
+		DADC1E7C10A37E5100593BF9 /* Utility */ = {
+			isa = PBXGroup;
+			children = (
+				DADC1E9510A3837400593BF9 /* CryptUtils.h */,
+				DADC1E9610A3837400593BF9 /* CryptUtils.m */,
+				DADC1E9710A3837400593BF9 /* Utils.h */,
+				DADC1E9810A3837400593BF9 /* Utils.m */,
+				DADC1E7D10A37E5100593BF9 /* Layout.h */,
+				DADC1E7E10A37E5100593BF9 /* Layout.m */,
+				DADC1E7F10A37E5100593BF9 /* NSData_MBBase64.h */,
+				DADC1E8010A37E5100593BF9 /* NSData_MBBase64.m */,
+				DADC1E8110A37E5100593BF9 /* NSString_NSArrayFormat.h */,
+				DADC1E8210A37E5100593BF9 /* NSString_NSArrayFormat.m */,
+			);
+			path = Utility;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -1391,9 +1432,14 @@
 				DA1AC41B108C89AA00C9AD7B /* Resettable.h in Headers */,
 				DA1AC41C108C89AA00C9AD7B /* ShadeLayer.h in Headers */,
 				DA1AC41E108C89AA00C9AD7B /* SwipeLayer.h in Headers */,
-				DA1AC420108C89AA00C9AD7B /* Utility.h in Headers */,
+				DA1AC420108C89AA00C9AD7B /* GLUtils.h in Headers */,
 				DA1AC93A109268C500C9AD7B /* FlickLayer.h in Headers */,
 				DADC1CBD10A0885500593BF9 /* DeblockWSController.h in Headers */,
+				DADC1E8510A37E5100593BF9 /* Layout.h in Headers */,
+				DADC1E8710A37E5100593BF9 /* NSData_MBBase64.h in Headers */,
+				DADC1E8910A37E5100593BF9 /* NSString_NSArrayFormat.h in Headers */,
+				DADC1E9910A3837400593BF9 /* CryptUtils.h in Headers */,
+				DADC1E9B10A3837400593BF9 /* Utils.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1709,6 +1755,7 @@
 				DA1AC7A11090F9BE00C9AD7B /* strategy-5.png in Resources */,
 				DA1AC7A21090F9BE00C9AD7B /* strategy-6.png in Resources */,
 				DA1AC7A31090F9BE00C9AD7B /* strategy-7.png in Resources */,
+				DADC1E7310A37AEE00593BF9 /* Secret.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1740,9 +1787,14 @@
 				DA1AC41A108C89AA00C9AD7B /* NSString_SEL.m in Sources */,
 				DA1AC41D108C89AA00C9AD7B /* ShadeLayer.m in Sources */,
 				DA1AC41F108C89AA00C9AD7B /* SwipeLayer.m in Sources */,
-				DA1AC421108C89AA00C9AD7B /* Utility.m in Sources */,
+				DA1AC421108C89AA00C9AD7B /* GLUtils.m in Sources */,
 				DA1AC93B109268C500C9AD7B /* FlickLayer.m in Sources */,
 				DADC1CBE10A0885500593BF9 /* DeblockWSController.m in Sources */,
+				DADC1E8610A37E5100593BF9 /* Layout.m in Sources */,
+				DADC1E8810A37E5100593BF9 /* NSData_MBBase64.m in Sources */,
+				DADC1E8A10A37E5100593BF9 /* NSString_NSArrayFormat.m in Sources */,
+				DADC1E9A10A3837400593BF9 /* CryptUtils.m in Sources */,
+				DADC1E9C10A3837400593BF9 /* Utils.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

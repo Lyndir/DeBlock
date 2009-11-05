@@ -9,9 +9,17 @@
 #import "DeblockWSController.h"
 #import "ASIFormDataRequest.h"
 #import "NSDictionary_JSONExtensions.h"
+#import "Logger.h"
+#import "CryptUtils.h"
 
 #define dScoreServlet   @"/scores.json"
 
+
+@interface DeblockWSController ()
+
+- (NSString *)checksumForName:(NSString *)name withScore:(NSNumber *)score;
+
+@end
 
 @implementation DeblockWSController
 
@@ -37,16 +45,23 @@
     [request setDelegate:self];
 
     if (score && playerName && achievedDate) {
-    NSNumber *timeStamp = [NSNumber numberWithLong:(long)([achievedDate timeIntervalSince1970] * 1000)];
-        [request setData:[[score description] dataUsingEncoding:NSUTF8StringEncoding]
-                  forKey:@"score"];
-        [request setData:[playerName dataUsingEncoding:NSUTF8StringEncoding]
-                  forKey:@"name"];
-        [request setData:[[timeStamp description] dataUsingEncoding:NSUTF8StringEncoding]
-                  forKey:@"name"];
+        [[Logger get] inf:@"Submitting score %@ for %@ at %@", score, playerName, achievedDate];
+
+        NSNumber *timeStamp = [NSNumber numberWithLong:(long)([achievedDate timeIntervalSince1970] * 1000)];
+        [request setPostValue:score forKey:@"score"];
+        [request setPostValue:playerName forKey:@"name"];
+        [request setPostValue:timeStamp forKey:@"date"];
+        [request setPostValue:[self checksumForName:playerName withScore:score] forKey:@"check"];
     }
     
     [request startAsynchronous];
+}
+
+
+- (NSString *)checksumForName:(NSString *)name withScore:(NSNumber *)score {
+    
+    NSDictionary *secrets = [NSDictionary dictionaryWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Secret" ofType:@"plist"]];
+    return [CryptUtils md5:[NSString stringWithFormat:@"%@:%d:%@", name, [score intValue], [secrets objectForKey:@"Salt"]]];
 }
 
 
@@ -55,17 +70,17 @@
     NSError *error = nil;
     NSDictionary *playersScoreHistory = [NSDictionary dictionaryWithJSONData:[request responseData] error:&error];
     if (error)
-        NSLog(@"Score response parsing failed: %@", error);
+        [[Logger get] err:@"Couldn't parse online scores: %@", error];
     else {
         [DMConfig get].userScoreHistory = playersScoreHistory;
-        NSLog(@"Saved new scores: %@", playersScoreHistory);
+        [[Logger get] inf:@"Online scores:\n%@", playersScoreHistory];
     }
 }
 
 
 - (void)requestFailed:(ASIHTTPRequest *)request {
 
-    NSLog(@"Score fetch request failed: %@", request.error);
+    [[Logger get] err:@"Couldn't fetch online scores: %@", request.error];
 }
 
 

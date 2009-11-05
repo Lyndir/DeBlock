@@ -28,7 +28,7 @@ typedef enum DbMode {
     #import <UIKit/UIKit.h>
     
     #import "cocos2d.h"
-    #import "Utility.h"
+    #import "GLUtils.h"
     #import "DebugLayer.h"
     #import "DMConfig.h"
 #endif

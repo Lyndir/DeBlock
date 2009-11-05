@@ -110,12 +110,6 @@ static NSDictionary *blockColors;
     Class blockClass = types[random() % 100];
     free(types);
     
-    NSUInteger count = [self getBlocksOfClass:blockClass andType:aType];
-    if (blockClass == [ZapBlockLayer class]) {
-        NSLog(@"zapper blocks of type %d: %d", aType, count);
-        NSLog(@"+");
-    }
-    
     return [[[blockClass alloc] initWithType:aType
                                    blockSize:size] autorelease];
 }
