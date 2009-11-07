@@ -41,7 +41,7 @@
 - (void)submitScore:(NSNumber *)score forPlayer:(NSString *)playerName achievedAt:(NSDate *)achievedDate {
 
     ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:[NSURL URLWithString:dScoreServlet
-                                                                            relativeToURL:[NSURL URLWithString:[DMConfig get].wsUrl]]];
+                                                                            relativeToURL:[NSURL URLWithString:[DeblockConfig get].wsUrl]]];
     [request setDelegate:self];
 
     if (score && playerName && achievedDate) {
@@ -72,7 +72,7 @@
     if (error)
         [[Logger get] err:@"Couldn't parse online scores: %@", error];
     else {
-        [DMConfig get].userScoreHistory = playersScoreHistory;
+        [DeblockConfig get].userScoreHistory = playersScoreHistory;
         [[Logger get] inf:@"Online scores:\n%@", playersScoreHistory];
     }
 }

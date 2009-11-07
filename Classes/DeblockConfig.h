@@ -23,11 +23,11 @@
 //
 
 #import "Config.h"
+#import "Player.h"
 
 #define cCompete          	NSStringFromSelector(@selector(compete))
 #define cWsUrl          	NSStringFromSelector(@selector(wsUrl))
 
-#define cLevel          	NSStringFromSelector(@selector(level))
 #define cLevelScore         NSStringFromSelector(@selector(levelScore))
 #define cLevelPenalty       NSStringFromSelector(@selector(levelPenalty))
 
@@ -41,19 +41,26 @@
 #define cUserName           NSStringFromSelector(@selector(userName))
 #define cUserScoreHistory   NSStringFromSelector(@selector(userScoreHistory))
 
+@interface DeblockConfig : Config {
 
-@interface DMConfig : Config {
-
+    NSDictionary                                *_playersCached;
 }
 
-+ (DMConfig *)get;
++ (DeblockConfig *)get;
 
+- (void)addScore:(NSInteger)score;
 - (void)saveScore;
+
+- (Player *)getPlayer:(NSString *)name;
+- (Player *)currentPlayer;
+- (void)updatePlayer:(Player *)player;
+
+#pragma mark ###############################
+#pragma mark Properties
 
 @property (readwrite, retain) NSNumber          *compete;
 @property (readwrite, retain) NSString          *wsUrl;
 
-@property (readwrite, retain) NSNumber          *level;
 @property (readwrite, retain) NSNumber          *levelScore;
 @property (readwrite, retain) NSNumber          *levelPenalty;
 

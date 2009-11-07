@@ -104,9 +104,9 @@
 
 - (void)newGameWithMode:(DbMode)gameMode {
     
-    [DMConfig get].level = [NSNumber numberWithInt:1];
-    [DMConfig get].gameMode = [NSNumber numberWithUnsignedInt:gameMode];
-    [[DMConfig get] recordScore:0];
+    [[DeblockConfig get] currentPlayer].score = 0;
+    [[DeblockConfig get] currentPlayer].level = 1;
+    [DeblockConfig get].gameMode = [NSNumber numberWithUnsignedInt:gameMode];
     
     [self startGame];
 }
@@ -120,9 +120,9 @@
     
     endReason                   = DbEndReasonEnded;
     penaltyInterval             = 2;
-    [DMConfig get].levelScore   = [NSNumber numberWithInt:0];
-    [DMConfig get].levelPenalty = [NSNumber numberWithInt:0];
-    [[DeblockAppDelegate get].hudLayer updateHudWithScore:0];
+    [DeblockConfig get].levelScore   = [NSNumber numberWithInt:0];
+    [DeblockConfig get].levelPenalty = [NSNumber numberWithInt:0];
+    [[DeblockAppDelegate get].hudLayer updateHudWasGood:YES];
     
     // Reset the game field and start the game.
     [self reset];
@@ -201,7 +201,7 @@
 
 -(void) started {
 
-    [[DeblockAppDelegate get].uiLayer message:[NSString stringWithFormat:@"Level %d", [[DMConfig get].level intValue]]];
+    [[DeblockAppDelegate get].uiLayer message:[NSString stringWithFormat:@"Level %d", [[DeblockConfig get] currentPlayer].level]];
     
     running = YES;
 
@@ -237,7 +237,7 @@
 
 - (void)increaseTimedPenalty:(ccTime)dt {
     
-    if ([[DMConfig get].gameMode unsignedIntValue] != DbModeTimed)
+    if ([[DeblockConfig get].gameMode unsignedIntValue] != DbModeTimed)
         // Don't increase penalty during non-timed games.
         return;
     if (!running || paused)
@@ -247,9 +247,9 @@
     remainingPenaltyTime        += dt;
     NSInteger penalty           = remainingPenaltyTime / penaltyInterval;
     remainingPenaltyTime        -= penalty * penaltyInterval;
-    [DMConfig get].levelPenalty = [NSNumber numberWithInt:[[DMConfig get].levelPenalty intValue] - penalty];
+    [DeblockConfig get].levelPenalty = [NSNumber numberWithInt:[[DeblockConfig get].levelPenalty intValue] - penalty];
     
-    [[DeblockAppDelegate get].hudLayer updateHudWithScore:0];
+    [[DeblockAppDelegate get].hudLayer updateHudWasGood:NO];
 }
 
 

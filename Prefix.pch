@@ -30,5 +30,5 @@ typedef enum DbMode {
     #import "cocos2d.h"
     #import "GLUtils.h"
     #import "DebugLayer.h"
-    #import "DMConfig.h"
+    #import "DeblockConfig.h"
 #endif

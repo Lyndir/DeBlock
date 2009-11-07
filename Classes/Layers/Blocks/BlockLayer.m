@@ -148,7 +148,7 @@ static NSDictionary *blockColors;
 
 + (DMBlockType)randomType {
     
-    DMBlockType typeRange = DMBlockTypeCount * [[DMConfig get].level intValue] / kAllBlocksLevel;
+    DMBlockType typeRange = DMBlockTypeCount * [[DeblockConfig get] currentPlayer].level / kAllBlocksLevel;
     return random() % ((int)fmaxf(fminf(typeRange, DMBlockTypeCount), kMinBlocks));
 }
 

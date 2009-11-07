@@ -27,6 +27,8 @@
 #import "MenuLayer.h"
 #import "PlayerViewController.h"
 #import "ConfigMenuLayer.h"
+#import "DbHUDLayer.h"
+
 
 @interface DeblockAppDelegate : AbstractAppDelegate<MenuDelegate, ConfigMenuDelegate> {
 

@@ -246,7 +246,7 @@
 		DACF74D9101A35BD003F2AF6 /* score.png in Resources */ = {isa = PBXBuildFile; fileRef = DA6A20951017B6D700B55AF8 /* score.png */; };
 		DACF74DA101A35BD003F2AF6 /* splash.png in Resources */ = {isa = PBXBuildFile; fileRef = DA53049E100FCC14000D32DF /* splash.png */; };
 		DACF74DC101A369F003F2AF6 /* DeblockAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* DeblockAppDelegate.m */; };
-		DACF74DD101A369F003F2AF6 /* DMConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = DA6A1B371015DC5700B55AF8 /* DMConfig.m */; };
+		DACF74DD101A369F003F2AF6 /* DeblockConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = DA6A1B371015DC5700B55AF8 /* DeblockConfig.m */; };
 		DACF74DE101A369F003F2AF6 /* GameLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = DA53050510107849000D32DF /* GameLayer.m */; };
 		DACF74DF101A369F003F2AF6 /* FieldLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = DA53052D101080A2000D32DF /* FieldLayer.m */; };
 		DACF74E0101A369F003F2AF6 /* SkyLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = DA53052310108077000D32DF /* SkyLayer.m */; };
@@ -310,6 +310,7 @@
 		DADC1E9A10A3837400593BF9 /* CryptUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = DADC1E9610A3837400593BF9 /* CryptUtils.m */; };
 		DADC1E9B10A3837400593BF9 /* Utils.h in Headers */ = {isa = PBXBuildFile; fileRef = DADC1E9710A3837400593BF9 /* Utils.h */; };
 		DADC1E9C10A3837400593BF9 /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = DADC1E9810A3837400593BF9 /* Utils.m */; };
+		DADC1EE210A49FCC00593BF9 /* Player.m in Sources */ = {isa = PBXBuildFile; fileRef = DADC1EE110A49FCC00593BF9 /* Player.m */; };
 		DAEC2F191058D11C005475FB /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAEC2F181058D11C005475FB /* AVFoundation.framework */; };
 		DAEC2F1B1058D11D005475FB /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAEC2F1A1058D11D005475FB /* AudioToolbox.framework */; };
 		DAEC2F1D1058D11D005475FB /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAEC2F1C1058D11D005475FB /* CoreGraphics.framework */; };
@@ -613,8 +614,8 @@
 		DA63683710583A95001E2410 /* Comic FX.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Comic FX.ttf"; sourceTree = "<group>"; };
 		DA63683E10583A95001E2410 /* MammaGamma.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = MammaGamma.ttf; sourceTree = "<group>"; };
 		DA63687710583C14001E2410 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
-		DA6A1B361015DC5700B55AF8 /* DMConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DMConfig.h; sourceTree = "<group>"; };
-		DA6A1B371015DC5700B55AF8 /* DMConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DMConfig.m; sourceTree = "<group>"; };
+		DA6A1B361015DC5700B55AF8 /* DeblockConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeblockConfig.h; sourceTree = "<group>"; };
+		DA6A1B371015DC5700B55AF8 /* DeblockConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeblockConfig.m; sourceTree = "<group>"; };
 		DA6A20921017B6D700B55AF8 /* en */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		DA6A20941017B6D700B55AF8 /* en */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = en; path = en.lproj/menu.png; sourceTree = "<group>"; };
 		DA6A20961017B6D700B55AF8 /* en */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = en; path = en.lproj/score.png; sourceTree = "<group>"; };
@@ -708,6 +709,8 @@
 		DADC1E9610A3837400593BF9 /* CryptUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CryptUtils.m; sourceTree = "<group>"; };
 		DADC1E9710A3837400593BF9 /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = "<group>"; };
 		DADC1E9810A3837400593BF9 /* Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Utils.m; sourceTree = "<group>"; };
+		DADC1EE010A49FCC00593BF9 /* Player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Player.h; sourceTree = "<group>"; };
+		DADC1EE110A49FCC00593BF9 /* Player.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Player.m; sourceTree = "<group>"; };
 		DAEC2F181058D11C005475FB /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		DAEC2F1A1058D11D005475FB /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		DAEC2F1C1058D11D005475FB /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -783,10 +786,12 @@
 			children = (
 				1D3623240D0F684500981E51 /* DeblockAppDelegate.h */,
 				1D3623250D0F684500981E51 /* DeblockAppDelegate.m */,
-				DA6A1B361015DC5700B55AF8 /* DMConfig.h */,
-				DA6A1B371015DC5700B55AF8 /* DMConfig.m */,
+				DA6A1B361015DC5700B55AF8 /* DeblockConfig.h */,
+				DA6A1B371015DC5700B55AF8 /* DeblockConfig.m */,
 				DADC1CBB10A0885500593BF9 /* DeblockWSController.h */,
 				DADC1CBC10A0885500593BF9 /* DeblockWSController.m */,
+				DADC1EE010A49FCC00593BF9 /* Player.h */,
+				DADC1EE110A49FCC00593BF9 /* Player.m */,
 				DA59418810617BD40014B435 /* Views */,
 				DA53050210107849000D32DF /* Layers */,
 			);
@@ -1880,7 +1885,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DACF74DC101A369F003F2AF6 /* DeblockAppDelegate.m in Sources */,
-				DACF74DD101A369F003F2AF6 /* DMConfig.m in Sources */,
+				DACF74DD101A369F003F2AF6 /* DeblockConfig.m in Sources */,
 				DACF74DE101A369F003F2AF6 /* GameLayer.m in Sources */,
 				DACF74DF101A369F003F2AF6 /* FieldLayer.m in Sources */,
 				DACF74E0101A369F003F2AF6 /* SkyLayer.m in Sources */,
@@ -1893,6 +1898,7 @@
 				DA1B8FE91062A41400042397 /* PlayerViewController.m in Sources */,
 				DAD7DC791063E2E500ABD531 /* ButtonFontLabel.m in Sources */,
 				DA1AC8191092522400C9AD7B /* StrategyLayer.m in Sources */,
+				DADC1EE210A49FCC00593BF9 /* Player.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

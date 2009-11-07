@@ -43,9 +43,9 @@
 
 - (void)onEnter {
     
-    NSMutableArray *scores = [NSMutableArray arrayWithCapacity:[[DMConfig get].userScoreHistory count]];
-    for (NSString *user in [[DMConfig get].userScoreHistory allKeys]) {
-        NSDictionary *userScores = [[DMConfig get].userScoreHistory objectForKey:user];
+    NSMutableArray *scores = [NSMutableArray arrayWithCapacity:[[DeblockConfig get].userScoreHistory count]];
+    for (NSString *user in [[DeblockConfig get].userScoreHistory allKeys]) {
+        NSDictionary *userScores = [[DeblockConfig get].userScoreHistory objectForKey:user];
         NSNumber *topUserScore = nil;
         NSDate *topUserScoreDate = nil;
         

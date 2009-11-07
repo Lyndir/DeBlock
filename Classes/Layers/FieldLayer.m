@@ -98,8 +98,8 @@
     }
 
     // Level-based field parameters.
-    blockColumns    = fmaxf(fminf(kMaxColumns * [[DMConfig get].level intValue] / kAllGridLevel, kMaxColumns), kMinColumns);
-    blockRows       = fmaxf(fminf(kMaxColumns * [[DMConfig get].level intValue] / kAllGridLevel, kMaxRows), kMinColumns);
+    blockColumns    = fmaxf(fminf(kMaxColumns * [[DeblockConfig get] currentPlayer].level / kAllGridLevel, kMaxColumns), kMinColumns);
+    blockRows       = fmaxf(fminf(kMaxColumns * [[DeblockConfig get] currentPlayer].level / kAllGridLevel, kMaxRows), kMinColumns);
     gravityRow      = 0;
     gravityColumn   = blockColumns / 2;
     blockGrid       = malloc(sizeof(BlockLayer **) * blockRows);
@@ -117,7 +117,7 @@
     for (NSInteger row = 0; row < blockRows; ++row) {
         for (NSInteger col = 0; col < blockColumns; ++col) {
             
-            BlockLayer *block = [BlockLayer randomBlockForLevel:[[DMConfig get].level intValue] withSize:blockSize];
+            BlockLayer *block = [BlockLayer randomBlockForLevel:[[DeblockConfig get] currentPlayer].level withSize:blockSize];
             block.position = ccp(col * (blockSize.width     + blockPadding) + blockPadding,
                                  row * (blockSize.height    + blockPadding) + blockPadding);
             
@@ -269,8 +269,8 @@
     NSInteger destroyedBlocks = [self destroyBlock:aBlock forced:NO];
     NSInteger points = powf(destroyedBlocks, 1.5f);
     if (points) {
-        [DMConfig get].levelScore = [NSNumber numberWithInt:[[DMConfig get].levelScore intValue] + points];
-        [[DeblockAppDelegate get].hudLayer updateHudWithScore: points];
+        [DeblockConfig get].levelScore = [NSNumber numberWithInt:[[DeblockConfig get].levelScore intValue] + points];
+        [[DeblockAppDelegate get].hudLayer updateHudWasGood:points > 0];
         [self message:[NSString stringWithFormat:@"%+d", points] at:blockPoint];
     }
     
@@ -523,29 +523,29 @@
     
     if (!linksLeft) {
         DbEndReason endReason = DbEndReasonNextField;
-        NSInteger points = [[DMConfig get].levelScore intValue] + [[DMConfig get].levelPenalty intValue];
+        NSInteger levelPoints = [[DeblockConfig get].levelScore intValue] + [[DeblockConfig get].levelPenalty intValue];
         NSInteger bonusPoints = 0;
         
         if (!blocksLeft) {
             // No blocks left -> flawless finish.
             [[DeblockAppDelegate get].uiLayer message:@"Flawless!"];
-            bonusPoints = [[DMConfig get].flawlessBonus intValue] * [[DMConfig get].level intValue];
+            bonusPoints = [[DeblockConfig get].flawlessBonus intValue] * [[DeblockConfig get] currentPlayer].level;
             [self message:[NSString stringWithFormat:@"%+d", bonusPoints]
                        at:ccp(self.contentSize.width / 2, self.contentSize.height / 2)];
 
-            [DMConfig get].level = [NSNumber numberWithInt:[[DMConfig get].level intValue] + 1];
+            ++[[DeblockConfig get] currentPlayer].level;
         } else if (blocksLeft < 8) {
             // Blocks left under minimum block limit -> level up.
-            [DMConfig get].level = [NSNumber numberWithInt:[[DMConfig get].level intValue] + 1];
+            ++[[DeblockConfig get] currentPlayer].level;
         } else {
             // Blocks left over minimum block limit -> game over.
-            points = 0;
+            levelPoints = 0;
             endReason = DbEndReasonGameOver;
         }
         
-        points += bonusPoints;
-        [[DMConfig get] recordScore:[[DMConfig get].score unsignedIntValue] + points];
-        [[DeblockAppDelegate get].hudLayer updateHudWithScore:bonusPoints];
+        levelPoints += bonusPoints;
+        [[DeblockConfig get] addScore:levelPoints];
+        [[DeblockAppDelegate get].hudLayer updateHudWasGood:bonusPoints > 0];
         [[DeblockAppDelegate get].gameLayer stopGame:endReason];
     }
 }
@@ -609,7 +609,7 @@
     
     locked = NO;
 
-    [[DeblockAppDelegate get].hudLayer updateHudWithScore:0];
+    [[DeblockAppDelegate get].hudLayer updateHudWasGood:YES];
     [[DeblockAppDelegate get].gameLayer started];
 }
 
@@ -662,7 +662,7 @@
 - (void)draw {
     
     DrawBoxFrom(CGPointMake(-5, -5), CGPointMake(self.contentSize.width + 5, self.contentSize.height + 5),
-                ccc4l([[DMConfig get].skyColorTo longValue] & 0x0f0f0f33), ccc4l([[DMConfig get].skyColorFrom longValue] & 0x0f0f0f33));
+                ccc4l([[DeblockConfig get].skyColorTo longValue] & 0x0f0f0f33), ccc4l([[DeblockConfig get].skyColorFrom longValue] & 0x0f0f0f33));
 }
 
 

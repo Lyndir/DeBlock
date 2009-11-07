@@ -59,7 +59,7 @@
 
 + (void)initialize {
     
-    [DMConfig get];
+    [DeblockConfig get];
 }
 
 - (void)dealloc {
@@ -194,7 +194,7 @@
 - (void)didEnter:(MenuLayer *)menuLayer {
     
     if (menuLayer == mainMenu) {
-        [continueGame setIsEnabled:[[DMConfig get].level intValue] > 1];
+        [continueGame setIsEnabled:[[DeblockConfig get] currentPlayer].level > 1];
     }
 }
 
@@ -218,7 +218,7 @@
 -(HUDLayer *) hudLayer {
     
     if(!hudLayer)
-        hudLayer = [[DbHUDLayer alloc] init];
+        hudLayer = [DbHUDLayer new];
     
     return hudLayer;
 }

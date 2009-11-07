@@ -31,4 +31,7 @@
     LabelAtlas          *levelScoreCount, *levelPenaltyCount;
 }
 
+-(void) updateHudWasGood:(BOOL)wasGood;
+
+
 @end

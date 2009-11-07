@@ -22,14 +22,14 @@
 //  Copyright 2009 lhunath (Maarten Billemont). All rights reserved.
 //
 
-#import "DMConfig.h"
+#import "DeblockConfig.h"
 #import "DeblockWSController.h"
 
 
-@implementation DMConfig
+@implementation DeblockConfig
 
 @dynamic compete, wsUrl;
-@dynamic level, levelScore, levelPenalty;
+@dynamic levelScore, levelPenalty;
 @dynamic gameMode;
 @dynamic skyColorFrom, skyColorTo;
 @dynamic flawlessBonus;
@@ -63,8 +63,7 @@
                                  NSLocalizedString(@"config.song.random", @"Shuffle"),
                                  NSLocalizedString(@"config.song.off", @"Off"),
                                  nil],                                                          cTrackNames,
-                                
-                                [NSNumber numberWithLong:0],                                    cLevel,
+
                                 [NSNumber numberWithLong:0],                                    cLevelScore,
                                 [NSNumber numberWithLong:0],                                    cLevelPenalty,
 
@@ -88,27 +87,73 @@
 }
 
 
-+ (DMConfig *)get {
++ (DeblockConfig *)get {
 
-    return (DMConfig *)[super get];
+    return (DeblockConfig *)[super get];
 }
 
 
 #pragma mark ###############################
 #pragma mark Behaviors
 
-- (void)recordScore:(NSInteger)score {
+- (NSDictionary *)players {
     
-    if (score < 0)
-        score = 0;
+    if (!_playersCached) {
+        NSData *playersArchive = [defaults dataForKey:@"players"];
+        _playersCached = [[NSKeyedUnarchiver unarchiveObjectWithData:playersArchive] retain];
+        
+        if(_playersCached == nil)
+            _playersCached = [NSDictionary new];
+    }
     
-    [super recordScore:score];
+    return _playersCached;
+}
+
+
+- (Player *)getPlayer:(NSString *)name {
+    
+    return [[self players] objectForKey:name];
+}
+
+
+- (Player *)currentPlayer {
+    
+    Player *currentPlayer = [[self players] objectForKey:self.userName];
+    if (!currentPlayer) {
+        currentPlayer = [[Player new] autorelease];
+        currentPlayer.name = self.userName;
+    }
+    
+    return currentPlayer;
+}
+
+
+- (void)updatePlayer:(Player *)player {
+    
+    NSMutableDictionary *players = [[self players] mutableCopy];
+    [players setObject:player forKey:player.name];
+    
+    NSData *playersArchive = [NSKeyedArchiver archivedDataWithRootObject:players];
+    [defaults setObject:playersArchive forKey:@"players"];
+    [defaults synchronize];
+    
+    [_playersCached release];
+    _playersCached = players;
+}
+
+- (void)addScore:(NSInteger)score {
+    
+    NSInteger newScore = [self currentPlayer].score + score;
+    if (newScore < 0)
+        newScore = 0;
+    
+    [self currentPlayer].score = newScore;
     [self saveScore];
 }
 
 - (void)saveScore {
     
-    NSNumber *score = self.score;
+    NSNumber *score = [NSNumber numberWithInteger:[self currentPlayer].score];
     NSString *name = self.userName;
     NSDate *achievedDate = [NSDate date];
 
@@ -135,5 +180,6 @@
     // Submit the score online.
     [[DeblockWSController get] submitScore:score forPlayer:name achievedAt:achievedDate];
 }
+
 
 @end
