@@ -251,6 +251,7 @@
 		DACF74DF101A369F003F2AF6 /* FieldLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = DA53052D101080A2000D32DF /* FieldLayer.m */; };
 		DACF74E0101A369F003F2AF6 /* SkyLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = DA53052310108077000D32DF /* SkyLayer.m */; };
 		DACF7538101A369F003F2AF6 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
+		DAD5C9CA10A6CBD100C4E27B /* PlayerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = DAD5C9C910A6CBD100C4E27B /* PlayerView.xib */; };
 		DAD7DC0D1063DC6E00ABD531 /* splash_menu.png in Resources */ = {isa = PBXBuildFile; fileRef = DAD7DC0B1063DC6E00ABD531 /* splash_menu.png */; };
 		DAD7DC0E1063DC6E00ABD531 /* splash_notitle.png in Resources */ = {isa = PBXBuildFile; fileRef = DAD7DC0C1063DC6E00ABD531 /* splash_notitle.png */; };
 		DAD7DC791063E2E500ABD531 /* ButtonFontLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = DAD7DC781063E2E500ABD531 /* ButtonFontLabel.m */; };
@@ -645,6 +646,7 @@
 		DAC8D5C11045D78000438A8B /* SpecialBlocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpecialBlocks.h; sourceTree = "<group>"; };
 		DAC8D5C21045D78000438A8B /* SpecialBlocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpecialBlocks.m; sourceTree = "<group>"; };
 		DACF73E9101A3520003F2AF6 /* Deblock.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Deblock.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		DAD5C9C910A6CBD100C4E27B /* PlayerView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PlayerView.xib; sourceTree = "<group>"; };
 		DAD7DC0B1063DC6E00ABD531 /* splash_menu.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = splash_menu.png; sourceTree = "<group>"; };
 		DAD7DC0C1063DC6E00ABD531 /* splash_notitle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = splash_notitle.png; sourceTree = "<group>"; };
 		DAD7DC771063E2E500ABD531 /* ButtonFontLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ButtonFontLabel.h; sourceTree = "<group>"; };
@@ -1293,6 +1295,7 @@
 				DA1B8FE81062A41400042397 /* PlayerViewController.m */,
 				DAD7DC771063E2E500ABD531 /* ButtonFontLabel.h */,
 				DAD7DC781063E2E500ABD531 /* ButtonFontLabel.m */,
+				DAD5C9C910A6CBD100C4E27B /* PlayerView.xib */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1761,6 +1764,7 @@
 				DA1AC7A21090F9BE00C9AD7B /* strategy-6.png in Resources */,
 				DA1AC7A31090F9BE00C9AD7B /* strategy-7.png in Resources */,
 				DADC1E7310A37AEE00593BF9 /* Secret.plist in Resources */,
+				DAD5C9CA10A6CBD100C4E27B /* PlayerView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

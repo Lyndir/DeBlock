@@ -178,7 +178,7 @@
     [newUserScores release];
     
     // Submit the score online.
-    [[DeblockWSController get] submitScore:score forPlayer:name achievedAt:achievedDate];
+    [[DeblockWSController get] submitScoreForPlayer:[self currentPlayer]];
 }
 
 

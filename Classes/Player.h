@@ -12,11 +12,16 @@
 @interface Player : NSObject <NSCoding> {
 
     NSString                            *_name;
+    NSString                            *_pass;
     NSInteger                           _score;
     NSUInteger                          _level;
+    
+    UIAlertView                         *passwordAlert;
+    UITextField                         *passwordField;
 }
 
 @property (readwrite, copy) NSString    *name;
+@property (readwrite, copy) NSString    *pass;
 @property (readwrite) NSInteger         score;
 @property (readwrite) NSUInteger        level;
 

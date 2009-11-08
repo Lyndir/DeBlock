@@ -6,8 +6,8 @@
 //  Copyright 2009 lhunath (Maarten Billemont). All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
 #import "ASIHTTPRequest.h"
+#import "Player.h"
 
 
 @interface DeblockWSController : NSObject<ASIHTTPRequestDelegate> {
@@ -29,6 +29,6 @@
  * The score is an NSNumber*.
  */
 - (void)reloadScores;
-- (void)submitScore:(NSNumber *)score forPlayer:(NSString *)playerName achievedAt:(NSDate *)achievedDate;
+- (void)submitScoreForPlayer:(Player *)player;
 
 @end

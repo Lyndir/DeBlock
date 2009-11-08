@@ -11,8 +11,15 @@
 
 @interface PlayerViewController : UIViewController<UITextFieldDelegate, ButtonFontLabelDelegate> {
 
-@private
     UITextField                 *playerField;
+    UILabel                     *playerSuggestion;
+    ButtonFontLabel             *next;
 }
+
+@property (retain) IBOutlet UITextField     *playerField;
+@property (retain) IBOutlet UILabel         *playerSuggestion;
+@property (retain) IBOutlet ButtonFontLabel *next;
+
+- (NSString *)playerName;
 
 @end

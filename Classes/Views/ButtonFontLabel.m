@@ -21,6 +21,22 @@
     return self;
 }
 
+- (id)initWithFrame:(CGRect)frame {
+    
+    if ((self = [super initWithFrame:frame]))
+        self.userInteractionEnabled = YES;
+    
+    return self;
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+    
+    if ((self = [super initWithCoder:aDecoder]))
+        self.userInteractionEnabled = YES;
+    
+    return self;
+}
+
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     
     if ([touches count] == 1) {

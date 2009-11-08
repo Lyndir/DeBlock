@@ -8,47 +8,29 @@
 
 #import "PlayerViewController.h"
 #import "DeblockAppDelegate.h"
+#import "FontManager.h"
 
 
 @interface PlayerViewController ()
 
-@property (readwrite, retain) UITextField           *playerField;
+- (void)playerAutocomplete:(NSString *)userText;
 
 @end
 
-
 @implementation PlayerViewController
 
-@synthesize playerField;
+@synthesize playerField, playerSuggestion, next;
 
-- (void)loadView {
+- (id)init {
     
-    self.view                           = [[[UIView alloc] initWithFrame:
-                                            [[UIScreen mainScreen] applicationFrame]] autorelease];
-    self.view.backgroundColor           = [UIColor colorWithPatternImage:
-                                           [UIImage imageNamed:@"splash_notitle.png"]];
+    return [super initWithNibName:@"PlayerView" bundle:nil];
+}
+
+- (void)viewDidLoad {
     
-    self.playerField                    = [[[UITextField alloc] initWithFrame:CGRectZero] autorelease];
-    self.playerField.textAlignment      = UITextAlignmentCenter;
-    self.playerField.font               = [UIFont fontWithName:@"Courier" size:[[Config get].largeFontSize intValue]];
-    self.playerField.text               = [DeblockConfig get].userName;
-    [self.playerField sizeToFit];
-    self.playerField.center             = ccp(self.view.center.x, 100);
-    self.playerField.autoresizingMask   = UIViewAutoresizingFlexibleWidth;
-    self.playerField.delegate           = self;
-    [self.view addSubview:self.playerField];
-    
-    ButtonFontLabel *nextButton         = [[ButtonFontLabel alloc] initWithFrame:CGRectZero
-                                                                  fontName:[Config get].fontName
-                                                                 pointSize:[[Config get].fontSize intValue]];
-    nextButton.backgroundColor          = [UIColor clearColor];
-    nextButton.textColor                = [UIColor whiteColor];
-    nextButton.text                     = @"   >   ";
-    nextButton.center                   = ccp(410, 140);
-    nextButton.delegate                 = self;
-    [nextButton sizeToFit];
-    [self.view addSubview:nextButton];
-    [nextButton release];
+    self.next.zFont             = [[FontManager sharedManager] zFontWithName:[Config get].fontName pointSize:[[Config get].fontSize intValue]];
+    self.playerField.text       = [DeblockConfig get].userName;
+    self.playerSuggestion.text  = @"";
 }
 
 - (void)touched {
@@ -58,13 +40,39 @@
         return;
     }
     
-    [DeblockConfig get].userName = self.playerField.text;
+    [DeblockConfig get].userName = [self playerName];
     [[DeblockAppDelegate get] showDirector];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     
     return interfaceOrientation == UIInterfaceOrientationLandscapeRight;
+}
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+
+    NSString *oldText = textField.text;
+    NSString *newText = [[oldText stringByReplacingCharactersInRange:range withString:string]
+                         stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    
+    if (textField == self.playerField)
+        [self playerAutocomplete:newText];
+    
+    return YES;
+}
+
+- (void)textFieldDidBeginEditing:(UITextField *)textField {
+    
+    if (textField == self.playerField)
+        [self playerAutocomplete:self.playerField.text];
+}
+
+- (void)textFieldDidEndEditing:(UITextField *)textField {
+    
+    if (textField == self.playerField) {
+        self.playerField.text       = [self playerName];
+        self.playerSuggestion.text  = @"";
+    }
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
@@ -76,16 +84,34 @@
     return YES;
 }
 
-- (void)viewDidUnload {
-	// Release any retained subviews of the main view.
-	// e.g. self.myOutlet = nil;
-}
+- (void)playerAutocomplete:(NSString *)userText {
 
-
-- (void)dealloc {
+    self.playerSuggestion.text  = @"";
     
-    [super dealloc];
+    NSArray *playerNames = [[[DeblockConfig get] players] allKeys];
+    for (NSString *playerName in playerNames)
+        if ([playerName hasPrefix:userText]) {
+            NSMutableString *paddedSuggestionText = [NSMutableString stringWithCapacity:[playerName length]];
+            for (NSUInteger pad = [userText length]; pad > 0; --pad)
+                [paddedSuggestionText appendString:@" "];
+            [paddedSuggestionText appendString:[playerName stringByReplacingCharactersInRange:NSMakeRange(0, [userText length])
+                                                                                   withString:@""]];
+            
+            self.playerSuggestion.text  = paddedSuggestionText;
+            break;
+        }
 }
 
+- (NSString *)playerName {
+    
+    NSMutableString *name = [NSMutableString stringWithCapacity:fmaxf([self.playerSuggestion.text length],
+                                                                      [self.playerField.text length])];
+    [name appendString:self.playerField.text];
+    if ([self.playerSuggestion.text length] > [name length])
+        [name appendString:[self.playerSuggestion.text stringByReplacingCharactersInRange:NSMakeRange(0, [name length])
+                                                                               withString:@""]];
+    
+    return name;
+}
 
 @end

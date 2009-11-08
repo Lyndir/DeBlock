@@ -9,7 +9,6 @@
 #import "DeblockWSController.h"
 #import "ASIFormDataRequest.h"
 #import "NSDictionary_JSONExtensions.h"
-#import "Logger.h"
 #import "CryptUtils.h"
 
 #define dScoreServlet   @"/scores.json"
@@ -17,7 +16,7 @@
 
 @interface DeblockWSController ()
 
-- (NSString *)checksumForName:(NSString *)name withScore:(NSNumber *)score;
+- (NSString *)checksumForName:(NSString *)name withScore:(NSInteger)score;
 
 @end
 
@@ -34,34 +33,36 @@
 
 - (void)reloadScores {
 
-    [self submitScore:nil forPlayer:nil achievedAt:nil];
+    [self submitScoreForPlayer:nil];
 }
 
 
-- (void)submitScore:(NSNumber *)score forPlayer:(NSString *)playerName achievedAt:(NSDate *)achievedDate {
-
+- (void)submitScoreForPlayer:(Player *)player {
+    
     ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:[NSURL URLWithString:dScoreServlet
                                                                             relativeToURL:[NSURL URLWithString:[DeblockConfig get].wsUrl]]];
     [request setDelegate:self];
 
-    if (score && playerName && achievedDate) {
-        [[Logger get] inf:@"Submitting score %@ for %@ at %@", score, playerName, achievedDate];
-
+    if (player) {
+        NSDate *achievedDate = [NSDate date];
         NSNumber *timeStamp = [NSNumber numberWithLong:(long)([achievedDate timeIntervalSince1970] * 1000)];
-        [request setPostValue:score forKey:@"score"];
-        [request setPostValue:playerName forKey:@"name"];
+        [[Logger get] inf:@"Submitting score %d for %@ at %@", player.score, player.name, achievedDate];
+
+        [request setPostValue:[NSNumber numberWithInteger:player.score] forKey:@"score"];
+        [request setPostValue:player.name forKey:@"name"];
+        [request setPostValue:player.pass forKey:@"pass"];
         [request setPostValue:timeStamp forKey:@"date"];
-        [request setPostValue:[self checksumForName:playerName withScore:score] forKey:@"check"];
+        [request setPostValue:[self checksumForName:player.name withScore:player.score] forKey:@"check"];
     }
     
     [request startAsynchronous];
 }
 
 
-- (NSString *)checksumForName:(NSString *)name withScore:(NSNumber *)score {
+- (NSString *)checksumForName:(NSString *)name withScore:(NSInteger)score {
     
     NSDictionary *secrets = [NSDictionary dictionaryWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Secret" ofType:@"plist"]];
-    return [CryptUtils md5:[NSString stringWithFormat:@"%@:%d:%@", name, [score intValue], [secrets objectForKey:@"Salt"]]];
+    return [CryptUtils md5:[NSString stringWithFormat:@"%@:%d:%@", name, score, [secrets objectForKey:@"Salt"]]];
 }
 
 
@@ -71,10 +72,8 @@
     NSDictionary *playersScoreHistory = [NSDictionary dictionaryWithJSONData:[request responseData] error:&error];
     if (error)
         [[Logger get] err:@"Couldn't parse online scores: %@", error];
-    else {
+    else
         [DeblockConfig get].userScoreHistory = playersScoreHistory;
-        [[Logger get] inf:@"Online scores:\n%@", playersScoreHistory];
-    }
 }
 
 

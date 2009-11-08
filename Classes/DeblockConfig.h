@@ -51,6 +51,7 @@
 - (void)addScore:(NSInteger)score;
 - (void)saveScore;
 
+- (NSDictionary *)players;
 - (Player *)getPlayer:(NSString *)name;
 - (Player *)currentPlayer;
 - (void)updatePlayer:(Player *)player;

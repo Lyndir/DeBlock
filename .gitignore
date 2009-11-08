@@ -1,6 +1,9 @@
 # Encoded audio.
 /Resources/Audio/*/*flac
 
+# Secret salt for online score submission.
+/Resources/Secret.plist
+
 # OS-Specific junk.
 .DS_Store
 
