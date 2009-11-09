@@ -16,7 +16,7 @@
 
 @interface DeblockWSController ()
 
-- (NSString *)checksumForName:(NSString *)name withScore:(NSInteger)score;
+- (NSString *)checksumForName:(NSString *)name withScore:(NSInteger)score atTime:(NSNumber *)timeStamp;
 
 @end
 
@@ -52,34 +52,40 @@
         [request setPostValue:player.name forKey:@"name"];
         [request setPostValue:player.pass forKey:@"pass"];
         [request setPostValue:timeStamp forKey:@"date"];
-        [request setPostValue:[self checksumForName:player.name withScore:player.score] forKey:@"check"];
+        [request setPostValue:[self checksumForName:player.name withScore:player.score atTime:timeStamp] forKey:@"check"];
     }
     
     [request startAsynchronous];
 }
 
 
-- (NSString *)checksumForName:(NSString *)name withScore:(NSInteger)score {
+- (NSString *)checksumForName:(NSString *)name withScore:(NSInteger)score atTime:(NSNumber *)timeStamp {
     
     NSDictionary *secrets = [NSDictionary dictionaryWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Secret" ofType:@"plist"]];
-    return [CryptUtils md5:[NSString stringWithFormat:@"%@:%d:%@", name, score, [secrets objectForKey:@"Salt"]]];
+    return [CryptUtils md5:[NSString stringWithFormat:@"%@:%d:%@:%d", name, score, [secrets objectForKey:@"Salt"], [timeStamp longValue]]];
 }
 
 
 - (void)requestFinished:(ASIHTTPRequest *)request {
     
+    [[Logger get] dbg:@"Response Error: %@", [request error]];
+    [[Logger get] dbg:@"Response Headers:\n%@", [request responseHeaders]];
+    [[Logger get] dbg:@"Response Body:\n%@", [request responseString]];
+
     NSError *error = nil;
     NSDictionary *playersScoreHistory = [NSDictionary dictionaryWithJSONData:[request responseData] error:&error];
     if (error)
         [[Logger get] err:@"Couldn't parse online scores: %@", error];
-    else
+    else {
+        [[Logger get] dbg:@"Response Scores:\n%@", playersScoreHistory];
         [DeblockConfig get].userScoreHistory = playersScoreHistory;
+    }
 }
 
 
 - (void)requestFailed:(ASIHTTPRequest *)request {
 
-    [[Logger get] err:@"Couldn't fetch online scores: %@", request.error];
+    [[Logger get] err:@"Couldn't fetch online scores from %@: %@", request.url, request.error];
 }
 
 
