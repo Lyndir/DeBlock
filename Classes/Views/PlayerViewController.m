@@ -14,12 +14,16 @@
 @interface PlayerViewController ()
 
 - (void)playerAutocomplete:(NSString *)userText;
+- (void)loadPass;
+
+@property (readwrite, retain) UIAlertView   *alertCode;
 
 @end
 
 @implementation PlayerViewController
 
-@synthesize playerField, playerSuggestion, next;
+@synthesize playerTitle, playerField, playerSuggestion, next;
+@synthesize alertCode;
 
 - (id)init {
     
@@ -28,9 +32,11 @@
 
 - (void)viewDidLoad {
     
-    self.next.zFont             = [[FontManager sharedManager] zFontWithName:[Config get].fontName pointSize:[[Config get].fontSize intValue]];
     self.playerField.text       = [DeblockConfig get].userName;
     self.playerSuggestion.text  = @"";
+    
+    self.playerTitle.zFont      = [[FontManager sharedManager] zFontWithName:[Config get].fontName pointSize:[[Config get].fontSize intValue]];
+    self.next.zFont             = [[FontManager sharedManager] zFontWithName:[Config get].fontName pointSize:[[Config get].fontSize intValue]];
 }
 
 - (void)touched {
@@ -41,6 +47,12 @@
     }
     
     [DeblockConfig get].userName = [self playerName];
+    if ([[Config get].firstRun boolValue] && [[DeblockConfig get].compete boolValue]) {
+        self.alertCode = [[[UIAlertView alloc] initWithTitle:@"Online Code" message:
+                           @"To submit your scores online, you need to create an online code.\nThis code will protect your progress in the competition from tampering."
+                                                    delegate:self cancelButtonTitle:@"Okay" otherButtonTitles:nil] autorelease];
+        [self.alertCode show];
+    }
     [[DeblockAppDelegate get] showDirector];
 }
 
@@ -83,6 +95,24 @@
     [textField resignFirstResponder];
     return YES;
 }
+
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    
+    if (alertView == self.alertCode) {
+        [[[[NSThread alloc] initWithTarget:self selector:@selector(loadPass) object:nil] autorelease] start];
+        
+        self.alertCode = nil;
+    }
+}
+
+- (void)loadPass {
+    
+    NSAutoreleasePool *pool = [NSAutoreleasePool new];
+    [[[DeblockConfig get] currentPlayer] pass];
+    [pool drain];
+}
+
 
 - (void)playerAutocomplete:(NSString *)userText {
 

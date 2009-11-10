@@ -148,11 +148,13 @@
         newScore = 0;
     
     [self currentPlayer].score = newScore;
-    [self saveScore];
+    
+    if ([[DeblockConfig get].compete boolValue])
+        [self saveScore];
 }
 
 - (void)saveScore {
-    
+
     NSNumber *score = [NSNumber numberWithInteger:[self currentPlayer].score];
     NSString *name = self.userName;
     NSDate *achievedDate = [NSDate date];

@@ -30,7 +30,7 @@
 #import "DbHUDLayer.h"
 
 
-@interface DeblockAppDelegate : AbstractAppDelegate<MenuDelegate, ConfigMenuDelegate> {
+@interface DeblockAppDelegate : AbstractAppDelegate<MenuDelegate, ConfigMenuDelegate, UIAlertViewDelegate> {
 
 @private
     PlayerViewController            *playerVC;
@@ -40,6 +40,8 @@
     ConfigMenuLayer                 *configMenu;
     
     MenuItem                        *continueGame;
+    
+    UIAlertView                     *alertWelcome, *alertCompete;
 }
 
 @property (readonly) GameLayer      *gameLayer;

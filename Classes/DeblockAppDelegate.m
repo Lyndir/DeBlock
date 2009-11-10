@@ -46,12 +46,16 @@
 - (void)strategy:(id)caller;
 - (void)scores:(id)caller;
 
+@property (readwrite, retain) UIAlertView *alertWelcome;
+@property (readwrite, retain) UIAlertView *alertCompete;
+
 @end
 
 
 @implementation DeblockAppDelegate
 
 @synthesize gameLayer;
+@synthesize alertWelcome, alertCompete;
 
 
 #pragma mark ###############################
@@ -82,7 +86,16 @@
 
 - (void)prepareUi {
     
-    [[DeblockWSController get] reloadScores];
+    if ([[Config get].firstRun boolValue]) {
+        self.alertWelcome = [[[UIAlertView alloc] initWithTitle:@"Welcome to Deblock!" message:
+                              @"Since this is your first time,\ncheck out the «Strategy» guide.\n\nMain Menu ➡ More ➡ Strategy"
+                                                       delegate:self cancelButtonTitle:@"Thanks" otherButtonTitles:nil] autorelease];
+        [self.alertWelcome show];
+    }
+    
+    if ([[DeblockConfig get].compete boolValue])
+        [[DeblockWSController get] reloadScores];
+    
     playerVC = [PlayerViewController new];
     [window addSubview:playerVC.view];
     [window makeKeyAndVisible];
@@ -213,6 +226,32 @@
     else
         return nil;
 }
+
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+
+    if (alertView == self.alertWelcome) {
+        self.alertCompete = [[[UIAlertView alloc] initWithTitle:@"Compete Online" message:
+                              @"Would you like to compete online\nwith other Deblock players across the world?"
+                                                       delegate:self cancelButtonTitle:@"Rather Not" otherButtonTitles:@"Sure!", nil] autorelease];
+        [self.alertCompete show];
+
+        self.alertWelcome = nil;
+    }
+    else if (alertView == self.alertCompete) {
+        if (buttonIndex == [alertView cancelButtonIndex]) {
+            [DeblockConfig get].compete = [NSNumber numberWithBool:NO];
+            [[[[UIAlertView alloc] initWithTitle:@"Compete Online" message:
+               @"You can join online competition later by toggling it in the configuration.\n\nMain Menu ➡ More ➡ Configuration"
+                                        delegate:nil cancelButtonTitle:@"Thanks" otherButtonTitles:nil] autorelease] show];
+        }
+        else
+            [DeblockConfig get].compete = [NSNumber numberWithBool:YES];
+        
+        self.alertCompete = nil;
+    }
+}
+
 
 
 -(HUDLayer *) hudLayer {

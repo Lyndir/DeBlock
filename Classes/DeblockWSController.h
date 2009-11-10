@@ -10,8 +10,12 @@
 #import "Player.h"
 
 
-@interface DeblockWSController : NSObject<ASIHTTPRequestDelegate> {
+@interface DeblockWSController : NSObject<ASIHTTPRequestDelegate, UIAlertViewDelegate> {
 
+    NSMutableDictionary     *requestsPlayer;
+    
+    UIAlertView             *alertPassword, *alertConnection;
+    Player                  *alertPlayer;
 }
 
 /**

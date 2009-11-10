@@ -16,6 +16,7 @@
     NSInteger                           _score;
     NSUInteger                          _level;
     
+    NSConditionLock                     *_passwordLock;
     UIAlertView                         *passwordAlert;
     UITextField                         *passwordField;
 }

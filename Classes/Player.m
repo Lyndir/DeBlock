@@ -8,6 +8,9 @@
 
 #import "Player.h"
 
+#define lockPassNotSet  2<<0
+#define lockPassSet     2<<1
+
 
 @interface UIAlertView (TextField)
 
@@ -19,12 +22,16 @@
 @interface Player ()
 
 - (void)registerObservers;
+- (void)showPasswordDialog;
+
+@property (readwrite, retain) NSConditionLock   *passwordLock;
 
 @end
 
 @implementation Player
 
 @synthesize name = _name, pass = _pass, score = _score, level = _level;
+@synthesize passwordLock = _passwordLock;
 
 - (id)init {
     
@@ -79,21 +86,45 @@
 
 - (NSString *)pass {
     
+    if ([[NSThread currentThread] isMainThread]) {
+        [[Logger get] err:@"This method should NOT be called from the MAIN thread!  Disallowing user to set his password."];
+        return _pass;
+    }
+    
     if (!_pass) {
-        passwordAlert = [[UIAlertView alloc] initWithTitle:@"Submitting Score" message:
-                         [NSString stringWithFormat:@"Enter %@'s online code:", self.name]
-                                                  delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Save", nil];
-        [passwordAlert addTextFieldWithValue:@"" label:@"Passcode"];
-        [passwordAlert show];
-
-        passwordField = [passwordAlert textFieldAtIndex:0];
-        passwordField.keyboardType = UIKeyboardTypeNumberPad;
-        passwordField.keyboardAppearance = UIKeyboardAppearanceAlert;
-        passwordField.autocorrectionType = UITextAutocorrectionTypeNo;
         
+        [[Logger get] dbg:@"creating with: lockPassNotSet"];
+        self.passwordLock = [[[NSConditionLock alloc] initWithCondition:lockPassNotSet] autorelease];
+        
+        NSThread *passwordThread = [[NSThread alloc] initWithTarget:self selector:@selector(showPasswordDialog) object:nil];
+        [passwordThread start];
+        [passwordThread autorelease];
+        
+        [[Logger get] dbg:@"locking until: lockPassSet"];
+        [self.passwordLock lockWhenCondition:lockPassSet];
+        [[Logger get] dbg:@"unlocking with: %@", _pass? @"lockPassSet": @"lockPassNotSet"];
+        [self.passwordLock unlockWithCondition:_pass? lockPassSet: lockPassNotSet];
     }
     
     return _pass;
+}
+
+- (void)showPasswordDialog {
+    
+    NSAutoreleasePool *pool = [NSAutoreleasePool new];
+    
+    passwordAlert = [[UIAlertView alloc] initWithTitle:@"Online Code" message:
+                     [NSString stringWithFormat:@"Code for %@:", self.name]
+                                              delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Save", nil];
+    [passwordAlert addTextFieldWithValue:@"" label:@""];
+    
+    passwordField                       = [passwordAlert textFieldAtIndex:0];
+    passwordField.keyboardType          = UIKeyboardTypeNumberPad;
+    passwordField.keyboardAppearance    = UIKeyboardAppearanceAlert;
+    passwordField.autocorrectionType    = UITextAutocorrectionTypeNo;
+    [passwordAlert show];
+    
+    [pool drain];
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
@@ -102,7 +133,12 @@
         return;
     
     if (alertView == passwordAlert) {
+        [[Logger get] dbg:@"locking until: lockPassNotSet"];
+        [self.passwordLock lockWhenCondition:lockPassNotSet];
         self.pass = passwordField.text;
+        [[Logger get] dbg:@"unlocking with: %@", _pass? @"lockPassSet": @"lockPassNotSet"];
+        [self.passwordLock unlockWithCondition:lockPassSet];
+
         [passwordAlert release];
         passwordAlert = nil;
         passwordField = nil;
