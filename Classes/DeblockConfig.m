@@ -99,8 +99,7 @@
 - (NSDictionary *)players {
     
     if (!_playersCached) {
-        NSData *playersArchive = [defaults dataForKey:@"players"];
-        _playersCached = [[NSKeyedUnarchiver unarchiveObjectWithData:playersArchive] retain];
+        _playersCached = [[NSKeyedUnarchiver unarchiveObjectWithData:[defaults dataForKey:@"players"]] retain];
         
         if(_playersCached == nil)
             _playersCached = [NSDictionary new];
@@ -119,6 +118,12 @@
 - (Player *)currentPlayer {
     
     Player *currentPlayer = [[self players] objectForKey:self.userName];
+    if ([currentPlayer.name isEqualToString:self.userName]) {
+        [[Logger get] wrn:@"Player name inconsistency detected (key: %@, name: %@).  Fixing by setting name to key.",
+         self.userName, currentPlayer.name];
+        currentPlayer.name = self.userName;
+    }
+    
     if (!currentPlayer) {
         currentPlayer = [[Player new] autorelease];
         currentPlayer.name = self.userName;
@@ -128,7 +133,26 @@
 }
 
 
+- (void)removePlayer:(Player *)player {
+    
+    if (!player.name)
+        return;
+    
+    NSMutableDictionary *players = [[self players] mutableCopy];
+    [players removeObjectForKey:player.name];
+    
+    NSData *playersArchive = [NSKeyedArchiver archivedDataWithRootObject:players];
+    [defaults setObject:playersArchive forKey:@"players"];
+    [defaults synchronize];
+    
+    [_playersCached release];
+    _playersCached = players;
+}
+
 - (void)updatePlayer:(Player *)player {
+    
+    if (!player.name)
+        return;
     
     NSMutableDictionary *players = [[self players] mutableCopy];
     [players setObject:player forKey:player.name];

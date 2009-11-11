@@ -16,14 +16,22 @@
     NSInteger                           _score;
     NSUInteger                          _level;
     
-    NSConditionLock                     *_passwordLock;
-    UIAlertView                         *passwordAlert;
-    UITextField                         *passwordField;
+    BOOL                                _onlineOk;
+    
+    NSConditionLock                     *_nameLock;
+    UIAlertView                         *nameAlert;
+    UITextField                         *nameField;
+
+    NSConditionLock                     *_passLock;
+    UIAlertView                         *passAlert;
+    UITextField                         *passField;
 }
 
 @property (readwrite, copy) NSString    *name;
+@property (readonly) NSString           *onlineName;
 @property (readwrite, copy) NSString    *pass;
 @property (readwrite) NSInteger         score;
 @property (readwrite) NSUInteger        level;
+@property (readwrite) BOOL              onlineOk;
 
 @end

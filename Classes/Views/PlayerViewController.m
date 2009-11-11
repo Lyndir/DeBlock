@@ -109,7 +109,7 @@
 - (void)loadPass {
     
     NSAutoreleasePool *pool = [NSAutoreleasePool new];
-    [[[DeblockConfig get] currentPlayer] pass];
+    [[DeblockConfig get] saveScore];
     [pool drain];
 }
 

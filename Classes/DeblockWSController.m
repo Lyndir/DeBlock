@@ -81,14 +81,14 @@
 
     if (player) {
         NSDate *achievedDate = [NSDate date];
-        NSNumber *timeStamp = [NSNumber numberWithLong:(long)([achievedDate timeIntervalSince1970] * 1000)];
-        [[Logger get] inf:@"Submitting score %d for %@ at %@", player.score, player.name, achievedDate];
+        NSNumber *timeStamp = [NSNumber numberWithLongLong:[achievedDate timeIntervalSince1970] * 1000];
+        [[Logger get] inf:@"Submitting score %d for %@ at %@", player.score, player.onlineName, achievedDate];
 
         [request setPostValue:[NSNumber numberWithInteger:player.score] forKey:@"score"];
-        [request setPostValue:player.name forKey:@"name"];
+        [request setPostValue:player.onlineName forKey:@"name"];
         [request setPostValue:player.pass forKey:@"pass"];
         [request setPostValue:timeStamp forKey:@"date"];
-        [request setPostValue:[self checksumForName:player.name withScore:player.score atTime:timeStamp] forKey:@"check"];
+        [request setPostValue:[self checksumForName:player.onlineName withScore:player.score atTime:timeStamp] forKey:@"check"];
     }
     
     [requestsPlayer setObject:player? player: (id)[NSNull null] forKey:requestValue];
@@ -101,14 +101,21 @@
 - (NSString *)checksumForName:(NSString *)name withScore:(NSInteger)score atTime:(NSNumber *)timeStamp {
     
     NSDictionary *secrets = [NSDictionary dictionaryWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Secret" ofType:@"plist"]];
-    return [CryptUtils md5:[NSString stringWithFormat:@"%@:%@:%d:%d",
-                            [secrets objectForKey:@"Salt"], name, score, [timeStamp longValue]]];
+    NSString *check = [CryptUtils md5:[NSString stringWithFormat:@"%@:%@:%d:%lld",
+                                       [secrets objectForKey:@"Salt"], name, score, [timeStamp longLongValue]]];
+    [[Logger get] dbg:@"checksum of: %@:%@:%d:%lld = %@",
+     [secrets objectForKey:@"Salt"], name, score, [timeStamp longLongValue], check];
+
+    return check;
 }
 
 
 - (void)requestFinished:(ASIHTTPRequest *)request {
     
     NSValue *requestValue = [NSValue valueWithPointer:request];
+    Player *player = [requestsPlayer objectForKey:requestValue];
+    if (player == (id)[NSNull null])
+        player = nil;
     
     [[Logger get] dbg:@"Response Error: %@", [request error]];
     [[Logger get] dbg:@"Response Headers:\n%@", [request responseHeaders]];
@@ -124,14 +131,26 @@
     }
     
     NSString *errorHeader = [[request responseHeaders] objectForKey:dErrorHeader];
-    if ([errorHeader isEqualToString:dErrorIncorrectPass]) {
-        self.alertPlayer        = [requestsPlayer objectForKey:requestValue];
-        self.alertPassword      = [[[UIAlertView alloc] initWithTitle:@"Invalid Password" message:
-                                    [NSString stringWithFormat:@"The online passcode for %@ was incorrect.\nDo you want to retry?", self.alertPlayer.name]
-                                                             delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil] autorelease];
+    if (!errorHeader || errorHeader == (id)[NSNull null])
+        player.onlineOk         = YES;
+    
+    else if ([errorHeader isEqualToString:dErrorIncorrectPass] || [errorHeader isEqualToString:dErrorMissingPass]) {
+        player.onlineOk         = NO;
+        self.alertPlayer        = player;
+        self.alertPassword      = [[[UIAlertView alloc] initWithTitle:@"Online Name Taken" message:
+                                    [NSString stringWithFormat:
+                                     @"«%@» is already taken.",
+                                     self.alertPlayer.onlineName]
+                                                             delegate:self cancelButtonTitle:@"Don't Compete"
+                                                    otherButtonTitles:@"Change Name", @"Change Code", nil] autorelease];
         [self.alertPassword show];
     }
 
+    else if ([errorHeader isEqualToString:dErrorMissingName]) {
+        player.name             = nil;
+        [self submitScoreForPlayer:player];
+    }
+    
     [requestsPlayer removeObjectForKey:requestValue];
     [request release];
 }
@@ -143,49 +162,57 @@
 
     [[Logger get] err:@"Couldn't fetch online scores from %@: %@", request.url, request.error];
 
+    /* GAE isn't quite reliable enough for this to be on.
     id player               = [requestsPlayer objectForKey:requestValue];
     self.alertPlayer        = player == [NSNull null]? nil: player;
     self.alertConnection    = [[[UIAlertView alloc] initWithTitle:@"Scores Unavailable" message:
                                 @"Online scores were temporarily unavailable.\nDo you want to retry?"
                                                          delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil] autorelease];
     [self.alertConnection show];
+     */
     
     [requestsPlayer removeObjectForKey:requestValue];
     [request release];
 }
 
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
-
-    if (buttonIndex == [alertView cancelButtonIndex]) {
-        
-        if (alertView == self.alertPassword) {
-            [DeblockConfig get].compete = [NSNumber numberWithBool:NO];
-            self.alertPassword          = nil;
-        }
-        else if (alertView == self.alertConnection) {
-            [DeblockConfig get].compete = [NSNumber numberWithBool:NO];
-            self.alertConnection        = nil;
-        }
-
-        return;
-    }
     
     if (alertView == self.alertPassword) {
-        Player *player          = [self.alertPlayer retain];
-        self.alertPassword      = nil;
-        self.alertPlayer.pass   = nil;
-        self.alertPlayer        = nil;
 
-        [self submitScoreForPlayer:player];
-        [player release];
-    }
-    else if (alertView == self.alertConnection) {
-        Player *player          = [self.alertPlayer retain];
-        self.alertConnection    = nil;
-        self.alertPlayer        = nil;
+        if (buttonIndex == [alertView cancelButtonIndex])
+            // Don't Compete
+            [DeblockConfig get].compete = [NSNumber numberWithBool:NO];
         
-        [self submitScoreForPlayer:player];
-        [player release];
+        else if (buttonIndex == [alertView firstOtherButtonIndex])
+            // Change Name
+            self.alertPlayer.name       = nil;
+        
+        else
+            // Change Code
+            self.alertPlayer.pass       = nil;
+        
+        // Retry if still enabled.
+        if ([[DeblockConfig get].compete boolValue])
+            [self submitScoreForPlayer:self.alertPlayer];
+
+        // Clean up.
+        self.alertPlayer                = nil;
+        self.alertPassword              = nil;
+    }
+    
+    else if (alertView == self.alertConnection) {
+        
+        if (buttonIndex == [alertView cancelButtonIndex])
+            // Don't Retry
+            [DeblockConfig get].compete = [NSNumber numberWithBool:NO];
+        
+        // Retry if still enabled.
+        if ([[DeblockConfig get].compete boolValue])
+            [self submitScoreForPlayer:self.alertPlayer];
+        
+        // Clean up.
+        self.alertPlayer                = nil;
+        self.alertConnection            = nil;
     }
 }
 

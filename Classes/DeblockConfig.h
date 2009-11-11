@@ -54,6 +54,7 @@
 - (NSDictionary *)players;
 - (Player *)getPlayer:(NSString *)name;
 - (Player *)currentPlayer;
+- (void)removePlayer:(Player *)player;
 - (void)updatePlayer:(Player *)player;
 
 #pragma mark ###############################
