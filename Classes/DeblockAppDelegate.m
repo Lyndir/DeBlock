@@ -156,6 +156,7 @@
     configMenu.opacity          = 0xcc;
     configMenu.color            = ccc3(0x99, 0x99, 0xff);
     configMenu.colorGradient    = ccc4(0xcc, 0xcc, 0xff, 0xcc);
+    configMenu.layout           = MenuLayoutColumns;
     
     pausedMenu = [[MenuLayer menuWithDelegate:self logo:[MenuItemImage itemFromNormalImage:@"title.paused.png"
                                                                              selectedImage:@"title.paused.png"]
@@ -187,20 +188,6 @@
     Scene *uiScene = [Scene node];
     [uiScene addChild:self.uiLayer];
     [[Director sharedDirector] runWithScene:uiScene];
-}
-
-
-- (void)didLoad:(MenuLayer *)menuLayer {
-
-    if (menuLayer == configMenu) {
-        [configMenu.menu alignItemsInColumns:
-         [NSNumber numberWithUnsignedInt:1],
-         [NSNumber numberWithUnsignedInt:1],
-         [NSNumber numberWithUnsignedInt:2],
-         [NSNumber numberWithUnsignedInt:2],
-         [NSNumber numberWithUnsignedInt:2],
-         nil];
-    }
 }
 
 

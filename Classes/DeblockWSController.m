@@ -11,7 +11,7 @@
 #import "NSDictionary_JSONExtensions.h"
 #import "CryptUtils.h"
 
-#define dScoreWSThread          @"scoreWSThread"
+#define dScoreWSThread          @"ScoreWSThread"
 #define dScoreServlet           @"/scores.json"
 
 #define dErrorHeader            @"X-Deblock-Error"
@@ -73,15 +73,15 @@
         return;
     }
 
-    NSAutoreleasePool *pool = [NSAutoreleasePool new];
+    NSAutoreleasePool *pool     = [NSAutoreleasePool new];
     ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:[NSURL URLWithString:dScoreServlet
                                                                             relativeToURL:[NSURL URLWithString:[DeblockConfig get].wsUrl]]];
-    NSValue *requestValue = [NSValue valueWithPointer:request];
+    NSValue *requestValue       = [NSValue valueWithPointer:request];
     [request setDelegate:self];
 
     if (player) {
-        NSDate *achievedDate = [NSDate date];
-        NSNumber *timeStamp = [NSNumber numberWithLongLong:[achievedDate timeIntervalSince1970] * 1000];
+        NSDate *achievedDate    = [NSDate date];
+        NSNumber *timeStamp     = [NSNumber numberWithLongLong:[achievedDate timeIntervalSince1970] * 1000];
         [[Logger get] inf:@"Submitting score %d for %@ at %@", player.score, player.onlineName, achievedDate];
 
         [request setPostValue:[NSNumber numberWithInteger:player.score] forKey:@"score"];
@@ -100,54 +100,45 @@
 
 - (NSString *)checksumForName:(NSString *)name withScore:(NSInteger)score atTime:(NSNumber *)timeStamp {
     
-    NSDictionary *secrets = [NSDictionary dictionaryWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Secret" ofType:@"plist"]];
-    NSString *check = [CryptUtils md5:[NSString stringWithFormat:@"%@:%@:%d:%lld",
-                                       [secrets objectForKey:@"Salt"], name, score, [timeStamp longLongValue]]];
-    [[Logger get] dbg:@"checksum of: %@:%@:%d:%lld = %@",
-     [secrets objectForKey:@"Salt"], name, score, [timeStamp longLongValue], check];
+    NSDictionary *secrets   = [NSDictionary dictionaryWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Secret" ofType:@"plist"]];
 
-    return check;
+    return [CryptUtils md5:[NSString stringWithFormat:@"%@:%@:%d:%lld",
+                            [secrets objectForKey:@"Salt"], name, score, [timeStamp longLongValue]]];
 }
 
 
 - (void)requestFinished:(ASIHTTPRequest *)request {
     
-    NSValue *requestValue = [NSValue valueWithPointer:request];
-    Player *player = [requestsPlayer objectForKey:requestValue];
+    NSValue *requestValue   = [NSValue valueWithPointer:request];
+    Player *player          = [requestsPlayer objectForKey:requestValue];
     if (player == (id)[NSNull null])
-        player = nil;
+        player              = nil;
     
-    [[Logger get] dbg:@"Response Error: %@", [request error]];
-    [[Logger get] dbg:@"Response Headers:\n%@", [request responseHeaders]];
-    [[Logger get] dbg:@"Response Body:\n%@", [request responseString]];
-
-    NSError *error = nil;
+    NSError *error          = nil;
     NSDictionary *playersScoreHistory = [NSDictionary dictionaryWithJSONData:[request responseData] error:&error];
     if (error)
         [[Logger get] err:@"Couldn't parse online scores: %@", error];
-    else {
-        [[Logger get] dbg:@"Response Scores:\n%@", playersScoreHistory];
+    else
         [DeblockConfig get].userScoreHistory = playersScoreHistory;
-    }
     
-    NSString *errorHeader = [[request responseHeaders] objectForKey:dErrorHeader];
+    NSString *errorHeader   = [[request responseHeaders] objectForKey:dErrorHeader];
     if (!errorHeader || errorHeader == (id)[NSNull null])
-        player.onlineOk         = YES;
+        player.onlineOk     = YES;
     
     else if ([errorHeader isEqualToString:dErrorIncorrectPass] || [errorHeader isEqualToString:dErrorMissingPass]) {
-        player.onlineOk         = NO;
-        self.alertPlayer        = player;
-        self.alertPassword      = [[[UIAlertView alloc] initWithTitle:@"Online Name Taken" message:
-                                    [NSString stringWithFormat:
-                                     @"«%@» is already taken.",
-                                     self.alertPlayer.onlineName]
-                                                             delegate:self cancelButtonTitle:@"Don't Compete"
-                                                    otherButtonTitles:@"Change Name", @"Change Code", nil] autorelease];
+        player.onlineOk     = NO;
+        self.alertPlayer    = player;
+        self.alertPassword  = [[[UIAlertView alloc] initWithTitle:@"Online Name Taken" message:
+                                [NSString stringWithFormat:
+                                 @"«%@» is already taken.",
+                                 self.alertPlayer.onlineName]
+                                                         delegate:self cancelButtonTitle:@"Don't Compete"
+                                                otherButtonTitles:@"Change Name", @"Change Code", nil] autorelease];
         [self.alertPassword show];
     }
 
     else if ([errorHeader isEqualToString:dErrorMissingName]) {
-        player.name             = nil;
+        player.name         = nil;
         [self submitScoreForPlayer:player];
     }
     
@@ -158,7 +149,7 @@
 
 - (void)requestFailed:(ASIHTTPRequest *)request {
     
-    NSValue *requestValue = [NSValue valueWithPointer:request];
+    NSValue *requestValue   = [NSValue valueWithPointer:request];
 
     [[Logger get] err:@"Couldn't fetch online scores from %@: %@", request.url, request.error];
 
