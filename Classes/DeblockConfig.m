@@ -118,7 +118,7 @@
 - (Player *)currentPlayer {
     
     Player *currentPlayer = [[self players] objectForKey:self.userName];
-    if ([currentPlayer.name isEqualToString:self.userName]) {
+    if (![currentPlayer.name isEqualToString:self.userName]) {
         [[Logger get] wrn:@"Player name inconsistency detected (key: %@, name: %@).  Fixing by setting name to key.",
          self.userName, currentPlayer.name];
         currentPlayer.name = self.userName;

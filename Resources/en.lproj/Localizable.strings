@@ -7,6 +7,7 @@
 //"font.family.default"                   = "Bilbao-Poster-Black";
 //"font.family.default"                   = "MammaGamma";
 "font.family.fixed"                     = "Absolute";
+"font.family.symbolic"                  = "DejaVuSansMono";
 
 // Global Config
 "config.direction"                      = "ltr";

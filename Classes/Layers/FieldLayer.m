@@ -534,7 +534,7 @@
                        at:ccp(self.contentSize.width / 2, self.contentSize.height / 2)];
 
             ++[[DeblockConfig get] currentPlayer].level;
-        } else if (blocksLeft < 8) {
+        } else if (blocksLeft <= 8) {
             // Blocks left under minimum block limit -> level up.
             ++[[DeblockConfig get] currentPlayer].level;
         } else {
