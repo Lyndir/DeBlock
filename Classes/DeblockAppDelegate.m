@@ -29,6 +29,7 @@
 #import "MenuItemTitle.h"
 #import "StrategyLayer.h"
 #import "DeblockWSController.h"
+#import "LogLayer.h"
 
 
 @interface DeblockAppDelegate ()
@@ -41,10 +42,11 @@
 - (void)endGame:(id)caller;
 - (void)stopGame:(id)caller;
 - (void)levelRedo:(id)caller;
-- (void)more:(id)caller;
+- (void)more;
 - (void)configuration:(id)caller;
 - (void)strategy:(id)caller;
 - (void)scores:(id)caller;
+- (void)log;
 
 @property (readwrite, retain) UIAlertView *alertWelcome;
 @property (readwrite, retain) UIAlertView *alertCompete;
@@ -107,7 +109,7 @@
                  [[MenuItemFont itemFromString:@"Continue Game" target:self selector:@selector(continueGame:)] retain],
                  [MenuItemFont itemFromString:@"New Game" target:self selector:@selector(newGame:)],
                  [MenuItemSpacer spacerSmall],
-                 [MenuItemFont itemFromString:@"More..." target:self selector:@selector(more:)],
+                 [MenuItemFont itemFromString:@"Strategy" target:self selector:@selector(strategy:)],
                  nil] retain];
     mainMenu.background         = [Sprite spriteWithFile:@"splash.png"];
     mainMenu.outerPadding       = margin(100, 20, 10, 20);
@@ -115,14 +117,14 @@
     mainMenu.opacity            = 0xcc;
     mainMenu.color              = ccc3(0x99, 0x99, 0xff);
     mainMenu.colorGradient      = ccc4(0xcc, 0xcc, 0xff, 0xcc);
+    [mainMenu setNextButtonTarget:self selector:@selector(more)];
     
     moreMenu = [[MenuLayer menuWithDelegate:self logo:[MenuItemSpacer spacerLarge]
                                       items:
                  [MenuItemSpacer spacerNormal],
-                 [MenuItemFont itemFromString:@"Configuration" target:self selector:@selector(configuration:)],
-                 [MenuItemSpacer spacerSmall],
-                 [MenuItemFont itemFromString:@"Strategy" target:self selector:@selector(strategy:)],
                  [MenuItemFont itemFromString:@"Scores" target:self selector:@selector(scores:)],
+                 [MenuItemSpacer spacerSmall],
+                 [MenuItemFont itemFromString:@"Configuration" target:self selector:@selector(configuration:)],
                  nil] retain];
     moreMenu.background         = [Sprite spriteWithFile:@"splash.png"];
     moreMenu.outerPadding       = margin(100, 20, 10, 20);
@@ -130,6 +132,8 @@
     moreMenu.opacity            = 0xcc;
     moreMenu.color              = ccc3(0x99, 0x99, 0xff);
     moreMenu.colorGradient      = ccc4(0xcc, 0xcc, 0xff, 0xcc);
+    [moreMenu.nextButton setString:@"   ⌕   "];
+    [moreMenu setNextButtonTarget:self selector:@selector(log)];
     
     newGameMenu = [[MenuLayer menuWithDelegate:self logo:[MenuItemSpacer spacerLarge]
                                          items:
@@ -338,7 +342,7 @@
 }
 
 
-- (void)more:(id)caller {
+- (void)more {
     
     [[DeblockAppDelegate get] pushLayer:moreMenu];
 }
@@ -359,6 +363,12 @@
 - (void)scores:(id)caller {
     
     [self pushLayer:[ScoresLayer get]];
+}
+
+
+- (void)log {
+    
+    [self pushLayer:[LogLayer get]];
 }
 
 
