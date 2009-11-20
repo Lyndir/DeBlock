@@ -59,13 +59,4 @@
     glBlendFunc(CC_BLEND_SRC, CC_BLEND_DST);
 }
 
-+ (LogLayer *)get {
-    
-    static LogLayer *logLayer = nil;
-    if (logLayer == nil)
-        logLayer = [self new];
-    
-    return logLayer;
-}
-
 @end

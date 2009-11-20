@@ -368,7 +368,7 @@
 
 - (void)log {
     
-    [self pushLayer:[LogLayer get]];
+    [self pushLayer:[LogLayer node]];
 }
 
 

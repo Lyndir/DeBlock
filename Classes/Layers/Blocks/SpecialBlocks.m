@@ -32,7 +32,7 @@
 - (BOOL)isLinkedToAdjecentBlock:(BlockLayer *)block forReason:(DMScanReason)aReason {
     
     if (aReason == DMScanReasonFreezing)
-        // When freezing, don't link to special blocks.
+        // When freezing, never link to special blocks.
         return NO;
     
     return [super isLinkedToAdjecentBlock:block forReason:aReason];
@@ -146,7 +146,7 @@
 - (BOOL)isLinkedToAdjecentBlock:(BlockLayer *)block forReason:(DMScanReason)aReason {
     
     if (aReason == DMScanReasonCheckState && self.destructible)
-        // When checking game state, considder morphing blocks as linked to any adjecent block.
+        // When checking game state, always considder morphing blocks as linked.
         return YES;
     
     return [super isLinkedToAdjecentBlock:block forReason:aReason];
@@ -181,6 +181,15 @@
     textures[0]         = [[[TextureMgr sharedTextureMgr] addImage:@"block.whole.zap.png"] retain];
     
     return self;
+}
+
+- (BOOL)isLinkedToAdjecentBlock:(BlockLayer *)block forReason:(DMScanReason)aReason {
+    
+    if (aReason == DMScanReasonDestroying)
+        // When destroying blocks, never link to zapper blocks.
+        return NO;
+    
+    return [super isLinkedToAdjecentBlock:block forReason:aReason];
 }
 
 - (NSMutableSet *)findLinkedBlocksInField:(FieldLayer *)field forReason:(DMScanReason)aReason

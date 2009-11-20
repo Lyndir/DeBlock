@@ -15,6 +15,4 @@
     NSString                *logString;
 }
 
-+ (LogLayer *)get;
-
 @end
