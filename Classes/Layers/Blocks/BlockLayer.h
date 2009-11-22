@@ -92,6 +92,7 @@ typedef enum DMScanReason {
 - (BOOL)isLinkedToAdjecentBlock:(BlockLayer *)block forReason:(DMScanReason)aReason;
 - (NSMutableSet *)findLinkedBlocksInField:(FieldLayer *)field forReason:(DMScanReason)aReason
                                     atRow:(NSInteger)aRow col:(NSInteger)aCol;
+- (BOOL)isRecursingLinks;
 - (void)getLinksInField:(FieldLayer *)aField forReason:(DMScanReason)aReason
                    toSet:(NSMutableSet *)allLinkedBlocks;
 

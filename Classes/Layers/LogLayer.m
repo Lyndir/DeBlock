@@ -18,7 +18,7 @@
     if (!(self = [super init]))
         return nil;
     
-    self.background = [Sprite spriteWithFile:@"splash.png"];
+    self.background = [Sprite spriteWithFile:@"back.png"];
     logLabel = [[Label alloc] initWithString:@"" dimensions:CGSizeMake(self.contentSize.width * 0.8f, 1000)
                                    alignment:UITextAlignmentLeft fontName:[Config get].fixedFontName fontSize:[[Config get].smallFontSize intValue]];
     logLabel.anchorPoint = CGPointZero;

@@ -26,6 +26,8 @@
 #import "FieldLayer.h"
 #import "DeblockAppDelegate.h"
 
+#define dFreezeTime 30
+
 
 @implementation SpecialBlockLayer
 
@@ -37,11 +39,6 @@
     
     return [super isLinkedToAdjecentBlock:block forReason:aReason];
 }
-
-- (BOOL)scoreMultiplier {
-    
-    return 0;
-}
     
 
 @end
@@ -52,7 +49,7 @@
 
 + (NSUInteger)occurancePercentForLevel:(NSUInteger)level type:(DMBlockType)aType {
     
-    // Start at 5%.  Every five levels, reduce by 1%.  Minimum is 1% (at level 20).
+    // Start at 5%.  Every 5 levels, reduce by 1%.  Minimum is 1% (at level 20).
     return max(1, 5 - level / 5);
 }
 
@@ -87,11 +84,6 @@
     return linkedBlocks;
 }
 
-- (BOOL)scoreMultiplier {
-    
-    return 1;
-}
-
 @end
 
 
@@ -105,8 +97,8 @@
 
 + (NSUInteger)occurancePercentForLevel:(NSUInteger)level type:(DMBlockType)aType {
     
-    // Start at 0%.  Every 5 levels, add 1%.  Maximum is 7% (at level 35).
-    return min(7, level / 5);
+    // Start at 0%.  Every 5 levels, add 1%.  Maximum is 10% (at level 50).
+    return min(10, level / 5);
 }
 
 - (id)initWithType:(DMBlockType)aType blockSize:(CGSize)size {
@@ -138,11 +130,6 @@
     self.type = [[self class] randomType];
 }
 
-- (BOOL)scoreMultiplier {
-    
-    return 1;
-}
-
 - (BOOL)isLinkedToAdjecentBlock:(BlockLayer *)block forReason:(DMScanReason)aReason {
     
     if (aReason == DMScanReasonCheckState && self.destructible)
@@ -164,11 +151,11 @@
         // Don't allow multiple Zap blocks of the same type in the field.
         return 0;
     
-    if (level > 30)
-        // From level 30 on, no more zappers.
+    if (level > 40)
+        // From level 40 on, no more zappers.
         return 0;
     
-    // Start at 0%.  Every 8 levels, add 1%.  Maximum is 3% (at level 24).
+    // Start at 0%.  Every 8 levels, add 1%.  Maximum is 5% (at level 40).
     return min(3, level / 8);
 }
 
@@ -192,6 +179,11 @@
     return [super isLinkedToAdjecentBlock:block forReason:aReason];
 }
 
+- (BOOL)isRecursingLinks {
+    
+    return NO;
+}
+
 - (NSMutableSet *)findLinkedBlocksInField:(FieldLayer *)field forReason:(DMScanReason)aReason
                                     atRow:(NSInteger)aRow col:(NSInteger)aCol {
     
@@ -199,23 +191,33 @@
     for (NSInteger r = 0; r < field.blockRows; ++r) {
         for (NSInteger c = 0; c < field.blockColumns; ++c) {
             BlockLayer *block = [field blockAtRow:r col:c];
-            if (block == nil || block == self)
-                // Let's not destroy ourselves and non-existing blocks.
+            if (block == nil)
+                // Let's not destroy non-existing blocks.
                 continue;
             
-            if (![block isLinkedToAdjecentBlock:self forReason:aReason])
-                // Block is not linked to us by standard rules.
-                continue;
-            
-            if ([block isKindOfClass:[SpecialBlockLayer class]] && ![block isKindOfClass:[self class]])
-                // Don't zap specials (except for other zappers).
-                continue;
+            if (block != self) {
+                // Allow self either way.
+                
+                if (![block isLinkedToAdjecentBlock:self forReason:aReason])
+                    // Block is not linked to us by standard rules.
+                    continue;
+                
+                if ([block isKindOfClass:[SpecialBlockLayer class]])
+                    if (![block isKindOfClass:[FreezeBlockLayer class]])
+                        // Don't zap specials (except for freeze blocks, those are allowed to be zapped).
+                        continue;
+            }
             
             [linkedBlocks addObject:block];
         }
     }
     
     return linkedBlocks;
+}
+
+- (BOOL)scoreMultiplier {
+    
+    return 0;
 }
 
 @end
@@ -232,7 +234,7 @@
 + (NSUInteger)occurancePercentForLevel:(NSUInteger)level type:(DMBlockType)aType {
     
     // Start at 0%.  Every 10 levels, add 1%.  Maximum is 15% (at level 75).
-    return min(15, level / 5);
+    return min(15, level / 10);
 }
 
 - (id)initWithType:(DMBlockType)aType blockSize:(CGSize)size {
@@ -250,17 +252,12 @@
     
     [super onEnter];
     
-    timeLeft = 10;
+    timeLeft = dFreezeTime;
     [label setString:[NSString stringWithFormat:@"%d", max(0, timeLeft)]];
     [self runAction:[Sequence actionOne:[Repeat actionWithAction:[Sequence actionOne:[DelayTime actionWithDuration:1]
                                                                                  two:[CallFunc actionWithTarget:self selector:@selector(cool)]]
                                                            times:timeLeft]
                                     two:[CallFunc actionWithTarget:self selector:@selector(freeze)]]];
-}
-
-- (BOOL)scoreMultiplier {
-    
-    return 1;
 }
 
 - (void)cool {

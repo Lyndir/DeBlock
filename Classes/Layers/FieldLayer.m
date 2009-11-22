@@ -25,7 +25,7 @@
 #import "FieldLayer.h"
 #import "DeblockAppDelegate.h"
 
-#define kAllGridLevel   20
+#define kAllGridLevel   40
 #define kMinColumns     5
 #define kMaxColumns     10
 #define kMinRows        3

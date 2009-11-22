@@ -10,6 +10,7 @@
 #import "ASIFormDataRequest.h"
 #import "NSDictionary_JSONExtensions.h"
 #import "CryptUtils.h"
+#import "Reachability.h"
 
 #define dScoreWSThread          @"ScoreWSThread"
 #define dScoreServlet           @"/scores.json"
@@ -72,29 +73,70 @@
         
         return;
     }
-
-    NSAutoreleasePool *pool     = [NSAutoreleasePool new];
-    ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:[NSURL URLWithString:dScoreServlet
-                                                                            relativeToURL:[NSURL URLWithString:[DeblockConfig get].wsUrl]]];
-    NSValue *requestValue       = [NSValue valueWithPointer:request];
-    [request setDelegate:self];
-
-    if (player) {
-        NSDate *achievedDate    = [NSDate date];
-        NSNumber *timeStamp     = [NSNumber numberWithLongLong:[achievedDate timeIntervalSince1970] * 1000];
-        [[Logger get] inf:@"Submitting score %d for %@ at %@", player.score, player.onlineName, achievedDate];
-
-        [request setPostValue:[NSNumber numberWithInteger:player.score] forKey:@"score"];
-        [request setPostValue:player.onlineName forKey:@"name"];
-        [request setPostValue:player.pass forKey:@"pass"];
-        [request setPostValue:timeStamp forKey:@"date"];
-        [request setPostValue:[self checksumForName:player.onlineName withScore:player.score atTime:timeStamp] forKey:@"check"];
-    }
     
-    [requestsPlayer setObject:player? player: (id)[NSNull null] forKey:requestValue];
-    [request startAsynchronous];
-    [request retain];
-    [pool drain];
+    NSAutoreleasePool *pool     = [NSAutoreleasePool new];
+    @try {
+        [Reachability sharedReachability].hostName = [[NSURL URLWithString:[DeblockConfig get].wsUrl] host];
+        
+        switch ([[DeblockConfig get].compete unsignedIntValue]) {
+            case DbCompeteOff: {
+                // Online competing is disabled, don't connect.
+                return;
+            }
+                
+            case DbCompeteWiFiCarrier: {
+                if ([[Reachability sharedReachability] remoteHostStatus] == NotReachable) {
+                    // There is no active connection that can reach the Deblock Web Service.
+                    [[Logger get] dbg:@"Deblock web service (host: %@) not reachable.  Skipping online score submission/retrieval.",
+                     [Reachability sharedReachability].hostName];
+                    return;
+                }
+                
+                break;
+            }
+                
+            case DbCompeteWiFi: {
+                if ([[Reachability sharedReachability] remoteHostStatus] != ReachableViaWiFiNetwork) {
+                    // There is no active WiFi connection that can reach the Deblock Web Service.
+                    [[Logger get] dbg:@"Deblock web service (host: %@) not reachable via WiFi.  Skipping online score submission/retrieval.",
+                     [Reachability sharedReachability].hostName];
+                    return;
+                }
+                
+                break;
+            }
+                
+            default: {
+                [[Logger get] err:@"Compete setting of %@ not understood/implemented.  Fixing by resetting it to OFF.", [DeblockConfig get].compete];
+                [DeblockConfig get].compete = [NSNumber numberWithUnsignedInt:DbCompeteOff];
+                return;
+            }
+        }
+        
+        ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:[NSURL URLWithString:dScoreServlet
+                                                                                relativeToURL:[NSURL URLWithString:[DeblockConfig get].wsUrl]]];
+        NSValue *requestValue       = [NSValue valueWithPointer:request];
+        [request setDelegate:self];
+        
+        if (player) {
+            NSDate *achievedDate    = [NSDate date];
+            NSNumber *timeStamp     = [NSNumber numberWithLongLong:[achievedDate timeIntervalSince1970] * 1000];
+            [[Logger get] inf:@"Submitting score %d for %@ at %@", player.score, player.onlineName, achievedDate];
+            
+            [request setPostValue:[NSNumber numberWithInteger:player.score] forKey:@"score"];
+            [request setPostValue:player.onlineName forKey:@"name"];
+            [request setPostValue:player.pass forKey:@"pass"];
+            [request setPostValue:timeStamp forKey:@"date"];
+            [request setPostValue:[self checksumForName:player.onlineName withScore:player.score atTime:timeStamp] forKey:@"check"];
+        }
+        
+        [requestsPlayer setObject:player? player: (id)[NSNull null] forKey:requestValue];
+        [request startAsynchronous];
+        [request retain];
+    }
+    @finally {
+        [pool drain];
+    }
 }
 
 
@@ -113,11 +155,15 @@
     Player *player          = [requestsPlayer objectForKey:requestValue];
     if (player == (id)[NSNull null])
         player              = nil;
-    
+    [[Logger get] dbg:@"headers:\n%@", [request responseHeaders]];
+    [[Logger get] dbg:@"body:\n%@", [request responseString]];
+
     NSError *error          = nil;
     NSDictionary *playersScoreHistory = [NSDictionary dictionaryWithJSONData:[request responseData] error:&error];
     if (error)
         [[Logger get] err:@"Couldn't parse online scores: %@", error];
+    else if (![playersScoreHistory count])
+        [[Logger get] wrn:@"No scores in response."];
     else
         [DeblockConfig get].userScoreHistory = playersScoreHistory;
     
@@ -183,7 +229,7 @@
             self.alertPlayer.pass       = nil;
         
         // Retry if still enabled.
-        if ([[DeblockConfig get].compete boolValue])
+        if ([[DeblockConfig get].compete unsignedIntValue] != DbCompeteOff)
             [self submitScoreForPlayer:self.alertPlayer];
 
         // Clean up.
@@ -198,7 +244,7 @@
             [DeblockConfig get].compete = [NSNumber numberWithBool:NO];
         
         // Retry if still enabled.
-        if ([[DeblockConfig get].compete boolValue])
+        if ([[DeblockConfig get].compete unsignedIntValue] != DbCompeteOff)
             [self submitScoreForPlayer:self.alertPlayer];
         
         // Clean up.

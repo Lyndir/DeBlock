@@ -27,7 +27,7 @@
 
 - (id)init {
     
-    return [super initWithNibName:@"PlayerView" bundle:nil];
+    return [self initWithNibName:@"PlayerView" bundle:nil];
 }
 
 - (void)viewDidLoad {
@@ -47,7 +47,7 @@
     }
     
     [DeblockConfig get].userName = [self playerName];
-    if ([[DeblockConfig get].compete boolValue] && ![[DeblockConfig get] currentPlayer].onlineOk) {
+    if ([[DeblockConfig get].compete unsignedIntValue] != DbCompeteOff && ![[DeblockConfig get] currentPlayer].onlineOk) {
         self.alertCode = [[[UIAlertView alloc] initWithTitle:@"Online Code" message:
                            @"To submit your scores online, you need to create an online code.\nThis code will protect your progress in the competition from tampering."
                                                     delegate:self cancelButtonTitle:@"Okay" otherButtonTitles:nil] autorelease];

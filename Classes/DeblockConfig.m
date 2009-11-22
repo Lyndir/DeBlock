@@ -44,7 +44,7 @@
     [defaults registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
                                 [NSNumber numberWithLong:0x38343C00],                           cShadeColor,
 
-                                [NSNumber numberWithBool:NO],                                   cCompete,
+                                [NSNumber numberWithUnsignedInt:DbCompeteOff],                  cCompete,
                                 @"https://lhunath-deblock.appspot.com",                         cWsUrl,
                                 
                                 [NSArray arrayWithObjects:
@@ -172,9 +172,7 @@
         newScore = 0;
     
     [self currentPlayer].score = newScore;
-    
-    if ([[DeblockConfig get].compete boolValue])
-        [self saveScore];
+    [self saveScore];
 }
 
 - (void)saveScore {

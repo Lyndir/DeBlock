@@ -114,14 +114,14 @@
 - (void)startGame {
 
     if(running) {
-        NSLog(@"WARN: Tried to start a game while one's still running.");
+        [[Logger get] wrn:@"WARN: Tried to start a game while one's still running."];
         return;
     }
     
-    endReason                   = DbEndReasonEnded;
-    penaltyInterval             = 2;
-    [DeblockConfig get].levelScore   = [NSNumber numberWithInt:0];
-    [DeblockConfig get].levelPenalty = [NSNumber numberWithInt:0];
+    endReason                           = DbEndReasonEnded;
+    penaltyInterval                     = 2;
+    [DeblockConfig get].levelScore      = [NSNumber numberWithInt:0];
+    [DeblockConfig get].levelPenalty    = [NSNumber numberWithInt:0];
     [[DeblockAppDelegate get].hudLayer updateHudWasGood:YES];
     
     // Reset the game field and start the game.

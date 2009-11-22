@@ -25,7 +25,7 @@
 #import "AbstractAppDelegate.h"
 #import "GameLayer.h"
 #import "MenuLayer.h"
-#import "PlayerViewController.h"
+#import "SplashViewController.h"
 #import "ConfigMenuLayer.h"
 #import "DbHUDLayer.h"
 
@@ -33,7 +33,7 @@
 @interface DeblockAppDelegate : AbstractAppDelegate<MenuDelegate, ConfigMenuDelegate, UIAlertViewDelegate> {
 
 @private
-    PlayerViewController            *playerVC;
+    SplashViewController            *splashVC;
     
     GameLayer                       *gameLayer;
     MenuLayer                       *mainMenu, *moreMenu, *newGameMenu, *pausedMenu, *gameOverMenu;

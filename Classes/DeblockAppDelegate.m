@@ -95,11 +95,10 @@
         [self.alertWelcome show];
     }
     
-    if ([[DeblockConfig get].compete boolValue])
-        [[DeblockWSController get] reloadScores];
+    [[DeblockWSController get] reloadScores];
     
-    playerVC = [PlayerViewController new];
-    [window addSubview:playerVC.view];
+    splashVC = [SplashViewController new];
+    [window addSubview:splashVC.view];
     [window makeKeyAndVisible];
     
     mainMenu = [[MenuLayer menuWithDelegate:self logo:[MenuItemSpacer spacerLarge]
@@ -111,7 +110,7 @@
                  [MenuItemSpacer spacerSmall],
                  [MenuItemFont itemFromString:@"Strategy" target:self selector:@selector(strategy:)],
                  nil] retain];
-    mainMenu.background         = [Sprite spriteWithFile:@"splash.png"];
+    mainMenu.background         = [Sprite spriteWithFile:@"back.png"];
     mainMenu.outerPadding       = margin(100, 20, 10, 20);
     mainMenu.innerRatio         = 1/20.0f;
     mainMenu.opacity            = 0xcc;
@@ -126,7 +125,7 @@
                  [MenuItemSpacer spacerSmall],
                  [MenuItemFont itemFromString:@"Configuration" target:self selector:@selector(configuration:)],
                  nil] retain];
-    moreMenu.background         = [Sprite spriteWithFile:@"splash.png"];
+    moreMenu.background         = [Sprite spriteWithFile:@"back.png"];
     moreMenu.outerPadding       = margin(100, 20, 10, 20);
     moreMenu.innerRatio         = 1/20.0f;
     moreMenu.opacity            = 0xcc;
@@ -141,7 +140,7 @@
                     [MenuItemFont itemFromString:@"Classic" target:self selector:@selector(newClassicGame:)],
                     [MenuItemFont itemFromString:@"Timed" target:self selector:@selector(newTimedGame:)],
                     nil] retain];
-    newGameMenu.background      = [Sprite spriteWithFile:@"splash.png"];
+    newGameMenu.background      = [Sprite spriteWithFile:@"back.png"];
     newGameMenu.outerPadding    = margin(110, 20, 10, 20);
     newGameMenu.innerRatio      = 1/20.0f;
     newGameMenu.opacity         = 0xcc;
@@ -154,7 +153,7 @@
                    @selector(soundFx),
                    @selector(compete),
                    nil] retain];
-    configMenu.background       = [Sprite spriteWithFile:@"splash.png"];
+    configMenu.background       = [Sprite spriteWithFile:@"back.png"];
     configMenu.outerPadding     = margin(110, 20, 10, 20);
     configMenu.innerRatio       = 1/20.0f;
     configMenu.opacity          = 0xcc;
@@ -184,7 +183,7 @@
 
 - (void)showDirector {
 
-    [playerVC.view removeFromSuperview];
+    [splashVC.view removeFromSuperview];
     
     mainMenu.fadeNextEntry  = NO;
     [self pushLayer:mainMenu];
@@ -217,6 +216,20 @@
     else
         return nil;
 }
+
+
+- (NSMutableArray *)toggleItemsForSetting:(SEL)setting {
+    
+    if (setting == @selector(compete))
+        return [NSMutableArray arrayWithObjects:
+                [MenuItemFont itemFromString:@"Off"],
+                [MenuItemFont itemFromString:@"Over WiFi or Carrier"],
+                [MenuItemFont itemFromString:@"Only over WiFi"],
+                nil];
+    
+    return nil;
+}
+
 
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {

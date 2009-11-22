@@ -204,6 +204,11 @@ static NSDictionary *blockColors;
     return YES;
 }
 
+- (BOOL)isRecursingLinks {
+    
+    return YES;
+}
+
 - (NSMutableSet *)findLinkedBlocksInField:(FieldLayer *)field forReason:(DMScanReason)aReason
                                     atRow:(NSInteger)aRow col:(NSInteger)aCol {
     
@@ -244,9 +249,10 @@ static NSDictionary *blockColors;
 
     [allLinkedBlocks unionSet:myLinkedBlocks];
 
-    for (BlockLayer *block in myLinkedBlocks)
-        [block getLinksInField:aField forReason:aReason
-                         toSet:allLinkedBlocks];
+    if ([self isRecursingLinks])
+        for (BlockLayer *block in myLinkedBlocks)
+            [block getLinksInField:aField forReason:aReason
+                             toSet:allLinkedBlocks];
 }
 
 

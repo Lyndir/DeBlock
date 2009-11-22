@@ -33,7 +33,7 @@
     if (!(self = [super init]))
         return nil;
     
-    self.background = [Sprite spriteWithFile:@"splash.png"];
+    self.background = [Sprite spriteWithFile:@"back.png"];
     
     graph = [GraphNode new];
     [self addChild:graph];

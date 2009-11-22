@@ -41,6 +41,12 @@
 #define cUserName           NSStringFromSelector(@selector(userName))
 #define cUserScoreHistory   NSStringFromSelector(@selector(userScoreHistory))
 
+typedef enum DbCompete {
+    DbCompeteOff,
+    DbCompeteWiFiCarrier,
+    DbCompeteWiFi,
+} DbCompete;
+
 @interface DeblockConfig : Config {
 
     NSDictionary                                *_playersCached;
