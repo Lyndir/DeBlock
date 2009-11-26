@@ -140,9 +140,9 @@
 
     NSAutoreleasePool *pool = [NSAutoreleasePool new];
 
-    nameAlert = [[UIAlertView alloc] initWithTitle:@"Online Name" message:
-                 [NSString stringWithFormat:@"Change name to:", self.name]
-                                          delegate:self cancelButtonTitle:@"Save" otherButtonTitles:nil];
+    nameAlert = [[UIAlertView alloc] initWithTitle:l(@"dialog.title.name") message:
+                 [NSString stringWithFormat:l(@"dialog.text.name.ask"), self.name]
+                                          delegate:self cancelButtonTitle:l(@"button.save") otherButtonTitles:nil];
     [nameAlert addTextFieldWithValue:@"" label:@""];
 
     nameField                       = [nameAlert textFieldAtIndex:0];
@@ -158,9 +158,9 @@
 
     NSAutoreleasePool *pool = [NSAutoreleasePool new];
 
-    passAlert = [[UIAlertView alloc] initWithTitle:@"Online Code" message:
-                     [NSString stringWithFormat:@"Code for «%@»:", self.name]
-                                              delegate:self cancelButtonTitle:@"Save" otherButtonTitles:nil];
+    passAlert = [[UIAlertView alloc] initWithTitle:l(@"dialog.title.compete.code") message:
+                     [NSString stringWithFormat:l(@"dialog.text.compete.code.ask"), self.name]
+                                              delegate:self cancelButtonTitle:l(@"button.save") otherButtonTitles:nil];
     [passAlert addTextFieldWithValue:@"" label:@""];
 
     passField                       = [passAlert textFieldAtIndex:0];

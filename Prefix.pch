@@ -33,7 +33,7 @@ typedef enum DbMode {
     #import "DebugLayer.h"
     #import "DeblockConfig.h"
 
-    #define l(key, comment) \
+    #define l(key) \
         [[NSBundle mainBundle] localizedStringForKey:(key) value:@"" table:nil]
 
 #endif

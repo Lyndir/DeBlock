@@ -56,12 +56,12 @@
                                  @"",
                                  nil],                                                          cTracks,
                                 [NSArray arrayWithObjects:
-                                 @"Carriage House",
-                                 @"Marimba",
-                                 @"Staccato",
-                                 @"Mjolnir",
-                                 NSLocalizedString(@"config.song.random", @"Shuffle"),
-                                 NSLocalizedString(@"config.song.off", @"Off"),
+                                 l(@"menu.config.song.carriageHouse"),
+                                 l(@"menu.config.song.marimba"),
+                                 l(@"menu.config.song.staccato"),
+                                 l(@"menu.config.song.mjolnir"),
+                                 NSLocalizedString(@"config.song.random", l(@"menu.config.song.random")),
+                                 NSLocalizedString(@"config.song.off", l(@"button.off")),
                                  nil],                                                          cTrackNames,
 
                                 [NSNumber numberWithLong:0],                                    cLevelScore,

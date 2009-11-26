@@ -48,9 +48,9 @@
     
     [DeblockConfig get].userName = [self playerName];
     if ([[DeblockConfig get].compete unsignedIntValue] != DbCompeteOff && ![[DeblockConfig get] currentPlayer].onlineOk) {
-        self.alertCode = [[[UIAlertView alloc] initWithTitle:@"Online Code" message:
+        self.alertCode = [[[UIAlertView alloc] initWithTitle:l(@"dialog.title.compete.code") message:
                            @"To submit your scores online, you need to create an online code.\nThis code will protect your progress in the competition from tampering."
-                                                    delegate:self cancelButtonTitle:@"Okay" otherButtonTitles:nil] autorelease];
+                                                    delegate:self cancelButtonTitle:l(@"button.okay") otherButtonTitles:nil] autorelease];
         [self.alertCode show];
     }
     [[DeblockAppDelegate get] showDirector];

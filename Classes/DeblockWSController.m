@@ -174,12 +174,12 @@
     else if ([errorHeader isEqualToString:dErrorIncorrectPass] || [errorHeader isEqualToString:dErrorMissingPass]) {
         player.onlineOk     = NO;
         self.alertPlayer    = player;
-        self.alertPassword  = [[[UIAlertView alloc] initWithTitle:@"Online Name Taken" message:
+        self.alertPassword  = [[[UIAlertView alloc] initWithTitle:l(@"dialog.title.error.name.taken") message:
                                 [NSString stringWithFormat:
-                                 @"«%@» is already taken.",
+                                 l(@"dialog.text.error.name.taken"),
                                  self.alertPlayer.onlineName]
-                                                         delegate:self cancelButtonTitle:@"Don't Compete"
-                                                otherButtonTitles:@"Change Name", @"Change Code", nil] autorelease];
+                                                         delegate:self cancelButtonTitle:l(@"button.compete.no")
+                                                otherButtonTitles:l(@"button.change.name"), l(@"button.change.code"), nil] autorelease];
         [self.alertPassword show];
     }
 
@@ -202,9 +202,9 @@
     /* GAE isn't quite reliable enough for this to be on.
     id player               = [requestsPlayer objectForKey:requestValue];
     self.alertPlayer        = player == [NSNull null]? nil: player;
-    self.alertConnection    = [[[UIAlertView alloc] initWithTitle:@"Scores Unavailable" message:
+    self.alertConnection    = [[[UIAlertView alloc] initWithTitle:l(@"dialog.title.error.score.unavailable") message:
                                 @"Online scores were temporarily unavailable.\nDo you want to retry?"
-                                                         delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil] autorelease];
+                                                         delegate:self cancelButtonTitle:l(@"button.no") otherButtonTitles:l(@"button.yes"), nil] autorelease];
     [self.alertConnection show];
      */
     

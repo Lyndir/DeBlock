@@ -53,11 +53,11 @@
     
     if(running) {
         if(paused){
-            [[DeblockAppDelegate get].uiLayer message:NSLocalizedString(@"messages.paused", @"Paused")];
+            [[DeblockAppDelegate get].uiLayer message:NSLocalizedString(@"message.paused", @"Paused")];
         }
         
         else {
-            [[DeblockAppDelegate get].uiLayer message:NSLocalizedString(@"messages.unpaused", @"Unpaused")];
+            [[DeblockAppDelegate get].uiLayer message:NSLocalizedString(@"message.unpaused", @"Unpaused")];
         }
     }
 }

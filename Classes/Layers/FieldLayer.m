@@ -528,7 +528,7 @@
         
         if (!blocksLeft) {
             // No blocks left -> flawless finish.
-            [[DeblockAppDelegate get].uiLayer message:@"Flawless!"];
+            [[DeblockAppDelegate get].uiLayer message:l(@"message.flawless")];
             bonusPoints = [[DeblockConfig get].flawlessBonus intValue] * [[DeblockConfig get] currentPlayer].level;
             [self message:[NSString stringWithFormat:@"%+d", bonusPoints]
                        at:ccp(self.contentSize.width / 2, self.contentSize.height / 2)];
