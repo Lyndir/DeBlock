@@ -2,21 +2,74 @@
 "font.size.small"                       = "12";
 "font.size.normal"                      = "32";
 "font.size.large"                       = "48";
-//"font.family.default"                   = "Absolute";
+//"font.family.default"                 = "Absolute";
 "font.family.default"                   = "AdvertisersGothic-Regular";
-//"font.family.default"                   = "Bilbao-Poster-Black";
-//"font.family.default"                   = "MammaGamma";
+//"font.family.default"                 = "Bilbao-Poster-Black";
+//"font.family.default"                 = "MammaGamma";
 "font.family.fixed"                     = "Absolute";
 "font.family.symbolic"                  = "DejaVuSansMono";
 
 // Global Config
 "config.direction"                      = "ltr";
-"config.song.random"                    = "Shuffle";
-"config.song.off"                       = "Off";
 
-// Statistics
-"stats.topscore"                        = "Top Score: %04d";
+// Dialog Buttons
+"button.change.code"                    = "Change Code";
+"button.change.name"                    = "Change Name";
+"button.compete.no"                     = "Don't Compete";
+"button.no"                             = "No";
+"button.no.kind"                        = "Rather Not";
+"button.off"                            = "Off";
+"button.okay"                           = "Okay";
+"button.save"                           = "Save";
+"button.sure"                           = "Sure!";
+"button.thanks"                         = "Thanks";
+"button.yes"                            = "Yes";
 
-// Messages
-"messages.paused"                       = "Game Paused";
-"messages.unpaused"                     = "Game Resuming";
+// Menu Items
+"menu.config"                           = "Configuration";
+"menu.config.music"                     = "Music";
+"menu.config.song.carriageHouse"        = "Carriage House";
+"menu.config.song.marimba"              = "Marimba";
+"menu.config.song.mjolnir"              = "Mjolnir";
+"menu.config.song.staccato"             = "Staccato";
+"menu.config.song.random"               = "Shuffle";
+"menu.config.song.off"                  = "Off";
+"menu.config.sound"                     = "Sound Effects";
+"menu.config.wifi"                      = "Only over WiFi";
+"menu.config.wifi+carrier"              = "Over WiFi or Carrier";
+"menu.continue"                         = "Continue Game";
+"menu.game.end"                         = "End Game";
+"menu.game.mode.classic"                = "Classic";
+"menu.game.mode.timed"                  = "Timed";
+"menu.game.new"                         = "New Game";
+"menu.level.restart"                    = "Restart Level";
+"menu.level.retry"                      = "Retry Level";
+"menu.main"                             = "Main Menu";
+"menu.scores"                           = "Scores";
+"menu.strategy"                         = "Strategy";
+
+// Game Messages
+"message.flawless"                      = "Flawless!";
+"message.paused"                        = "Game Paused";
+"message.unpaused"                      = "Game Resuming";
+
+// Dialogs
+"dialog.title.compete"                  = "Compete Online";
+"dialog.text.compete"                   = "Would you like to compete online\nwith other Deblock players across the world?";
+"dialog.text.compete.later"             = "You can join online competition later by toggling it in the configuration.\n\nMain Menu ➡ More ➡ Configuration";
+
+"dialog.title.compete.code"             = "Online Code";
+"dialog.text.compete.code"              = "To submit your scores online, you need to create an online code.\nThis code will protect your progress in the competition from tampering.";
+"dialog.text.compete.code.ask"          = "Code for «%@»:";
+
+"dialog.title.error.name.taken"         = "Online Name Taken";
+"dialog.text.error.name.taken"          = "«%@» is already taken.";
+
+"dialog.title.error.score.unavailable"  = "Scores Unavailable";
+"dialog.text.error.score.unavailable"   = "Online scores were temporarily unavailable.\nDo you want to retry?";
+
+"dialog.title.firsttime"                = "Welcome to Deblock!";
+"dialog.text.firsttime.strategy"        = "Since this is your first time,\ncheck out the «Strategy» guide.\n\nMain Menu ➡ More ➡ Strategy";
+
+"dialog.title.name"                     = "Online Name";
+"dialog.text.name.ask"                  = "Change name to:";

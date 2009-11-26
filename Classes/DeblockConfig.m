@@ -56,7 +56,7 @@
                                  @"",
                                  nil],                                                          cTracks,
                                 [NSArray arrayWithObjects:
-                                 @"Carriage_House_Deblock",
+                                 @"Carriage House",
                                  @"Marimba",
                                  @"Staccato",
                                  @"Mjolnir",

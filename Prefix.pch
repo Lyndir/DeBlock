@@ -32,4 +32,8 @@ typedef enum DbMode {
     #import "GLUtils.h"
     #import "DebugLayer.h"
     #import "DeblockConfig.h"
+
+    #define l(key, comment) \
+        [[NSBundle mainBundle] localizedStringForKey:(key) value:@"" table:nil]
+
 #endif
