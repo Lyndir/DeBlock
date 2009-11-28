@@ -155,8 +155,6 @@
     Player *player          = [requestsPlayer objectForKey:requestValue];
     if (player == (id)[NSNull null])
         player              = nil;
-    [[Logger get] dbg:@"headers:\n%@", [request responseHeaders]];
-    [[Logger get] dbg:@"body:\n%@", [request responseString]];
 
     NSError *error          = nil;
     NSDictionary *playersScoreHistory = [NSDictionary dictionaryWithJSONData:[request responseData] error:&error];
@@ -174,10 +172,10 @@
     else if ([errorHeader isEqualToString:dErrorIncorrectPass] || [errorHeader isEqualToString:dErrorMissingPass]) {
         player.onlineOk     = NO;
         self.alertPlayer    = player;
-        self.alertPassword  = [[[UIAlertView alloc] initWithTitle:l(@"dialog.title.error.name.taken") message:
-                                [NSString stringWithFormat:
-                                 l(@"dialog.text.error.name.taken"),
-                                 self.alertPlayer.onlineName]
+        self.alertPassword  = [[[UIAlertView alloc] initWithTitle:l(@"dialog.title.error.name.taken")
+                                                          message:[NSString stringWithFormat:
+                                                                   l(@"dialog.text.error.name.taken"),
+                                                                   self.alertPlayer.onlineName]
                                                          delegate:self cancelButtonTitle:l(@"button.compete.no")
                                                 otherButtonTitles:l(@"button.change.name"), l(@"button.change.code"), nil] autorelease];
         [self.alertPassword show];
@@ -202,8 +200,8 @@
     /* GAE isn't quite reliable enough for this to be on.
     id player               = [requestsPlayer objectForKey:requestValue];
     self.alertPlayer        = player == [NSNull null]? nil: player;
-    self.alertConnection    = [[[UIAlertView alloc] initWithTitle:l(@"dialog.title.error.score.unavailable") message:
-                                @"Online scores were temporarily unavailable.\nDo you want to retry?"
+    self.alertConnection    = [[[UIAlertView alloc] initWithTitle:l(@"dialog.title.error.score.unavailable")
+                                                          message:l(@"dialog.text.error.score.unavailable")
                                                          delegate:self cancelButtonTitle:l(@"button.no") otherButtonTitles:l(@"button.yes"), nil] autorelease];
     [self.alertConnection show];
      */
@@ -218,7 +216,7 @@
 
         if (buttonIndex == [alertView cancelButtonIndex])
             // Don't Compete
-            [DeblockConfig get].compete = [NSNumber numberWithBool:NO];
+            [DeblockConfig get].compete = [NSNumber numberWithUnsignedInt:DbCompeteOff];
         
         else if (buttonIndex == [alertView firstOtherButtonIndex])
             // Change Name
@@ -241,7 +239,7 @@
         
         if (buttonIndex == [alertView cancelButtonIndex])
             // Don't Retry
-            [DeblockConfig get].compete = [NSNumber numberWithBool:NO];
+            [DeblockConfig get].compete = [NSNumber numberWithUnsignedInt:DbCompeteOff];
         
         // Retry if still enabled.
         if ([[DeblockConfig get].compete unsignedIntValue] != DbCompeteOff)

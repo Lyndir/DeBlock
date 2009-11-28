@@ -89,8 +89,8 @@
 - (void)prepareUi {
     
     if ([[Config get].firstRun boolValue]) {
-        self.alertWelcome = [[[UIAlertView alloc] initWithTitle:l(@"dialog.title.firsttime") message:
-                              @"Since this is your first time,\ncheck out the «Strategy» guide.\n\nMain Menu ➡ More ➡ Strategy"
+        self.alertWelcome = [[[UIAlertView alloc] initWithTitle:l(@"dialog.title.firsttime")
+                                                        message:l(@"dialog.text.firsttime.strategy")
                                                        delegate:self cancelButtonTitle:l(@"button.thanks") otherButtonTitles:nil] autorelease];
         [self.alertWelcome show];
     }
@@ -105,10 +105,13 @@
                                       items:
                  [MenuItemSpacer spacerNormal],
                  continueGame =
-                 [[MenuItemFont itemFromString:l(@"menu.continue") target:self selector:@selector(continueGame:)] retain],
-                 [MenuItemFont itemFromString:l(@"menu.game.new") target:self selector:@selector(newGame:)],
+                 [[MenuItemFont itemFromString:l(@"menu.continue")
+                                        target:self selector:@selector(continueGame:)] retain],
+                 [MenuItemFont itemFromString:l(@"menu.game.new")
+                                       target:self selector:@selector(newGame:)],
                  [MenuItemSpacer spacerSmall],
-                 [MenuItemFont itemFromString:l(@"menu.strategy") target:self selector:@selector(strategy:)],
+                 [MenuItemFont itemFromString:l(@"menu.strategy")
+                                       target:self selector:@selector(strategy:)],
                  nil] retain];
     mainMenu.background         = [Sprite spriteWithFile:@"back.png"];
     mainMenu.outerPadding       = margin(100, 20, 10, 20);
@@ -121,9 +124,11 @@
     moreMenu = [[MenuLayer menuWithDelegate:self logo:[MenuItemSpacer spacerLarge]
                                       items:
                  [MenuItemSpacer spacerNormal],
-                 [MenuItemFont itemFromString:l(@"menu.scores") target:self selector:@selector(scores:)],
+                 [MenuItemFont itemFromString:l(@"menu.scores")
+                                       target:self selector:@selector(scores:)],
                  [MenuItemSpacer spacerSmall],
-                 [MenuItemFont itemFromString:l(@"menu.config") target:self selector:@selector(configuration:)],
+                 [MenuItemFont itemFromString:l(@"menu.config")
+                                       target:self selector:@selector(configuration:)],
                  nil] retain];
     moreMenu.background         = [Sprite spriteWithFile:@"back.png"];
     moreMenu.outerPadding       = margin(100, 20, 10, 20);
@@ -137,8 +142,10 @@
     newGameMenu = [[MenuLayer menuWithDelegate:self logo:[MenuItemSpacer spacerLarge]
                                          items:
                     [MenuItemSpacer spacerNormal],
-                    [MenuItemFont itemFromString:l(@"menu.game.mode.classic") target:self selector:@selector(newClassicGame:)],
-                    [MenuItemFont itemFromString:l(@"menu.game.mode.timed") target:self selector:@selector(newTimedGame:)],
+                    [MenuItemFont itemFromString:l(@"menu.game.mode.classic")
+                                          target:self selector:@selector(newClassicGame:)],
+                    [MenuItemFont itemFromString:l(@"menu.game.mode.timed")
+                                          target:self selector:@selector(newTimedGame:)],
                     nil] retain];
     newGameMenu.background      = [Sprite spriteWithFile:@"back.png"];
     newGameMenu.outerPadding    = margin(110, 20, 10, 20);
@@ -164,18 +171,23 @@
     pausedMenu = [[MenuLayer menuWithDelegate:self logo:[MenuItemImage itemFromNormalImage:@"title.paused.png"
                                                                              selectedImage:@"title.paused.png"]
                                         items:
-                   [MenuItemFont itemFromString:l(@"menu.level.restart") target:self selector:@selector(levelRedo:)],
+                   [MenuItemFont itemFromString:l(@"menu.level.restart")
+                                         target:self selector:@selector(levelRedo:)],
                    [MenuItemSpacer spacerSmall],
-                   [MenuItemFont itemFromString:l(@"menu.main") target:self selector:@selector(stopGame:)],
-                   [MenuItemFont itemFromString:l(@"menu.game.end") target:self selector:@selector(endGame:)],
+                   [MenuItemFont itemFromString:l(@"menu.main")
+                                         target:self selector:@selector(stopGame:)],
+                   [MenuItemFont itemFromString:l(@"menu.game.end")
+                                         target:self selector:@selector(endGame:)],
                    nil] retain];
     [pausedMenu setBackButtonTarget:self selector:@selector(resumeGame:)];
     
     gameOverMenu = [[MenuLayer menuWithDelegate:self logo:[MenuItemImage itemFromNormalImage:@"title.gameover.png"
                                                                                selectedImage:@"title.gameover.png"]
                                           items:
-                     [MenuItemFont itemFromString:l(@"menu.game.end") target:self selector:@selector(endGame:)],
-                     [MenuItemFont itemFromString:l(@"menu.level.retry") target:self selector:@selector(levelRedo:)],
+                     [MenuItemFont itemFromString:l(@"menu.game.end")
+                                           target:self selector:@selector(endGame:)],
+                     [MenuItemFont itemFromString:l(@"menu.level.retry")
+                                           target:self selector:@selector(levelRedo:)],
                      nil] retain];
     
     [uiLayer addChild:gameLayer = [[GameLayer alloc] init]];
@@ -222,7 +234,7 @@
     
     if (setting == @selector(compete))
         return [NSMutableArray arrayWithObjects:
-                [MenuItemFont itemFromString:l(@"button.off")],
+                [MenuItemFont itemFromString:l(@"menu.config.off")],
                 [MenuItemFont itemFromString:l(@"menu.config.wifi+carrier")],
                 [MenuItemFont itemFromString:l(@"menu.config.wifi")],
                 nil];
@@ -235,8 +247,8 @@
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
 
     if (alertView == self.alertWelcome) {
-        self.alertCompete = [[[UIAlertView alloc] initWithTitle:l(@"dialog.title.compete") message:
-                              @"Would you like to compete online\nwith other Deblock players across the world?"
+        self.alertCompete = [[[UIAlertView alloc] initWithTitle:l(@"dialog.title.compete")
+                                                        message:l(@"dialog.text.compete")
                                                        delegate:self cancelButtonTitle:l(@"button.no.kind") otherButtonTitles:l(@"button.sure"), nil] autorelease];
         [self.alertCompete show];
 
@@ -244,13 +256,13 @@
     }
     else if (alertView == self.alertCompete) {
         if (buttonIndex == [alertView cancelButtonIndex]) {
-            [DeblockConfig get].compete = [NSNumber numberWithBool:NO];
-            [[[[UIAlertView alloc] initWithTitle:l(@"dialog.title.compete") message:
-               @"You can join online competition later by toggling it in the configuration.\n\nMain Menu ➡ More ➡ Configuration"
+            [DeblockConfig get].compete = [NSNumber numberWithUnsignedInt:DbCompeteOff];
+            [[[[UIAlertView alloc] initWithTitle:l(@"dialog.title.compete")
+                                         message:l(@"dialog.text.compete.later")
                                         delegate:nil cancelButtonTitle:l(@"button.thanks") otherButtonTitles:nil] autorelease] show];
         }
         else
-            [DeblockConfig get].compete = [NSNumber numberWithBool:YES];
+            [DeblockConfig get].compete = [NSNumber numberWithUnsignedInt:DbCompeteWiFiCarrier];
         
         self.alertCompete = nil;
     }

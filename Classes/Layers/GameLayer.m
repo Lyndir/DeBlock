@@ -52,13 +52,11 @@
     [self setPausedSilently:isPaused];
     
     if(running) {
-        if(paused){
-            [[DeblockAppDelegate get].uiLayer message:NSLocalizedString(@"message.paused", @"Paused")];
-        }
+        if(paused)
+            [[DeblockAppDelegate get].uiLayer message:l(@"message.paused")];
         
-        else {
-            [[DeblockAppDelegate get].uiLayer message:NSLocalizedString(@"message.unpaused", @"Unpaused")];
-        }
+        else
+            [[DeblockAppDelegate get].uiLayer message:l(@"message.unpaused")];
     }
 }
 
@@ -201,7 +199,8 @@
 
 -(void) started {
 
-    [[DeblockAppDelegate get].uiLayer message:[NSString stringWithFormat:@"Level %d", [[DeblockConfig get] currentPlayer].level]];
+    [[DeblockAppDelegate get].uiLayer message:[NSString stringWithFormat:l(@"message.level"),
+                                               [[DeblockConfig get] currentPlayer].level]];
     
     running = YES;
 
