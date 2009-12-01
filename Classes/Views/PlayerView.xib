@@ -92,15 +92,15 @@
 					<object class="IBUILabel" id="260338013">
 						<reference key="NSNextResponder" ref="191373211"/>
 						<int key="NSvFlags">289</int>
-						<string key="NSFrame">{{407, 141}, {73, 38}}</string>
+						<string key="NSFrame">{{390, 132}, {90, 57}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<bool key="IBUIOpaque">NO</bool>
 						<bool key="IBUIClipsSubviews">YES</bool>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
-						<string key="IBUIText">   &gt;   </string>
-						<object class="NSFont" key="IBUIFont" id="32127659">
-							<string key="NSName">AdvertisersGothic</string>
-							<double key="NSSize">32</double>
+						<string key="IBUIText"> ▹ </string>
+						<object class="NSFont" key="IBUIFont">
+							<string key="NSName">DejaVuSansMono</string>
+							<double key="NSSize">48</double>
 							<int key="NSfFlags">16</int>
 						</object>
 						<object class="NSColor" key="IBUITextColor" id="126128143">
@@ -148,7 +148,11 @@
 						<bool key="IBUIClipsSubviews">YES</bool>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="IBUIText">Player Name:</string>
-						<reference key="IBUIFont" ref="32127659"/>
+						<object class="NSFont" key="IBUIFont">
+							<string key="NSName">AdvertisersGothic</string>
+							<double key="NSSize">32</double>
+							<int key="NSfFlags">16</int>
+						</object>
 						<reference key="IBUITextColor" ref="126128143"/>
 						<nil key="IBUIHighlightedColor"/>
 						<int key="IBUIBaselineAdjustment">1</int>
@@ -243,10 +247,10 @@
 						<object class="NSMutableArray" key="children">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<reference ref="772643747"/>
-							<reference ref="260338013"/>
 							<reference ref="244244970"/>
 							<reference ref="152657730"/>
 							<reference ref="540070616"/>
+							<reference ref="260338013"/>
 						</object>
 						<reference key="parent" ref="0"/>
 						<string key="objectName">PlayerView</string>

@@ -32,13 +32,14 @@
 
 - (void)viewDidLoad {
     
-    // TODO: Localize "Player Name:"
-    
     self.playerField.text       = [DeblockConfig get].userName;
     self.playerSuggestion.text  = @"";
     
-    self.playerTitle.zFont      = [[FontManager sharedManager] zFontWithName:[Config get].fontName pointSize:[[Config get].fontSize intValue]];
-    self.next.zFont             = [[FontManager sharedManager] zFontWithName:[Config get].fontName pointSize:[[Config get].fontSize intValue]];
+    self.playerTitle.zFont      = [[FontManager sharedManager] zFontWithName:[Config get].fontName
+                                                                   pointSize:[[Config get].fontSize intValue]];
+    self.playerTitle.text       = l(@"menu.player.name");
+    self.next.zFont             = [[FontManager sharedManager] zFontWithName:[Config get].symbolicFontName
+                                                                   pointSize:[[Config get].largeFontSize intValue]];
 }
 
 - (void)touched {
