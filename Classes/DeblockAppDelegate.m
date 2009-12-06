@@ -114,8 +114,8 @@
                                        target:self selector:@selector(strategy:)],
                  nil] retain];
     mainMenu.background         = [Sprite spriteWithFile:@"back.png"];
-    mainMenu.outerPadding       = margin(100, 20, 10, 20);
-    mainMenu.innerRatio         = 1/20.0f;
+    mainMenu.outerPadding       = margin(100, 0, 10, 0);
+    mainMenu.innerRatio         = 0;
     mainMenu.opacity            = 0xcc;
     mainMenu.color              = ccc3(0x99, 0x99, 0xff);
     mainMenu.colorGradient      = ccc4(0xcc, 0xcc, 0xff, 0xcc);
@@ -131,8 +131,8 @@
                                        target:self selector:@selector(configuration:)],
                  nil] retain];
     moreMenu.background         = [Sprite spriteWithFile:@"back.png"];
-    moreMenu.outerPadding       = margin(100, 20, 10, 20);
-    moreMenu.innerRatio         = 1/20.0f;
+    moreMenu.outerPadding       = margin(100, 0, 10, 0);
+    moreMenu.innerRatio         = 0;
     moreMenu.opacity            = 0xcc;
     moreMenu.color              = ccc3(0x99, 0x99, 0xff);
     moreMenu.colorGradient      = ccc4(0xcc, 0xcc, 0xff, 0xcc);
@@ -148,8 +148,8 @@
                                           target:self selector:@selector(newTimedGame:)],
                     nil] retain];
     newGameMenu.background      = [Sprite spriteWithFile:@"back.png"];
-    newGameMenu.outerPadding    = margin(110, 20, 10, 20);
-    newGameMenu.innerRatio      = 1/20.0f;
+    newGameMenu.outerPadding    = margin(110, 0, 10, 0);
+    newGameMenu.innerRatio      = 0;
     newGameMenu.opacity         = 0xcc;
     newGameMenu.color           = ccc3(0x99, 0x99, 0xff);
     newGameMenu.colorGradient   = ccc4(0xcc, 0xcc, 0xff, 0xcc);
@@ -161,15 +161,15 @@
                    @selector(compete),
                    nil] retain];
     configMenu.background       = [Sprite spriteWithFile:@"back.png"];
-    configMenu.outerPadding     = margin(110, 20, 10, 20);
-    configMenu.innerRatio       = 1/20.0f;
+    configMenu.outerPadding     = margin(110, 0, 10, 0);
+    configMenu.innerRatio       = 0;
     configMenu.opacity          = 0xcc;
     configMenu.color            = ccc3(0x99, 0x99, 0xff);
     configMenu.colorGradient    = ccc4(0xcc, 0xcc, 0xff, 0xcc);
     configMenu.layout           = MenuLayoutColumns;
     
-    pausedMenu = [[MenuLayer menuWithDelegate:self logo:[MenuItemImage itemFromNormalImage:@"title.paused.png"
-                                                                             selectedImage:@"title.paused.png"]
+    pausedMenu = [[MenuLayer menuWithDelegate:self logo:[MenuItemImage itemFromNormalImage:@"title.game.paused.png"
+                                                                             selectedImage:@"title.game.paused.png"]
                                         items:
                    [MenuItemFont itemFromString:l(@"menu.level.restart")
                                          target:self selector:@selector(levelRedo:)],
@@ -181,8 +181,8 @@
                    nil] retain];
     [pausedMenu setBackButtonTarget:self selector:@selector(resumeGame:)];
     
-    gameOverMenu = [[MenuLayer menuWithDelegate:self logo:[MenuItemImage itemFromNormalImage:@"title.gameover.png"
-                                                                               selectedImage:@"title.gameover.png"]
+    gameOverMenu = [[MenuLayer menuWithDelegate:self logo:[MenuItemImage itemFromNormalImage:@"title.game.over.png"
+                                                                               selectedImage:@"title.game.over.png"]
                                           items:
                      [MenuItemFont itemFromString:l(@"menu.game.end")
                                            target:self selector:@selector(endGame:)],
