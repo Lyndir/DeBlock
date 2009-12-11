@@ -29,7 +29,7 @@
 @interface ScoresLayer : ShadeLayer {
 
 @private
-    GraphNode      *graph;
+    GraphNode      *_graph;
 }
 
 + (ScoresLayer *)get;

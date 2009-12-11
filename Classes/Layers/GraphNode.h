@@ -28,9 +28,9 @@
 @interface Score : NSObject {
 
 @private
-    NSInteger                                   score;
-    NSString                                    *username;
-    NSDate                                      *date;
+    NSInteger                                   _score;
+    NSString                                    *_username;
+    NSDate                                      *_date;
 }
 
 @property (readonly) NSInteger                  score;
@@ -50,18 +50,18 @@
 
 @interface GraphDataNode : ScrollLayer {
     
-    NSArray                                     *sortedScores;
-    NSInteger                                   topScore;
+    NSArray                                     *_sortedScores;
+    NSInteger                                   _topScore;
     
-    NSString                                    *scoreFormat;
-    NSDateFormatter                             *dateFormatter;
+    NSString                                    *_scoreFormat;
+    NSDateFormatter                             *_dateFormatter;
     
-    CGFloat                                     padding, barHeight;
-    NSUInteger                                  scoreCount, barCount;
+    CGFloat                                     _padding, _barHeight;
+    NSUInteger                                  _scoreCount, _barCount;
     
-    ccTime                                      animationTimeLeft;
-    GLuint                                      vertexBuffer;
-    Label                                       **scoreLabels;
+    ccTime                                      _animationTimeLeft;
+    GLuint                                      _vertexBuffer;
+    Label                                       **_scoreLabels;
 }
 
 /** The formatter to use when rendering score dates. */
@@ -82,10 +82,10 @@
 @interface GraphNode : CocosNode {
 
 @private
-    NSArray                                     *sortedScores;
-    SEL                                         comparator;
+    NSArray                                     *_sortedScores;
+    SEL                                         _comparator;
     
-    GraphDataNode                               *graphDataNode;
+    GraphDataNode                               *_graphDataNode;
 }
 
 /** The method on the Score object that will determine the order of rendered score appearance. */

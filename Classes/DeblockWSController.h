@@ -12,10 +12,10 @@
 
 @interface DeblockWSController : NSObject<ASIHTTPRequestDelegate, UIAlertViewDelegate> {
 
-    NSMutableDictionary     *requestsPlayer;
+    NSMutableDictionary     *_requestsPlayer;
     
-    UIAlertView             *alertPassword, *alertConnection;
-    Player                  *alertPlayer;
+    UIAlertView             *_alertPassword, *_alertConnection;
+    Player                  *_alertPlayer;
 }
 
 /**

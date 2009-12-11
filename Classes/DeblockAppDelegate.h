@@ -33,15 +33,15 @@
 @interface DeblockAppDelegate : AbstractAppDelegate<MenuDelegate, ConfigMenuDelegate, UIAlertViewDelegate> {
 
 @private
-    SplashViewController            *splashVC;
+    SplashViewController            *_splashVC;
     
-    GameLayer                       *gameLayer;
-    MenuLayer                       *mainMenu, *moreMenu, *newGameMenu, *pausedMenu, *gameOverMenu;
-    ConfigMenuLayer                 *configMenu;
+    GameLayer                       *_gameLayer;
+    MenuLayer                       *_mainMenu, *_moreMenu, *_newGameMenu, *_pausedMenu, *_gameOverMenu;
+    ConfigMenuLayer                 *_configMenu;
     
-    MenuItem                        *continueGame;
+    MenuItem                        *_continueGame;
     
-    UIAlertView                     *alertWelcome, *alertCompete;
+    UIAlertView                     *_alertWelcome, *_alertCompete;
 }
 
 @property (readonly) GameLayer      *gameLayer;

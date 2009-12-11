@@ -45,22 +45,22 @@ typedef enum DMScanReason {
 @interface BlockLayer : Layer<CocosNodeRGBA> {
 
 @protected
-    Texture2D                                   **textures;
-    Label                                       *label;
+    Texture2D                                   **_textures;
+    Label                                       *_label;
 
 @private
-    DMBlockType                                 type;
-    BOOL                                        destroyed;
-    BOOL                                        destructible;
+    DMBlockType                                 _type;
+    BOOL                                        _destroyed;
+    BOOL                                        _destructible;
     
-    NSInteger                                   targetRow, targetCol;
-    NSUInteger                                  frames, frame;
-    ccColor4B                                   blockColor;
-    ccColor4F                                   modColor;
+    NSInteger                                   _targetRow, _targetCol;
+    NSUInteger                                  _frames, _frame;
+    ccColor4B                                   _blockColor;
+    ccColor4F                                   _modColor;
     
-    IntervalAction                              *moveAction;
+    IntervalAction                              *_moveAction;
     
-    ParticleSystem                              *dropEmitter;
+    ParticleSystem                              *_dropEmitter;
 }
 
 @property (readwrite) DMBlockType               type;

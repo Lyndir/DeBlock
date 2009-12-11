@@ -11,14 +11,14 @@
 
 @interface PlayerViewController : UIViewController<UITextFieldDelegate, ButtonFontLabelDelegate> {
 
-    FontLabel                   *playerTitle;
+    FontLabel                   *_playerTitle;
 
-    UITextField                 *playerField;
-    UILabel                     *playerSuggestion;
+    UITextField                 *_playerField;
+    UILabel                     *_playerSuggestion;
 
-    ButtonFontLabel             *next;
+    ButtonFontLabel             *_next;
     
-    UIAlertView                 *alertCode;
+    UIAlertView                 *_alertCode;
 }
 
 @property (retain) IBOutlet FontLabel       *playerTitle;

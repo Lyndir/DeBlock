@@ -18,7 +18,7 @@
 @interface ButtonFontLabel : FontLabel {
     
 @private
-    id<ButtonFontLabelDelegate>                             delegate;
+    id<ButtonFontLabelDelegate>                             _delegate;
 }
 
 @property (readwrite, retain) id<ButtonFontLabelDelegate>   delegate;

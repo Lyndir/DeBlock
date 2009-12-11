@@ -56,8 +56,8 @@
 
 @implementation DeblockAppDelegate
 
-@synthesize gameLayer;
-@synthesize alertWelcome, alertCompete;
+@synthesize gameLayer = _gameLayer;
+@synthesize alertWelcome = _alertWelcome, alertCompete = _alertCompete;
 
 
 #pragma mark ###############################

@@ -12,7 +12,7 @@
 
 @interface StrategyLayer : ShadeLayer {
 
-    FlickLayer                  *guide;
+    FlickLayer                  *_guide;
 }
 
 @end

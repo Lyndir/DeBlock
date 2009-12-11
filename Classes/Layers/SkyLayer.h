@@ -27,12 +27,12 @@
 
 @interface SkyLayer : Layer <Resettable> {
 
-    BOOL                    fancySky;
+    BOOL                    _fancySky;
 
-    ccColor4B               skyColorFrom, skyColorTo;
-    Texture2D               **clouds;
+    ccColor4B               _skyColorFrom, _skyColorTo;
+    Texture2D               **_clouds;
     
-    CGFloat                 cloudsX;
+    CGFloat                 _cloudsX;
 }
 
 @end

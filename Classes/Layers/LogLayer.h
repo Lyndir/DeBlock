@@ -11,8 +11,8 @@
 
 @interface LogLayer : ShadeLayer {
 
-    Label                   *logLabel;
-    NSString                *logString;
+    Label                   *_logLabel;
+    NSString                *_logString;
 }
 
 @end

@@ -19,12 +19,12 @@
     BOOL                                _onlineOk;
     
     NSConditionLock                     *_nameLock;
-    UIAlertView                         *nameAlert;
-    UITextField                         *nameField;
+    UIAlertView                         *_nameAlert;
+    UITextField                         *_nameField;
 
     NSConditionLock                     *_passLock;
-    UIAlertView                         *passAlert;
-    UITextField                         *passField;
+    UIAlertView                         *_passAlert;
+    UITextField                         *_passField;
 }
 
 @property (readwrite, copy) NSString    *name;

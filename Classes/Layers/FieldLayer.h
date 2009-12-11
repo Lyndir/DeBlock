@@ -28,14 +28,14 @@
 @interface FieldLayer : Layer <Resettable> {
 
 @private
-    Label                       *msgLabel;
+    Label                       *_msgLabel;
 
-    BOOL                        locked;
+    BOOL                        _locked;
 
-    NSInteger                   blockRows, blockColumns;
-    NSInteger                   gravityRow, gravityColumn;
-    CGFloat                     blockPadding;    
-    BlockLayer                  ***blockGrid;
+    NSInteger                   _blockRows, _blockColumns;
+    NSInteger                   _gravityRow, _gravityColumn;
+    CGFloat                     _blockPadding;    
+    BlockLayer                  ***_blockGrid;
 }
 
 @property (readonly) BOOL       locked;

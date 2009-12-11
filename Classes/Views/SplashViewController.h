@@ -11,7 +11,7 @@
 
 @interface SplashViewController : UIViewController {
 
-    UIImageView                                     *top, *bottom;
+    UIImageView                                     *_top, *_bottom;
 }
 
 @property (readwrite, retain) IBOutlet UIImageView  *top;
