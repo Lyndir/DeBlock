@@ -34,17 +34,17 @@
 
 @private
     SplashViewController            *_splashVC;
-    
+
     GameLayer                       *_gameLayer;
     MenuLayer                       *_mainMenu, *_moreMenu, *_newGameMenu, *_pausedMenu, *_gameOverMenu;
     ConfigMenuLayer                 *_configMenu;
-    
+
     MenuItem                        *_continueGame;
-    
+
     UIAlertView                     *_alertWelcome, *_alertCompete;
 }
 
-@property (readonly) GameLayer      *gameLayer;
+@property (readonly, retain) GameLayer      *gameLayer;
 
 +(DeblockAppDelegate *) get;
 

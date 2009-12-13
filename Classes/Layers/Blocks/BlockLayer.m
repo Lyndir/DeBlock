@@ -35,14 +35,33 @@
 
 - (void)randomEvent:(ccTime)dt;
 
+@property (readwrite, assign) Texture2D                                   **textures;
+@property (readwrite, retain) Label                                       *label;
+
+
+@property (readwrite, assign) NSUInteger                                  frames;
+@property (readwrite, assign) ccColor4B                                   blockColor;
+
+
+@property (readwrite, retain) ParticleSystem                              *dropEmitter;
+
 @end
 
 
 @implementation BlockLayer
 
-@synthesize type, destroyed, destructible, moveAction;
-@synthesize targetRow, targetCol;
-@synthesize frames, frame, modColor;
+@synthesize textures = _textures;
+@synthesize label = _label;
+@synthesize type = _type;
+@synthesize destroyed = _destroyed;
+@synthesize destructible = _destructible;
+@synthesize targetRow = _targetRow, targetCol = _targetCol;
+@synthesize frames = _frames, frame = _frame;
+@synthesize blockColor = _blockColor;
+@synthesize modColor = _modColor;
+@synthesize moveAction = _moveAction;
+@synthesize dropEmitter = _dropEmitter;
+
 
 static NSDictionary *blockColors;
 
@@ -163,19 +182,19 @@ static NSDictionary *blockColors;
     self.destructible   = YES;
     self.modColor       = ccc4f(1, 1, 1, 1);
 
-    frames              = 11;
-    frame               = 0;
-    textures            = malloc(sizeof(Texture2D *) * frames);
-    textures[0]         = [[[TextureMgr sharedTextureMgr] addImage:@"block.whole.png"] retain];
+    self.frames              = 11;
+    self.frame               = 0;
+    self.textures            = malloc(sizeof(Texture2D *) * self.frames);
+    self.textures[0]         = [[[TextureMgr sharedTextureMgr] addImage:@"block.whole.png"] retain];
     for (NSUInteger i = 1; i < 11; ++i)
-        textures[i]     = [[[TextureMgr sharedTextureMgr] addImage:[NSString stringWithFormat:@"block.cracked.%d.png", i]] retain];
+        self.textures[i]     = [[[TextureMgr sharedTextureMgr] addImage:[NSString stringWithFormat:@"block.cracked.%d.png", i]] retain];
 
-    label               = [[Label alloc] initWithString:@"" dimensions:size
-                                              alignment:UITextAlignmentCenter
-                                               fontName:[Config get].fixedFontName
-                                               fontSize:size.height * 3 / 4];
-    label.position      = ccp(size.width / 2, size.height / 2);
-    [self addChild:label];
+    self.label               = [Label labelWithString:@"" dimensions:size
+                                            alignment:UITextAlignmentCenter
+                                             fontName:[Config get].fixedFontName
+                                             fontSize:size.height * 3 / 4];
+    self.label.position      = ccp(size.width / 2, size.height / 2);
+    [self addChild:self.label];
     
     self.isTouchEnabled      = YES;
     
@@ -258,39 +277,39 @@ static NSDictionary *blockColors;
 
 - (void)notifyDropped {
 
-    if (dropEmitter)
-        [dropEmitter resetSystem];
+    if (self.dropEmitter)
+        [self.dropEmitter resetSystem];
     
     else {
-        dropEmitter                     = [[ParticleSmoke alloc] initWithTotalParticles:1000];
-        dropEmitter.duration            = 0.2f;
-        dropEmitter.life                = 0.7f;
-        dropEmitter.lifeVar             = 0.3f;
-        dropEmitter.speed               = 15;
-        dropEmitter.speedVar            = 3;
-        dropEmitter.startSize           = 3;
-        dropEmitter.startSizeVar        = 2;
-        dropEmitter.endSize             = 10;
-        dropEmitter.endSizeVar          = 3;
-        dropEmitter.angle               = 90;
-        dropEmitter.angleVar            = 90;
-        dropEmitter.gravity             = ccp(0, -5);
-        dropEmitter.posVar              = ccp(self.contentSize.width / 2, 0);
-        dropEmitter.position            = CGPointZero;
+        self.dropEmitter                     = [[[ParticleSmoke alloc] initWithTotalParticles:1000] autorelease];
+        self.dropEmitter.duration            = 0.2f;
+        self.dropEmitter.life                = 0.7f;
+        self.dropEmitter.lifeVar             = 0.3f;
+        self.dropEmitter.speed               = 15;
+        self.dropEmitter.speedVar            = 3;
+        self.dropEmitter.startSize           = 3;
+        self.dropEmitter.startSizeVar        = 2;
+        self.dropEmitter.endSize             = 10;
+        self.dropEmitter.endSizeVar          = 3;
+        self.dropEmitter.angle               = 90;
+        self.dropEmitter.angleVar            = 90;
+        self.dropEmitter.gravity             = ccp(0, -5);
+        self.dropEmitter.posVar              = ccp(self.contentSize.width / 2, 0);
+        self.dropEmitter.position            = CGPointZero;
 #if TARGET_IPHONE_SIMULATOR
-        dropEmitter.startColor          = ccc4f(1, 1, 1, 0.3f);
-        dropEmitter.endColor            = ccc4f(1, 1, 1, 0);
+        self.dropEmitter.startColor          = ccc4f(1, 1, 1, 0.3f);
+        self.dropEmitter.endColor            = ccc4f(1, 1, 1, 0);
 #else
-        dropEmitter.startColor          = ccc4f(0.3f, 0.3f, 0.3f, 0.3f);
-        dropEmitter.endColor            = ccc4f(0, 0, 0, 0);
+        self.dropEmitter.startColor          = ccc4f(0.3f, 0.3f, 0.3f, 0.3f);
+        self.dropEmitter.endColor            = ccc4f(0, 0, 0, 0);
 #endif
-        dropEmitter.autoRemoveOnFinish  = YES;
+        self.dropEmitter.autoRemoveOnFinish  = YES;
     }
 
-    if (!dropEmitter.parent)
-        [self.parent addChild:dropEmitter];
+    if (!self.dropEmitter.parent)
+        [self.parent addChild:self.dropEmitter];
 
-    dropEmitter.centerOfGravity = ccp(self.position.x + self.contentSize.width / 2, self.position.y);
+    self.dropEmitter.centerOfGravity = ccp(self.position.x + self.contentSize.width / 2, self.position.y);
 }
 
 
@@ -301,9 +320,8 @@ static NSDictionary *blockColors;
 
 - (void)notifyDestroyed {
     
-    [dropEmitter stopSystem];
-    [dropEmitter release];
-    dropEmitter = nil;
+    [self.dropEmitter stopSystem];
+    self.dropEmitter = nil;
     
     [self.parent removeChild:self cleanup:YES];
 }
@@ -311,61 +329,57 @@ static NSDictionary *blockColors;
 
 - (void)setTargetRow:(NSInteger)r {
     
-    targetRow = r;
+    _targetRow = r;
     //[label setString:[NSString stringWithFormat:@"%d,%d", targetRow, targetCol]];
 }
 
 
 - (void)setTargetCol:(NSInteger)c {
     
-    targetCol = c;
+    _targetCol = c;
     //[label setString:[NSString stringWithFormat:@"%d,%d", targetRow, targetCol]];
 }
 
 
 - (ccColor3B)color {
     
-    return ccc3(blockColor.r, blockColor.g, blockColor.b);
+    return ccc3(self.blockColor.r, self.blockColor.g, self.blockColor.b);
 }
 
 
 - (GLubyte)opacity {
     
-    return blockColor.a;
+    return self.blockColor.a;
 }
 
 
 - (void)setColor:(ccColor3B)color {
     
-    blockColor.r = color.r;
-    blockColor.g = color.g;
-    blockColor.b = color.b;
+    self.blockColor = ccc4(color.r, color.g, color.b, self.blockColor.a);
 }
 
 
 - (void)setOpacity:(GLubyte)a {
     
-    blockColor.a = a;
+    self.blockColor = ccc4(self.blockColor.r, self.blockColor.g, self.blockColor.b, a);
 }
 
 
 - (void)setColorMultiplier:(CGFloat)m {
     
-    modColor.r = m;
-    modColor.g = m;
-    modColor.b = m;
+    self.modColor = ccc4f(m, m, m, self.modColor.a);
 }
 
 
 - (void)setType:(DMBlockType)aType {
     
-    type = aType;
-    ccColor4B targetColor = [[self class] colorForType:type];
+    _type = aType;
+    ccColor4B targetColor = [[self class] colorForType:self.type];
     
     if (self.parent)
         [self runAction:[TintTo actionWithDuration:0.2f red:targetColor.r green:targetColor.g blue:targetColor.b]];
     else
-        blockColor = targetColor;
+        self.blockColor = targetColor;
 }
 
 
@@ -417,7 +431,7 @@ static NSDictionary *blockColors;
     
     PropertyAction *animateFrames      = [PropertyAction actionWithDuration:0.4f key:@"frame"
                                                                    from:[NSNumber numberWithUnsignedInt:0]
-                                                                     to:[NSNumber numberWithUnsignedInt:frames - 1]];
+                                                                     to:[NSNumber numberWithUnsignedInt:self.frames - 1]];
     
     ParticleSystem *crumbleEmitter      = [[ParticleSmoke alloc] initWithTotalParticles:1000];
     crumbleEmitter.duration             = animateFrames.duration;
@@ -457,24 +471,24 @@ static NSDictionary *blockColors;
 
 - (BOOL)moving {
     
-    return moveAction && ![moveAction isDone];
+    return self.moveAction && ![self.moveAction isDone];
 }
 
 
 - (BOOL)valid {
     
-    return !self.moving && !destroyed && destructible;
+    return !self.moving && !self.destroyed && self.destructible;
 }
 
 
 - (void)draw {
 
     //CGPoint to    = CGPointMake(self.contentSize.width, self.contentSize.height);
-    ccColor4B fromC = blockColor;
-    fromC.r         = fminf(0xff, fmaxf(0x00, fromC.r * modColor.r));
-    fromC.g         = fminf(0xff, fmaxf(0x00, fromC.g * modColor.g));
-    fromC.b         = fminf(0xff, fmaxf(0x00, fromC.b * modColor.b));
-    fromC.a         = fminf(0xff, fmaxf(0x00, fromC.a * modColor.a));
+    ccColor4B fromC = self.blockColor;
+    fromC.r         = fminf(0xff, fmaxf(0x00, fromC.r * self.modColor.r));
+    fromC.g         = fminf(0xff, fmaxf(0x00, fromC.g * self.modColor.g));
+    fromC.b         = fminf(0xff, fmaxf(0x00, fromC.b * self.modColor.b));
+    fromC.a         = fminf(0xff, fmaxf(0x00, fromC.a * self.modColor.a));
     ccColor4B toC   = fromC;
     toC.r           = fmaxf(0x00, toC.r * 0.5f);
     toC.g           = fmaxf(0x00, toC.g * 0.5f);
@@ -490,7 +504,7 @@ static NSDictionary *blockColors;
     CGRect textureRect;
     textureRect.origin = CGPointZero;
     textureRect.size   = self.contentSize;
-    [textures[frame] drawInRect:textureRect];
+    [self.textures[self.frame] drawInRect:textureRect];
 	
 	// is this chepear than saving/restoring color state ?
 	glColor4ub( 255, 255, 255, 255);

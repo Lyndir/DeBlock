@@ -15,9 +15,9 @@
     NSString                            *_pass;
     NSInteger                           _score;
     NSUInteger                          _level;
-    
+
     BOOL                                _onlineOk;
-    
+
     NSConditionLock                     *_nameLock;
     UIAlertView                         *_nameAlert;
     UITextField                         *_nameField;
@@ -28,7 +28,7 @@
 }
 
 @property (readwrite, copy) NSString    *name;
-@property (readonly) NSString           *onlineName;
+@property (readonly, retain) NSString           *onlineName;
 @property (readwrite, copy) NSString    *pass;
 @property (readwrite) NSInteger         score;
 @property (readwrite) NSUInteger        level;

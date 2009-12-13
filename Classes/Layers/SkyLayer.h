@@ -31,7 +31,7 @@
 
     ccColor4B               _skyColorFrom, _skyColorTo;
     Texture2D               **_clouds;
-    
+
     CGFloat                 _cloudsX;
 }
 

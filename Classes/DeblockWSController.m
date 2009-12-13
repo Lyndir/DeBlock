@@ -27,16 +27,22 @@
 
 - (NSString *)checksumForName:(NSString *)name withScore:(NSInteger)score atTime:(NSNumber *)timeStamp;
 
-@property (readwrite, retain) UIAlertView   *alertPassword;
-@property (readwrite, retain) UIAlertView   *alertConnection;
-@property (readwrite, retain) Player        *alertPlayer;
+
+@property (readwrite, retain) NSMutableDictionary     *requestsPlayer;
+
+@property (readwrite, retain) UIAlertView             *alertPassword;
+@property (readwrite, retain) UIAlertView             *alertConnection;
+@property (readwrite, retain) Player                  *alertPlayer;
 
 @end
 
 
 @implementation DeblockWSController
 
-@synthesize alertPlayer, alertPassword, alertConnection;
+@synthesize requestsPlayer = _requestsPlayer;
+@synthesize alertPassword = _alertPassword, alertConnection = _alertConnection;
+@synthesize alertPlayer = _alertPlayer;
+
 
 + (DeblockWSController *)get {
     
@@ -52,7 +58,7 @@
     if (!(self = [super init]))
         return nil;
     
-    requestsPlayer = [NSMutableDictionary new];
+    self.requestsPlayer = [NSMutableDictionary dictionary];
     
     return self;
 }
@@ -130,7 +136,7 @@
             [request setPostValue:[self checksumForName:player.onlineName withScore:player.score atTime:timeStamp] forKey:@"check"];
         }
         
-        [requestsPlayer setObject:player? player: (id)[NSNull null] forKey:requestValue];
+        [self.requestsPlayer setObject:player? player: (id)[NSNull null] forKey:requestValue];
         [request startAsynchronous];
         [request retain];
     }
@@ -152,7 +158,7 @@
 - (void)requestFinished:(ASIHTTPRequest *)request {
     
     NSValue *requestValue   = [NSValue valueWithPointer:request];
-    Player *player          = [requestsPlayer objectForKey:requestValue];
+    Player *player          = [self.requestsPlayer objectForKey:requestValue];
     if (player == (id)[NSNull null])
         player              = nil;
 
@@ -186,7 +192,7 @@
         [self submitScoreForPlayer:player];
     }
     
-    [requestsPlayer removeObjectForKey:requestValue];
+    [self.requestsPlayer removeObjectForKey:requestValue];
     [request release];
 }
 
@@ -198,7 +204,7 @@
     [[Logger get] err:@"Couldn't fetch online scores from %@: %@", request.url, request.error];
 
     /* GAE isn't quite reliable enough for this to be on.
-    id player               = [requestsPlayer objectForKey:requestValue];
+    id player               = [self.requestsPlayer objectForKey:requestValue];
     self.alertPlayer        = player == [NSNull null]? nil: player;
     self.alertConnection    = [[[UIAlertView alloc] initWithTitle:l(@"dialog.title.error.score.unavailable")
                                                           message:l(@"dialog.text.error.score.unavailable")
@@ -206,7 +212,7 @@
     [self.alertConnection show];
      */
     
-    [requestsPlayer removeObjectForKey:requestValue];
+    [self.requestsPlayer removeObjectForKey:requestValue];
     [request release];
 }
 

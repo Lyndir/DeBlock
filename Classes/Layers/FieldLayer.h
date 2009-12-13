@@ -34,7 +34,7 @@
 
     NSInteger                   _blockRows, _blockColumns;
     NSInteger                   _gravityRow, _gravityColumn;
-    CGFloat                     _blockPadding;    
+    CGFloat                     _blockPadding;
     BlockLayer                  ***_blockGrid;
 }
 

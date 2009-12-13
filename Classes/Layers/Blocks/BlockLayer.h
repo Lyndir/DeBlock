@@ -52,14 +52,14 @@ typedef enum DMScanReason {
     DMBlockType                                 _type;
     BOOL                                        _destroyed;
     BOOL                                        _destructible;
-    
+
     NSInteger                                   _targetRow, _targetCol;
     NSUInteger                                  _frames, _frame;
     ccColor4B                                   _blockColor;
     ccColor4F                                   _modColor;
-    
+
     IntervalAction                              *_moveAction;
-    
+
     ParticleSystem                              *_dropEmitter;
 }
 

@@ -25,22 +25,32 @@
 #import "DbHUDLayer.h"
 
 
+@interface DbHUDLayer ()
+
+@property (readwrite, retain) LabelAtlas          *levelScoreCount;
+@property (readwrite, retain) LabelAtlas          *levelPenaltyCount;
+
+@end
+
+
 @implementation DbHUDLayer
+
+@synthesize levelScoreCount = _levelScoreCount, levelPenaltyCount = _levelPenaltyCount;
 
 - (id)init {
     
     if (!(self = [super init]))
         return nil;
     
-    levelScoreCount             = [[LabelAtlas alloc] initWithString:@""
-                                                         charMapFile:@"bonk.png" itemWidth:13 itemHeight:26 startCharMap:' '];
-    levelScoreCount.color       = ccc3(0x99, 0xFF, 0x99);
-    [self addChild:levelScoreCount];
+    self.levelScoreCount             = [LabelAtlas labelAtlasWithString:@""
+                                                            charMapFile:@"bonk.png" itemWidth:13 itemHeight:26 startCharMap:' '];
+    self.levelScoreCount.color       = ccc3(0x99, 0xFF, 0x99);
+    [self addChild:self.levelScoreCount];
     
-    levelPenaltyCount           = [[LabelAtlas alloc] initWithString:@""
-                                                         charMapFile:@"bonk.png" itemWidth:13 itemHeight:26 startCharMap:' '];
-    levelPenaltyCount.color     = ccc3(0xFF, 0x99, 0x99);
-    [self addChild:levelPenaltyCount];
+    self.levelPenaltyCount           = [LabelAtlas labelAtlasWithString:@""
+                                                            charMapFile:@"bonk.png" itemWidth:13 itemHeight:26 startCharMap:' '];
+    self.levelPenaltyCount.color     = ccc3(0xFF, 0x99, 0x99);
+    [self addChild:self.levelPenaltyCount];
     
     return self;
 }
@@ -55,13 +65,13 @@
     NSString *levelScore        = [NSString stringWithFormat:@"%+04d", [[DeblockConfig get].levelScore intValue]];
     NSString *levelPenalty      = [NSString stringWithFormat:@"%+04d", [[DeblockConfig get].levelPenalty intValue]];
     
-    levelScoreCount.position    = ccp(scoreCount.position.x + 13 * gameScore.length, scoreCount.position.y);
-    [levelScoreCount setString:levelScore];
+    self.levelScoreCount.position    = ccp(scoreCount.position.x + 13 * gameScore.length, scoreCount.position.y);
+    [self.levelScoreCount setString:levelScore];
     
-    levelPenaltyCount.visible = [[DeblockConfig get].gameMode unsignedIntValue] == DbModeTimed;
-    if (levelPenaltyCount.visible) {
-        levelPenaltyCount.position  = ccp(scoreCount.position.x + 13 * (gameScore.length + levelScore.length), scoreCount.position.y);
-        [levelPenaltyCount setString:levelPenalty];
+    self.levelPenaltyCount.visible = [[DeblockConfig get].gameMode unsignedIntValue] == DbModeTimed;
+    if (self.levelPenaltyCount.visible) {
+        self.levelPenaltyCount.position  = ccp(scoreCount.position.x + 13 * (gameScore.length + levelScore.length), scoreCount.position.y);
+        [self.levelPenaltyCount setString:levelPenalty];
     }
 }
 

@@ -16,7 +16,7 @@
 @end
 
 @interface ButtonFontLabel : FontLabel {
-    
+
 @private
     id<ButtonFontLabelDelegate>                             _delegate;
 }

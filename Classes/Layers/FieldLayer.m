@@ -31,7 +31,7 @@
 #define kMinRows        3
 #define kMaxRows        8
 
-@interface FieldLayer (Private)
+@interface FieldLayer ()
 
 - (NSInteger)destroyBlock:(BlockLayer *)aBlock forced:(BOOL)forced;
 - (void)destroySingleBlock:(BlockLayer *)aBlock;
@@ -49,12 +49,29 @@
 - (void)blinkAll;
 - (void)destroyAll;
 
+@property (readwrite, retain) Label                       *msgLabel;
+
+@property (readwrite, assign) BOOL                        locked;
+
+@property (readwrite, assign) NSInteger                   blockRows;
+@property (readwrite, assign) NSInteger                   blockColumns;
+@property (readwrite, assign) NSInteger                   gravityRow;
+@property (readwrite, assign) NSInteger                   gravityColumn;
+@property (readwrite, assign) CGFloat                     blockPadding;
+@property (readwrite, assign) BlockLayer                  ***blockGrid;
+
 @end
 
 
 @implementation FieldLayer
 
-@synthesize locked, blockRows, blockColumns;
+@synthesize msgLabel = _msgLabel;
+@synthesize locked = _locked;
+@synthesize blockRows = _blockRows, blockColumns = _blockColumns;
+@synthesize gravityRow = _gravityRow, gravityColumn = _gravityColumn;
+@synthesize blockPadding = _blockPadding;
+@synthesize blockGrid = _blockGrid;
+
 
 
 -(id) init {
@@ -62,8 +79,8 @@
     if (!(self = [super init]))
 		return self;
     
-    blockPadding    = 0;
-    locked          = YES;
+    self.blockPadding    = 0;
+    self.locked          = YES;
     
     return self;
 }
@@ -81,48 +98,48 @@
     // Clean up.
     [self stopAllActions];
     
-    if (blockGrid) {
-        for (NSInteger row = 0; row < blockRows; ++row) {
-            for (NSInteger col = 0; col < blockColumns; ++col) {
-                BlockLayer *block = blockGrid[row][col];
+    if (self.blockGrid) {
+        for (NSInteger row = 0; row < self.blockRows; ++row) {
+            for (NSInteger col = 0; col < self.blockColumns; ++col) {
+                BlockLayer *block = self.blockGrid[row][col];
                 if (!block)
                     continue;
                 
                 [self removeChild:block cleanup:YES];
-                blockGrid[row][col] = nil;
+                self.blockGrid[row][col] = nil;
                 [block release];
             }
-            free(blockGrid[row]);
+            free(self.blockGrid[row]);
         }
-        free(blockGrid);
+        free(self.blockGrid);
     }
 
     // Level-based field parameters.
-    blockColumns    = fmaxf(fminf(kMaxColumns * [[DeblockConfig get] currentPlayer].level / kAllGridLevel, kMaxColumns), kMinColumns);
-    blockRows       = fmaxf(fminf(kMaxColumns * [[DeblockConfig get] currentPlayer].level / kAllGridLevel, kMaxRows), kMinColumns);
-    gravityRow      = 0;
-    gravityColumn   = blockColumns / 2;
-    blockGrid       = malloc(sizeof(BlockLayer **) * blockRows);
-    for (NSInteger row = 0; row < blockRows; ++row) {
-        blockGrid[row] = malloc(sizeof(BlockLayer *) * blockColumns);
-        for (NSInteger col = 0; col < blockColumns; ++col)
+    self.blockColumns    = fmaxf(fminf(kMaxColumns * [[DeblockConfig get] currentPlayer].level / kAllGridLevel, kMaxColumns), kMinColumns);
+    self.blockRows       = fmaxf(fminf(kMaxColumns * [[DeblockConfig get] currentPlayer].level / kAllGridLevel, kMaxRows), kMinColumns);
+    self.gravityRow      = 0;
+    self.gravityColumn   = self.blockColumns / 2;
+    self.blockGrid       = malloc(sizeof(BlockLayer **) * self.blockRows);
+    for (NSInteger row = 0; row < self.blockRows; ++row) {
+        self.blockGrid[row] = malloc(sizeof(BlockLayer *) * self.blockColumns);
+        for (NSInteger col = 0; col < self.blockColumns; ++col)
             // Nil the grid so we can iterate through it before it's been completely filled up.
-            blockGrid[row][col] = nil;
+            self.blockGrid[row][col] = nil;
     }
             
     // Build field of blocks.
-    CGSize blockSize        = CGSizeMake((self.contentSize.width   - blockPadding) / blockColumns  - blockPadding,
-                                         (self.contentSize.height  - blockPadding) / blockRows     - blockPadding);
+    CGSize blockSize        = CGSizeMake((self.contentSize.width   - self.blockPadding) / self.blockColumns  - self.blockPadding,
+                                         (self.contentSize.height  - self.blockPadding) / self.blockRows     - self.blockPadding);
     
-    for (NSInteger row = 0; row < blockRows; ++row) {
-        for (NSInteger col = 0; col < blockColumns; ++col) {
+    for (NSInteger row = 0; row < self.blockRows; ++row) {
+        for (NSInteger col = 0; col < self.blockColumns; ++col) {
             
             BlockLayer *block = [BlockLayer randomBlockForLevel:[[DeblockConfig get] currentPlayer].level withSize:blockSize];
-            block.position = ccp(col * (blockSize.width     + blockPadding) + blockPadding,
-                                 row * (blockSize.height    + blockPadding) + blockPadding);
+            block.position = ccp(col * (blockSize.width     + self.blockPadding) + self.blockPadding,
+                                 row * (blockSize.height    + self.blockPadding) + self.blockPadding);
             
             [self addChild:block];
-            blockGrid[row][col] = [block retain];
+            self.blockGrid[row][col] = [block retain];
         }
     }
 }
@@ -132,18 +149,18 @@
     
     if (aRow < 0 || aCol < 0)
         return nil;
-    if (aRow >= blockRows || aCol >= blockColumns)
+    if (aRow >= self.blockRows || aCol >= self.blockColumns)
         return nil;
     
-    return blockGrid[aRow][aCol];
+    return self.blockGrid[aRow][aCol];
 }
 
 
 - (BlockLayer *)blockAtTargetRow:(NSInteger)aRow col:(NSInteger)aCol {
     
-    for (NSInteger row = 0; row < blockRows; ++row)
-        for (NSInteger col = 0; col < blockColumns; ++col) {
-            BlockLayer *block = blockGrid[row][col];
+    for (NSInteger row = 0; row < self.blockRows; ++row)
+        for (NSInteger col = 0; col < self.blockColumns; ++col) {
+            BlockLayer *block = self.blockGrid[row][col];
             if (!block)
                 continue;
             
@@ -157,9 +174,9 @@
 
 - (NSArray *)blocksInRow:(NSInteger)aRow {
 
-    NSMutableArray *blocks = [NSMutableArray arrayWithCapacity:blockColumns];
-    for (NSInteger col = 0; col < blockColumns; ++col) {
-        BlockLayer *block = blockGrid[aRow][col];
+    NSMutableArray *blocks = [NSMutableArray arrayWithCapacity:self.blockColumns];
+    for (NSInteger col = 0; col < self.blockColumns; ++col) {
+        BlockLayer *block = self.blockGrid[aRow][col];
         if (block)
             [blocks addObject:block];
     }
@@ -170,9 +187,9 @@
 
 - (NSArray *)blocksInCol:(NSInteger)aCol {
     
-    NSMutableArray *blocks = [NSMutableArray arrayWithCapacity:blockRows];
-    for (NSInteger row = 0; row < blockRows; ++row) {
-        BlockLayer *block = blockGrid[row][aCol];
+    NSMutableArray *blocks = [NSMutableArray arrayWithCapacity:self.blockRows];
+    for (NSInteger row = 0; row < self.blockRows; ++row) {
+        BlockLayer *block = self.blockGrid[row][aCol];
         if (block)
             [blocks addObject:block];
     }
@@ -183,8 +200,8 @@
 
 - (NSArray *)blocksInTargetRow:(NSInteger)aRow {
     
-    NSMutableArray *blocks = [NSMutableArray arrayWithCapacity:blockColumns];
-    for (NSInteger col = 0; col < blockColumns; ++col) {
+    NSMutableArray *blocks = [NSMutableArray arrayWithCapacity:self.blockColumns];
+    for (NSInteger col = 0; col < self.blockColumns; ++col) {
         BlockLayer *block = [self blockAtTargetRow:aRow col:col];
         if (block)
             [blocks addObject:block];
@@ -196,8 +213,8 @@
 
 - (NSArray *)blocksInTargetCol:(NSInteger)aCol {
     
-    NSMutableArray *blocks = [NSMutableArray arrayWithCapacity:blockRows];
-    for (NSInteger row = 0; row < blockRows; ++row) {
+    NSMutableArray *blocks = [NSMutableArray arrayWithCapacity:self.blockRows];
+    for (NSInteger row = 0; row < self.blockRows; ++row) {
         BlockLayer *block = [self blockAtTargetRow:row col:aCol];
         if (block)
             [blocks addObject:block];
@@ -209,8 +226,8 @@
 
 - (BOOL)findPositionOfBlock:(BlockLayer *)aBlock toRow:(NSInteger *)aRow col:(NSInteger *)aCol {
     
-    for (NSInteger row = 0; row < blockRows; ++row)
-        for (NSInteger col = 0; col < blockColumns; ++col)
+    for (NSInteger row = 0; row < self.blockRows; ++row)
+        for (NSInteger col = 0; col < self.blockColumns; ++col)
             if ([self blockAtRow:row col:col] == aBlock) {
                 if (aRow)
                     *aRow = row;
@@ -252,15 +269,15 @@
     
     NSInteger row, col;
     if ([self findPositionOfBlock:aBlock toRow:&row col:&col])
-        blockGrid[row][col] = oldBlock;
+        self.blockGrid[row][col] = oldBlock;
     
-    blockGrid[aRow][aCol] = aBlock;
+    self.blockGrid[aRow][aCol] = aBlock;
 }
 
 
 - (void)destroyBlock:(BlockLayer *)aBlock {
     
-    locked = YES;
+    self.locked = YES;
 
     CGPoint blockPoint = aBlock.position;
     blockPoint.x += aBlock.contentSize.width / 2.0f;
@@ -312,23 +329,23 @@
     [aBlock crumble];
     [aBlock release];
     
-    blockGrid[row][col] = nil;
+    self.blockGrid[row][col] = nil;
 }
 
 
 - (void)startDropping {
     
-    for (NSInteger row = 0; row < blockRows; ++row)
-        for (NSInteger col = 0; col < blockColumns; ++col) {
-            blockGrid[row][col].targetRow = row;
-            blockGrid[row][col].targetCol = col;
+    for (NSInteger row = 0; row < self.blockRows; ++row)
+        for (NSInteger col = 0; col < self.blockColumns; ++col) {
+            self.blockGrid[row][col].targetRow = row;
+            self.blockGrid[row][col].targetCol = col;
         }
     
     BOOL anyBlockDropping = NO;
-    for (NSInteger col = 0; col < blockColumns; ++col) {
-        for (NSInteger row = gravityRow + 1; row < blockRows; ++row)
+    for (NSInteger col = 0; col < self.blockColumns; ++col) {
+        for (NSInteger row = self.gravityRow + 1; row < self.blockRows; ++row)
             anyBlockDropping |= [self dropBlockAtRow:row col:col];
-        for (NSInteger row = gravityRow - 1; row >= 0; --row)
+        for (NSInteger row = self.gravityRow - 1; row >= 0; --row)
             anyBlockDropping |= [self dropBlockAtRow:row col:col];
     }
     
@@ -346,7 +363,7 @@
         return NO;
     
     
-    NSInteger gravityRowDirection = gravityRow - row;
+    NSInteger gravityRowDirection = self.gravityRow - row;
     if (gravityRowDirection == 0)
         // Hit the gravity "floor", stop dropping.
         return NO;
@@ -355,7 +372,7 @@
     // Row dropping.
     block.targetRow = row;
     while (YES) {
-        if (block.targetRow == gravityRow)
+        if (block.targetRow == self.gravityRow)
             // Hit the gravity "floor", stop dropping.
             break;
         
@@ -369,7 +386,7 @@
         // This block is already at its target, no moving needs to be done.
         return NO;
     
-    CGFloat dropHeight = fabsf(row - block.targetRow) * (block.contentSize.height + blockPadding) * gravityRowDirection;
+    CGFloat dropHeight = fabsf(row - block.targetRow) * (block.contentSize.height + self.blockPadding) * gravityRowDirection;
     ccTime duration = 0.3f * fabsf(dropHeight) / 100.0f;
     
     [block runAction:block.moveAction = [Sequence actions:
@@ -399,8 +416,8 @@
     block.moveAction = nil;
     
     BOOL allDoneDropping = YES;
-    for (NSInteger row = 0; row < blockRows && allDoneDropping; ++row)
-        for (NSInteger col = 0; col < blockColumns && allDoneDropping; ++col)
+    for (NSInteger row = 0; row < self.blockRows && allDoneDropping; ++row)
+        for (NSInteger col = 0; col < self.blockColumns && allDoneDropping; ++col)
             if ([self blockAtRow:row col:col].moving) {
                 allDoneDropping = NO;
             }
@@ -419,9 +436,9 @@
 - (void)startCollapsing {
     
     BOOL anyBlockCollapsing = NO;
-    for (NSInteger col = gravityColumn + 1; col < blockColumns; ++col)
+    for (NSInteger col = self.gravityColumn + 1; col < self.blockColumns; ++col)
         anyBlockCollapsing |= [self collapseBlocksAtCol:col];
-    for (NSInteger col = gravityColumn - 1; col >= 0; --col)
+    for (NSInteger col = self.gravityColumn - 1; col >= 0; --col)
         anyBlockCollapsing |= [self collapseBlocksAtCol:col];
 
     if (!anyBlockCollapsing)
@@ -433,7 +450,7 @@
 - (BOOL)collapseBlocksAtCol:(NSInteger)col {
 
     
-    NSInteger gravityColDirection = gravityColumn - col;
+    NSInteger gravityColDirection = self.gravityColumn - col;
     if (gravityColDirection == 0)
         // Hit the gravity "wall", stop collapsing.
         return NO;
@@ -442,7 +459,7 @@
     // Column collapsing.
     NSInteger targetCol = col;
     while (YES) {
-        if (targetCol == gravityColumn)
+        if (targetCol == self.gravityColumn)
             // Hit the gravity "wall", stop collapsing.
             break;
         
@@ -457,7 +474,7 @@
         return NO;
 
     BOOL anyBlockCollapsing = NO;
-    for (NSInteger row = 0; row < blockRows; ++row) {
+    for (NSInteger row = 0; row < self.blockRows; ++row) {
         BlockLayer *block = [self blockAtRow:row col:col];
         if (!block || block.moving)
             // No block here or block already moving.
@@ -465,7 +482,7 @@
         
         
         block.targetCol = targetCol;
-        CGFloat dropWidth = fabsf(col - block.targetCol) * (block.contentSize.width + blockPadding) * gravityColDirection;
+        CGFloat dropWidth = fabsf(col - block.targetCol) * (block.contentSize.width + self.blockPadding) * gravityColDirection;
         
         [block runAction:block.moveAction = [[Sequence alloc] initOne:[MoveBy actionWithDuration:0.3f position:ccp(dropWidth, 0)]
                                                                   two:[CallFuncN actionWithTarget:self selector:@selector(doneCollapsingBlock:)]]];
@@ -485,8 +502,8 @@
     [block notifyCollapsed];
     
     BOOL allDoneCollapsing = YES;
-    for (NSInteger row = 0; row < blockRows && allDoneCollapsing; ++row)
-        for (NSInteger col = 0; col < blockColumns && allDoneCollapsing; ++col)
+    for (NSInteger row = 0; row < self.blockRows && allDoneCollapsing; ++row)
+        for (NSInteger col = 0; col < self.blockColumns && allDoneCollapsing; ++col)
             if ([self blockAtRow:row col:col].moving)
                 allDoneCollapsing = NO;
     
@@ -499,7 +516,7 @@
     
     [self checkGameState];
     
-    locked = NO;
+    self.locked = NO;
 }
 
 - (void)checkGameState {
@@ -509,9 +526,9 @@
 
     NSMutableSet *allLinkedBlocks = [NSMutableSet new];
     NSUInteger blocksLeft = 0;
-    for (NSInteger row = 0; row < blockRows; ++row)
-        for (NSInteger col = 0; col < blockColumns; ++col) {
-            BlockLayer *block = blockGrid[row][col];
+    for (NSInteger row = 0; row < self.blockRows; ++row)
+        for (NSInteger col = 0; col < self.blockColumns; ++col) {
+            BlockLayer *block = self.blockGrid[row][col];
             if (!block)
                 continue;
             
@@ -559,43 +576,43 @@
 
 -(void) message:(NSString *)msg at:(CGPoint)point {
     
-    if(msgLabel)
-        [msgLabel stopAllActions];
+    if(self.msgLabel)
+        [self.msgLabel stopAllActions];
     
     else {
-        msgLabel = [[Label alloc] initWithString:@""
-                                      dimensions:CGSizeMake(1000, [[Config get].fontSize intValue] + 5)
-                                       alignment:UITextAlignmentCenter
-                                        fontName:[Config get].fixedFontName
-                                        fontSize:[[Config get].fontSize intValue]];
+        self.msgLabel = [Label labelWithString:@""
+                                    dimensions:CGSizeMake(1000, [[Config get].fontSize intValue] + 5)
+                                     alignment:UITextAlignmentCenter
+                                      fontName:[Config get].fixedFontName
+                                      fontSize:[[Config get].fontSize intValue]];
         
-        [self addChild:msgLabel z:9];
+        [self addChild:self.msgLabel z:9];
     }
     
-    [msgLabel setString:msg];
-    msgLabel.position = point;
+    [self.msgLabel setString:msg];
+    self.msgLabel.position = point;
     
     // Make sure label remains on screen.
     CGSize winSize = [Director sharedDirector].winSize;
-    if([msgLabel position].x < [[Config get].fontSize intValue] / 2)                 // Left edge
-        [msgLabel setPosition:ccp([[Config get].fontSize intValue] / 2, [msgLabel position].y)];
-    if([msgLabel position].x > winSize.width - [[Config get].fontSize intValue] / 2) // Right edge
-        [msgLabel setPosition:ccp(winSize.width - [[Config get].fontSize intValue] / 2, [msgLabel position].y)];
-    if([msgLabel position].y < [[Config get].fontSize intValue] / 2)                 // Bottom edge
-        [msgLabel setPosition:ccp([msgLabel position].x, [[Config get].fontSize intValue] / 2)];
-    if([msgLabel position].y > winSize.width - [[Config get].fontSize intValue] * 2) // Top edge
-        [msgLabel setPosition:ccp([msgLabel position].x, winSize.height - [[Config get].fontSize intValue] * 2)];
+    if([self.msgLabel position].x < [[Config get].fontSize intValue] / 2)                 // Left edge
+        [self.msgLabel setPosition:ccp([[Config get].fontSize intValue] / 2, [self.msgLabel position].y)];
+    if([self.msgLabel position].x > winSize.width - [[Config get].fontSize intValue] / 2) // Right edge
+        [self.msgLabel setPosition:ccp(winSize.width - [[Config get].fontSize intValue] / 2, [self.msgLabel position].y)];
+    if([self.msgLabel position].y < [[Config get].fontSize intValue] / 2)                 // Bottom edge
+        [self.msgLabel setPosition:ccp([self.msgLabel position].x, [[Config get].fontSize intValue] / 2)];
+    if([self.msgLabel position].y > winSize.width - [[Config get].fontSize intValue] * 2) // Top edge
+        [self.msgLabel setPosition:ccp([self.msgLabel position].x, winSize.height - [[Config get].fontSize intValue] * 2)];
     
     // Color depending on whether message starts with -, + or neither.
     if([msg hasPrefix:@"+"])
-        [msgLabel setColor:ccc3(0x66, 0xCC, 0x66)];
+        [self.msgLabel setColor:ccc3(0x66, 0xCC, 0x66)];
     else if([msg hasPrefix:@"-"])
-        [msgLabel setColor:ccc3(0xCC, 0x66, 0x66)];
+        [self.msgLabel setColor:ccc3(0xCC, 0x66, 0x66)];
     else
-        [msgLabel setColor:ccc3(0xFF, 0xFF, 0xFF)];
+        [self.msgLabel setColor:ccc3(0xFF, 0xFF, 0xFF)];
     
     // Animate the label to fade out.
-    [msgLabel runAction:[Spawn actions:
+    [self.msgLabel runAction:[Spawn actions:
                          [FadeOut actionWithDuration:3],
                          [Sequence actions:
                           [DelayTime actionWithDuration:1],
@@ -607,7 +624,7 @@
 
 -(void) startGame {
     
-    locked = NO;
+    self.locked = NO;
 
     [[DeblockAppDelegate get].hudLayer updateHudWasGood:YES];
     [[DeblockAppDelegate get].gameLayer started];
@@ -616,12 +633,12 @@
 
 -(void) stopGame {
     
-    locked = YES;
+    self.locked = YES;
 
     BOOL isEmpty = YES;
-    for (NSInteger row = 0; row < blockRows && isEmpty; ++row)
-        for (NSInteger col = 0; col < blockColumns && isEmpty; ++col)
-            if (blockGrid[row][col]) {
+    for (NSInteger row = 0; row < self.blockRows && isEmpty; ++row)
+        for (NSInteger col = 0; col < self.blockColumns && isEmpty; ++col)
+            if (self.blockGrid[row][col]) {
                 isEmpty = NO;
                 break;
             }
@@ -641,17 +658,17 @@
 
 - (void)blinkAll {
 
-    for (NSInteger row = 0; row < blockRows; ++row)
-        for (NSInteger col = 0; col < blockColumns; ++col)
+    for (NSInteger row = 0; row < self.blockRows; ++row)
+        for (NSInteger col = 0; col < self.blockColumns; ++col)
             [[self blockAtRow:row col:col] blink];
 }
 
 
 - (void)destroyAll {
     
-    for (NSInteger row = 0; row < blockRows; ++row)
-        for (NSInteger col = 0; col < blockColumns; ++col) {
-            BlockLayer *block = blockGrid[row][col];
+    for (NSInteger row = 0; row < self.blockRows; ++row)
+        for (NSInteger col = 0; col < self.blockColumns; ++col) {
+            BlockLayer *block = self.blockGrid[row][col];
 
             if (block)
                 [self destroySingleBlock:block];
@@ -671,13 +688,13 @@
     NSMutableString *d = [NSMutableString new];
     [d appendString:@"    ||"];
     
-    for (NSInteger col = 0; col < blockColumns; ++col)
+    for (NSInteger col = 0; col < self.blockColumns; ++col)
         [d appendFormat:@" %02d  |", col];
 
-    for (NSInteger row = blockRows - 1; row >= 0; --row) {
+    for (NSInteger row = self.blockRows - 1; row >= 0; --row) {
         [d appendFormat:@"\n %02d ||", row];
-        for (NSInteger col = 0; col < blockColumns; ++col) {
-            BlockLayer *block = blockGrid[row][col];
+        for (NSInteger col = 0; col < self.blockColumns; ++col) {
+            BlockLayer *block = self.blockGrid[row][col];
             if (block) {
                 NSMutableString *properties = [NSMutableString stringWithCapacity:2];
                 if (block.destroyed)
@@ -701,8 +718,7 @@
 
 - (void)dealloc {
     
-    [msgLabel release];
-    msgLabel = nil;
+    self.msgLabel = nil;
     
     [super dealloc];
 }

@@ -26,7 +26,16 @@
 #import "DeblockWSController.h"
 
 
+@interface DeblockConfig ()
+
+@property (readwrite, retain) NSDictionary                                *playersCached;
+
+@end
+
+
 @implementation DeblockConfig
+
+@synthesize playersCached = _playersCached;
 
 @dynamic compete, wsUrl;
 @dynamic levelScore, levelPenalty;

@@ -42,7 +42,7 @@
 @end
 
 @interface FreezeBlockLayer : SpecialBlockLayer {
-    
+
     NSInteger               _timeLeft;
 }
 @end

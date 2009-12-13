@@ -10,7 +10,18 @@
 #import "ScrollLayer.h"
 
 
+@interface LogLayer ()
+
+@property (readwrite, retain) Label                   *logLabel;
+@property (readwrite, copy) NSString                *logString;
+
+@end
+
+
 @implementation LogLayer
+
+@synthesize logLabel = _logLabel;
+@synthesize logString = _logString;
 
 
 - (id)init {
@@ -19,17 +30,17 @@
         return nil;
     
     self.background = [Sprite spriteWithFile:@"back.png"];
-    logLabel = [[Label alloc] initWithString:@"" dimensions:CGSizeMake(self.contentSize.width * 0.8f, 1000)
+    self.logLabel = [Label labelWithString:@"" dimensions:CGSizeMake(self.contentSize.width * 0.8f, 1000)
                                    alignment:UITextAlignmentLeft fontName:[Config get].fixedFontName fontSize:[[Config get].smallFontSize intValue]];
-    logLabel.anchorPoint = CGPointZero;
+    self.logLabel.anchorPoint = CGPointZero;
     
-    ScrollLayer *scrollLayer    = [ScrollLayer scrollNode:logLabel direction:ScrollContentDirectionTopToBottom];
+    ScrollLayer *scrollLayer    = [ScrollLayer scrollNode:self.logLabel direction:ScrollContentDirectionTopToBottom];
     Layer *log                  = [Layer node];
     [log addChild:scrollLayer];
-    scrollLayer.contentSize     = CGSizeMake(logLabel.contentSize.width, self.contentSize.height * 0.7f);
+    scrollLayer.contentSize     = CGSizeMake(self.logLabel.contentSize.width, self.contentSize.height * 0.7f);
     log.position                = ccp((self.contentSize.width - scrollLayer.contentSize.width) * 0.5f,
                                       (self.contentSize.height - scrollLayer.contentSize.height) * 0.7f);
-    logLabel.position           = ccp(0, scrollLayer.contentSize.height - logLabel.contentSize.height);
+    self.logLabel.position           = ccp(0, scrollLayer.contentSize.height - self.logLabel.contentSize.height);
     
     [self addChild:log];
     
@@ -39,10 +50,9 @@
 - (void)onEnter {
 
     NSString *newLogString = [[Logger get] formatMessages];
-    if (![logString isEqualToString:newLogString]) {
-        [logLabel setString:newLogString];
-        [logString release];
-        logString = [newLogString retain];
+    if (![self.logString isEqualToString:newLogString]) {
+        [self.logLabel setString:newLogString];
+        self.logString = newLogString;
     }
     
     [super onEnter];

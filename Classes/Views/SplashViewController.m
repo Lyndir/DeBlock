@@ -10,9 +10,17 @@
 #import "PlayerViewController.h"
 
 
+@interface SplashViewController ()
+
+
+
+@end
+
+
 @implementation SplashViewController
 
-@synthesize top, bottom;
+@synthesize top = _top, bottom = _bottom;
+
 
 - (id)init {
     

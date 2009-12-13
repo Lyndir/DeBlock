@@ -9,7 +9,16 @@
 #import "StrategyLayer.h"
 
 
+@interface StrategyLayer ()
+
+@property (readwrite, retain) FlickLayer                  *guide;
+
+@end
+
+
 @implementation StrategyLayer
+
+@synthesize guide = _guide;
 
 
 - (id)init {
@@ -17,16 +26,16 @@
     if (!(self = [super init]))
         return nil;
     
-    guide = [[FlickLayer alloc] initWithSprites:
-             [Sprite spriteWithFile:@"strategy-1.png"],
-             [Sprite spriteWithFile:@"strategy-2.png"],
-             [Sprite spriteWithFile:@"strategy-3.png"],
-             [Sprite spriteWithFile:@"strategy-4.png"],
-             [Sprite spriteWithFile:@"strategy-5.png"],
-             [Sprite spriteWithFile:@"strategy-6.png"],
-             [Sprite spriteWithFile:@"strategy-7.png"],
-             nil];
-    [self addChild:guide];
+    self.guide = [FlickLayer flickSprites:
+                  [Sprite spriteWithFile:@"strategy-1.png"],
+                  [Sprite spriteWithFile:@"strategy-2.png"],
+                  [Sprite spriteWithFile:@"strategy-3.png"],
+                  [Sprite spriteWithFile:@"strategy-4.png"],
+                  [Sprite spriteWithFile:@"strategy-5.png"],
+                  [Sprite spriteWithFile:@"strategy-6.png"],
+                  [Sprite spriteWithFile:@"strategy-7.png"],
+                  nil];
+    [self addChild:self.guide];
     
     return self;
 }

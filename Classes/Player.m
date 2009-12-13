@@ -26,15 +26,31 @@
 - (void)showNameDialog;
 - (void)showPassDialog;
 
-@property (readwrite, retain) NSConditionLock   *nameLock;
-@property (readwrite, retain) NSConditionLock   *passLock;
+
+@property (readwrite, retain) NSConditionLock                     *nameLock;
+@property (readwrite, retain) UIAlertView                         *nameAlert;
+@property (readwrite, retain) UITextField                         *nameField;
+
+@property (readwrite, retain) NSConditionLock                     *passLock;
+@property (readwrite, retain) UIAlertView                         *passAlert;
+@property (readwrite, retain) UITextField                         *passField;
 
 @end
 
 @implementation Player
 
-@synthesize name = _name, pass = _pass, score = _score, level = _level, onlineOk = _onlineOk;
-@synthesize nameLock = _nameLock, passLock = _passLock;
+@synthesize name = _name;
+@synthesize pass = _pass;
+@synthesize score = _score;
+@synthesize level = _level;
+@synthesize onlineOk = _onlineOk;
+@synthesize nameLock = _nameLock;
+@synthesize nameAlert = _nameAlert;
+@synthesize nameField = _nameField;
+@synthesize passLock = _passLock;
+@synthesize passAlert = _passAlert;
+@synthesize passField = _passField;
+
 
 - (id)init {
     
@@ -140,16 +156,16 @@
 
     NSAutoreleasePool *pool = [NSAutoreleasePool new];
 
-    nameAlert = [[UIAlertView alloc] initWithTitle:l(@"dialog.title.name") message:
-                 [NSString stringWithFormat:l(@"dialog.text.name.ask"), self.name]
-                                          delegate:self cancelButtonTitle:l(@"button.save") otherButtonTitles:nil];
-    [nameAlert addTextFieldWithValue:@"" label:@""];
+    self.nameAlert = [[[UIAlertView alloc] initWithTitle:l(@"dialog.title.name") message:
+                       [NSString stringWithFormat:l(@"dialog.text.name.ask"), self.name]
+                                                delegate:self cancelButtonTitle:l(@"button.save") otherButtonTitles:nil] autorelease];
+    [self.nameAlert addTextFieldWithValue:@"" label:@""];
 
-    nameField                       = [nameAlert textFieldAtIndex:0];
-    nameField.keyboardType          = UIKeyboardTypeNamePhonePad;
-    nameField.keyboardAppearance    = UIKeyboardAppearanceAlert;
-    nameField.autocorrectionType    = UITextAutocorrectionTypeNo;
-    [nameAlert show];
+    self.nameField                       = [self.nameAlert textFieldAtIndex:0];
+    self.nameField.keyboardType          = UIKeyboardTypeNamePhonePad;
+    self.nameField.keyboardAppearance    = UIKeyboardAppearanceAlert;
+    self.nameField.autocorrectionType    = UITextAutocorrectionTypeNo;
+    [self.nameAlert show];
 
     [pool drain];
 }
@@ -158,42 +174,40 @@
 
     NSAutoreleasePool *pool = [NSAutoreleasePool new];
 
-    passAlert = [[UIAlertView alloc] initWithTitle:l(@"dialog.title.compete.code") message:
-                     [NSString stringWithFormat:l(@"dialog.text.compete.code.ask"), self.name]
-                                              delegate:self cancelButtonTitle:l(@"button.save") otherButtonTitles:nil];
-    [passAlert addTextFieldWithValue:@"" label:@""];
+    self.passAlert = [[[UIAlertView alloc] initWithTitle:l(@"dialog.title.compete.code") message:
+                       [NSString stringWithFormat:l(@"dialog.text.compete.code.ask"), self.name]
+                                                delegate:self cancelButtonTitle:l(@"button.save") otherButtonTitles:nil] autorelease];
+    [self.passAlert addTextFieldWithValue:@"" label:@""];
 
-    passField                       = [passAlert textFieldAtIndex:0];
-    passField.keyboardType          = UIKeyboardTypeNumberPad;
-    passField.keyboardAppearance    = UIKeyboardAppearanceAlert;
-    passField.autocorrectionType    = UITextAutocorrectionTypeNo;
-    [passAlert show];
+    self.passField                       = [self.passAlert textFieldAtIndex:0];
+    self.passField.keyboardType          = UIKeyboardTypeNumberPad;
+    self.passField.keyboardAppearance    = UIKeyboardAppearanceAlert;
+    self.passField.autocorrectionType    = UITextAutocorrectionTypeNo;
+    [self.passAlert show];
 
     [pool drain];
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
 
-    if (alertView == nameAlert) {
+    if (alertView == self.nameAlert) {
 
         [self.nameLock lockWhenCondition:lNotSet];
-        self.name = nameField.text;
+        self.name = self.nameField.text;
         [self.nameLock unlockWithCondition:_name? lSet: lNotSet];
 
-        [nameAlert release];
-        nameAlert = nil;
-        nameField = nil;
+        self.nameAlert = nil;
+        self.nameField = nil;
     }
 
-    if (alertView == passAlert) {
+    if (alertView == self.passAlert) {
 
         [self.passLock lockWhenCondition:lNotSet];
-        self.pass = passField.text;
+        self.pass = self.passField.text;
         [self.passLock unlockWithCondition:_pass? lSet: lNotSet];
 
-        [passAlert release];
-        passAlert = nil;
-        passField = nil;
+        self.passAlert = nil;
+        self.passField = nil;
     }
 }
 

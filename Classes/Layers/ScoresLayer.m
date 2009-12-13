@@ -25,7 +25,16 @@
 #import "ScoresLayer.h"
 
 
+@interface ScoresLayer ()
+
+@property (readwrite, retain) GraphNode      *graph;
+
+@end
+
+
 @implementation ScoresLayer
+
+@synthesize graph = _graph;
 
 
 - (id)init {
@@ -35,8 +44,8 @@
     
     self.background = [Sprite spriteWithFile:@"back.png"];
     
-    graph = [GraphNode new];
-    [self addChild:graph];
+    self.graph = [GraphNode node];
+    [self addChild:self.graph];
     
     return self;
 }
@@ -61,7 +70,7 @@
         [scores addObject:[Score scoreWithScore:[topUserScore intValue] by:user at:topUserScoreDate]];
     }
     
-    [graph setScores:scores];
+    [self.graph setScores:scores];
     
     [super onEnter];
 }

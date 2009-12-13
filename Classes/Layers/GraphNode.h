@@ -34,13 +34,13 @@
 }
 
 @property (readonly) NSInteger                  score;
-@property (readonly) NSString                   *username;
-@property (readonly) NSDate                     *date;
+@property (readonly, copy) NSString                   *username;
+@property (readonly, copy) NSDate                     *date;
 
 + (Score *)scoreWithScore:(NSInteger)aScore by:(NSString *)aUsername at:(NSDate *)aDate;
 
 - (id)initWithScore:(NSInteger)aScore by:(NSString *)aUsername at:(NSDate *)aDate;
-    
+
 - (NSComparisonResult)compareByTopScore:(Score *)other;
 - (NSComparisonResult)compareByRecency:(Score *)other;
 - (NSComparisonResult)compareByUsername:(Score *)other;
@@ -49,27 +49,27 @@
 
 
 @interface GraphDataNode : ScrollLayer {
-    
+
     NSArray                                     *_sortedScores;
     NSInteger                                   _topScore;
-    
+
     NSString                                    *_scoreFormat;
     NSDateFormatter                             *_dateFormatter;
-    
+
     CGFloat                                     _padding, _barHeight;
     NSUInteger                                  _scoreCount, _barCount;
-    
+
     ccTime                                      _animationTimeLeft;
     GLuint                                      _vertexBuffer;
     Label                                       **_scoreLabels;
 }
 
-/** The formatter to use when rendering score dates. */
-@property (readwrite, retain) NSDateFormatter   *dateFormatter;
 /** The format string to render the score data with.
  *
  * The arguments to the format string are in this order: score, username, formatted date. */
 @property (readwrite, retain) NSString          *scoreFormat;
+/** The formatter to use when rendering score dates. */
+@property (readwrite, retain) NSDateFormatter   *dateFormatter;
 
 /** The amount of pixels of padding to use between the graph border and the graph data. */
 @property (readwrite) CGFloat                   padding;
@@ -84,14 +84,14 @@
 @private
     NSArray                                     *_sortedScores;
     SEL                                         _comparator;
-    
+
     GraphDataNode                               *_graphDataNode;
 }
 
 /** The method on the Score object that will determine the order of rendered score appearance. */
 @property (readwrite) SEL                       comparator;
 /** The node that displays the actual graph data. */
-@property (readonly) GraphDataNode              *graphDataNode;
+@property (readonly, retain) GraphDataNode              *graphDataNode;
 
 - (void)setScores:(NSArray *)newScores;
 

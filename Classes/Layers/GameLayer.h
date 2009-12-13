@@ -39,13 +39,13 @@ typedef enum DbEndReason {
     BOOL                                                _paused;
     BOOL                                                _running;
     DbEndReason                                         _endReason;
-    
+
     SkyLayer                                            *_skyLayer;
     FieldLayer                                          *_fieldLayer;
     Layer                                               *_fieldScroller;
-    
+
     Action                                              *_shakeAction;
-    
+
     ccTime                                              _penaltyInterval;
     ccTime                                              _remainingPenaltyTime;
 }
@@ -53,8 +53,8 @@ typedef enum DbEndReason {
 @property (nonatomic, readwrite) BOOL                   paused;
 @property (nonatomic, readwrite) BOOL                   running;
 
-@property (nonatomic, readonly) SkyLayer                *skyLayer;
-@property (nonatomic, readonly) FieldLayer              *fieldLayer;
+@property (nonatomic, readonly, retain) SkyLayer                *skyLayer;
+@property (nonatomic, readonly, retain) FieldLayer              *fieldLayer;
 
 - (void)shake;
 

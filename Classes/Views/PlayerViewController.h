@@ -17,7 +17,7 @@
     UILabel                     *_playerSuggestion;
 
     ButtonFontLabel             *_next;
-    
+
     UIAlertView                 *_alertCode;
 }
 

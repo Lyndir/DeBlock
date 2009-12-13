@@ -9,9 +9,17 @@
 #import "ButtonFontLabel.h"
 
 
+@interface ButtonFontLabel ()
+
+
+
+@end
+
+
 @implementation ButtonFontLabel
 
-@synthesize delegate;
+@synthesize delegate = _delegate;
+
 
 - (id)initWithFrame:(CGRect)frame zFont:(ZFont *)font {
     

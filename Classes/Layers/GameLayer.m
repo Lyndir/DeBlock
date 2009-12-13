@@ -27,32 +27,51 @@
 #import "DeblockAppDelegate.h"
 
 
-@interface GameLayer (Private)
+@interface GameLayer ()
 
 - (void)setPausedSilently:(BOOL)_paused;
 - (void)increaseTimedPenalty:(ccTime)dt;
+
+@property (readwrite, assign) DbEndReason                                         endReason;
+
+@property (nonatomic, readwrite, retain) SkyLayer                                            *skyLayer;
+@property (nonatomic, readwrite, retain) FieldLayer                                          *fieldLayer;
+@property (readwrite, retain) Layer                                               *fieldScroller;
+
+@property (readwrite, retain) Action                                              *shakeAction;
+
+@property (readwrite, assign) ccTime                                              penaltyInterval;
+@property (readwrite, assign) ccTime                                              remainingPenaltyTime;
 
 @end
 
 @implementation GameLayer
 
+@synthesize paused = _paused;
+@synthesize running = _running;
+@synthesize endReason = _endReason;
+@synthesize skyLayer = _skyLayer;
+@synthesize fieldLayer = _fieldLayer;
+@synthesize fieldScroller = _fieldScroller;
+@synthesize shakeAction = _shakeAction;
+@synthesize penaltyInterval = _penaltyInterval;
+@synthesize remainingPenaltyTime = _remainingPenaltyTime;
+
 
 #pragma mark Properties
 
-@synthesize paused, running;
-@synthesize skyLayer, fieldLayer;
 
 
 -(void) setPaused:(BOOL)isPaused {
 
-    if(paused == isPaused)
+    if(self.paused == isPaused)
         // Nothing changed.
         return;
     
     [self setPausedSilently:isPaused];
     
-    if(running) {
-        if(paused)
+    if(self.running) {
+        if(self.paused)
             [[DeblockAppDelegate get].uiLayer message:l(@"message.paused")];
         
         else
@@ -63,20 +82,20 @@
 
 -(void) setPausedSilently:(BOOL)isPaused {
     
-    paused = isPaused;
+    _paused = isPaused;
     
-    [[UIApplication sharedApplication] setStatusBarHidden:!paused animated:YES];
+    [[UIApplication sharedApplication] setStatusBarHidden:!self.paused animated:YES];
     
-    if(paused) {
+    if(self.paused) {
         [self unschedule:@selector(increaseTimedPenalty:)];
         [[DeblockAppDelegate get] hideHud];
-        [fieldScroller runAction:[MoveTo actionWithDuration:0.5f
-                                                position:CGPointMake(0, fieldScroller.contentSize.height)]];
+        [self.fieldScroller runAction:[MoveTo actionWithDuration:0.5f
+                                                position:CGPointMake(0, self.fieldScroller.contentSize.height)]];
     } else {
         [self schedule:@selector(increaseTimedPenalty:) interval:0.1f];
         [[DeblockAppDelegate get] popAllLayers];
         [[DeblockAppDelegate get] revealHud];
-        [fieldScroller runAction:[MoveTo actionWithDuration:0.5f
+        [self.fieldScroller runAction:[MoveTo actionWithDuration:0.5f
                                                    position:CGPointZero]];
     }
 }
@@ -86,8 +105,8 @@
 
 - (void)reset {
     
-    [skyLayer reset];
-    [fieldLayer reset];
+    [self.skyLayer reset];
+    [self.fieldLayer reset];
 }
 
 
@@ -96,7 +115,7 @@
     if ([[Config get].vibration boolValue])
         [AudioController vibrate];
     
-    [fieldLayer runAction:shakeAction];
+    [self.fieldLayer runAction:self.shakeAction];
 }
 
 
@@ -111,20 +130,20 @@
 
 - (void)startGame {
 
-    if(running) {
+    if(self.running) {
         [[Logger get] wrn:@"WARN: Tried to start a game while one's still running."];
         return;
     }
     
-    endReason                           = DbEndReasonEnded;
-    penaltyInterval                     = 2;
+    self.endReason                           = DbEndReasonEnded;
+    self.penaltyInterval                     = 2;
     [DeblockConfig get].levelScore      = [NSNumber numberWithInt:0];
     [DeblockConfig get].levelPenalty    = [NSNumber numberWithInt:0];
     [[DeblockAppDelegate get].hudLayer updateHudWasGood:YES];
     
     // Reset the game field and start the game.
     [self reset];
-    [fieldLayer startGame];
+    [self.fieldLayer startGame];
 }
 
 
@@ -136,12 +155,12 @@
 
 - (void)stopGame:(DbEndReason)reason {
     
-    endReason = reason;
+    self.endReason = reason;
     [self setPausedSilently:NO];
 
-    running = NO;
+    self.running = NO;
 
-    [fieldLayer stopGame];
+    [self.fieldLayer stopGame];
 }
 
 
@@ -152,30 +171,30 @@
 	if (!(self = [super init]))
 		return self;
 
-    running = NO;
+    self.running                = NO;
     
-    IntervalAction *l       = [MoveBy actionWithDuration:.05f position:ccp(-3, 0)];
-    IntervalAction *r       = [MoveBy actionWithDuration:.05f position:ccp(6, 0)];
-    shakeAction             = [[Sequence actions:l, r, l, l, r, l, r, l, l, nil] retain];
+    IntervalAction *l           = [MoveBy actionWithDuration:.05f position:ccp(-3, 0)];
+    IntervalAction *r           = [MoveBy actionWithDuration:.05f position:ccp(6, 0)];
+    self.shakeAction            = [Sequence actions:l, r, l, l, r, l, r, l, l, nil];
     
     // Set up our own layer.
-    self.anchorPoint        = ccp(0.5f, 0.5f);
+    self.anchorPoint            = ccp(0.5f, 0.5f);
     
     // Sky and field.
-    fieldLayer              = [[FieldLayer alloc] init];
-    skyLayer                = [[SkyLayer alloc] init];
+    self.fieldLayer             = [FieldLayer node];
+    self.skyLayer               = [SkyLayer node];
     
-    fieldLayer.contentSize  = CGSizeMake(self.contentSize.width * 9/10, self.contentSize.height * 4/5);
-    fieldLayer.position     = ccp((self.contentSize.width - fieldLayer.contentSize.width) / 2.0f,
-                                  (self.contentSize.height - fieldLayer.contentSize.height - [DeblockAppDelegate get].hudLayer.contentSize.height) / 2.0f +  [DeblockAppDelegate get].hudLayer.contentSize.height);
+    self.fieldLayer.contentSize = CGSizeMake(self.contentSize.width * 9/10, self.contentSize.height * 4/5);
+    self.fieldLayer.position    = ccp((self.contentSize.width - self.fieldLayer.contentSize.width) / 2.0f,
+                                      (self.contentSize.height - self.fieldLayer.contentSize.height - [DeblockAppDelegate get].hudLayer.contentSize.height) / 2.0f +  [DeblockAppDelegate get].hudLayer.contentSize.height);
 
-    fieldScroller           = [Layer new];
-    [fieldScroller addChild:fieldLayer];
+    self.fieldScroller          = [Layer node];
+    [self.fieldScroller addChild:self.fieldLayer];
+
+    [self addChild:self.skyLayer z:-1];
+    [self addChild:self.fieldScroller z:1];
     
-    [self addChild:skyLayer z:-1];
-    [self addChild:fieldScroller z:1];
-    
-    paused = YES;
+    _paused                     = YES;
     
     return self;
 }
@@ -202,7 +221,7 @@
     [[DeblockAppDelegate get].uiLayer message:[NSString stringWithFormat:l(@"message.level"),
                                                [[DeblockConfig get] currentPlayer].level]];
     
-    running = YES;
+    self.running = YES;
 
     [self setPausedSilently:NO];
 }
@@ -210,9 +229,9 @@
 
 -(void) stopped {
     
-    running     = NO;
+    self.running     = NO;
 
-    switch (endReason) {
+    switch (self.endReason) {
         case DbEndReasonEnded:
             [[DeblockAppDelegate get] showScores];
             break;
@@ -227,10 +246,10 @@
             break;
         default:
             [NSException raise:NSInternalInconsistencyException
-                        format:@"End reason not implemented: %d", endReason];
+                        format:@"End reason not implemented: %d", self.endReason];
     }
     
-    endReason   = DbEndReasonEnded;
+    self.endReason   = DbEndReasonEnded;
 }
 
 
@@ -239,13 +258,13 @@
     if ([[DeblockConfig get].gameMode unsignedIntValue] != DbModeTimed)
         // Don't increase penalty during non-timed games.
         return;
-    if (!running || paused)
+    if (!self.running || self.paused)
         // Don't increase penalty while game not running or paused.
         return;
     
-    remainingPenaltyTime        += dt;
-    NSInteger penalty           = remainingPenaltyTime / penaltyInterval;
-    remainingPenaltyTime        -= penalty * penaltyInterval;
+    self.remainingPenaltyTime        += dt;
+    NSInteger penalty           = self.remainingPenaltyTime / self.penaltyInterval;
+    self.remainingPenaltyTime        -= penalty * self.penaltyInterval;
     [DeblockConfig get].levelPenalty = [NSNumber numberWithInt:[[DeblockConfig get].levelPenalty intValue] - penalty];
     
     [[DeblockAppDelegate get].hudLayer updateHudWasGood:NO];
@@ -254,11 +273,8 @@
 
 -(void) dealloc {
     
-    [skyLayer release];
-    skyLayer = nil;
-    
-    [fieldLayer release];
-    fieldLayer = nil;
+    self.skyLayer = nil;
+    self.fieldLayer = nil;
     
     [super dealloc];
 }

@@ -35,9 +35,22 @@
 
 - (void)cloudDone:(Sprite *)cloud;
 
+@property (readwrite, assign) BOOL                    fancySky;
+
+@property (readwrite, assign) ccColor4B               skyColorFrom;
+@property (readwrite, assign) ccColor4B               skyColorTo;
+@property (readwrite, assign) Texture2D               **clouds;
+
+@property (readwrite, assign) CGFloat                 cloudsX;
+
 @end
 
 @implementation SkyLayer
+
+@synthesize fancySky = _fancySky;
+@synthesize skyColorFrom = _skyColorFrom, skyColorTo = _skyColorTo;
+@synthesize clouds = _clouds;
+@synthesize cloudsX = _cloudsX;
 
 
 -(id) init {
@@ -47,16 +60,16 @@
     
     self.contentSize = [Director sharedDirector].winSize;
 
-    clouds = malloc(sizeof(Texture2D *) * kCloudFrames);
+    self.clouds = malloc(sizeof(Texture2D *) * kCloudFrames);
     for (NSUInteger c = 0; c < kCloudFrames; ++c)
-        clouds[c] = [[[TextureMgr sharedTextureMgr] addImage:[NSString stringWithFormat:@"clouds.%d.png", c + 1]] retain];
+        self.clouds[c] = [[[TextureMgr sharedTextureMgr] addImage:[NSString stringWithFormat:@"clouds.%d.png", c + 1]] retain];
     
     ccBlendFunc cloudBlend;
     cloudBlend.src = GL_ONE;
     cloudBlend.dst = GL_ONE_MINUS_SRC_ALPHA;
     
     for (NSUInteger c = 0; c < kCloudCount; ++c) {
-        Sprite *cloud = [Sprite spriteWithTexture:clouds[random() % kCloudFrames]];
+        Sprite *cloud = [Sprite spriteWithTexture:self.clouds[random() % kCloudFrames]];
         cloud.position = CGPointMake(random() % (NSInteger)(self.contentSize.width + cloud.contentSize.width)
                                      + cloud.contentSize.width / 4,
                                      self.contentSize.height - random() % (NSInteger)cloud.contentSize.height / 3);
@@ -94,21 +107,21 @@
 
 -(void) reset {
 
-    skyColorFrom = ccc4l([[DeblockConfig get].skyColorFrom longValue]);
-    skyColorTo = ccc4l([[DeblockConfig get].skyColorTo longValue]);
-    fancySky = [[Config get].visualFx boolValue];
+    self.skyColorFrom = ccc4l([[DeblockConfig get].skyColorFrom longValue]);
+    self.skyColorTo = ccc4l([[DeblockConfig get].skyColorTo longValue]);
+    self.fancySky = [[Config get].visualFx boolValue];
 }
 
 
 -(void) draw {
     
-    if(fancySky) {
-        DrawBoxFrom(CGPointZero, ccp(self.contentSize.width, self.contentSize.height), skyColorFrom, skyColorTo);
+    if(self.fancySky) {
+        DrawBoxFrom(CGPointZero, ccp(self.contentSize.width, self.contentSize.height), self.skyColorFrom, self.skyColorTo);
     }
     
     else {
-        glClearColor(skyColorFrom.r / (float)0xff, skyColorFrom.g / (float)0xff,
-                     skyColorFrom.b / (float)0xff, skyColorFrom.a / (float)0xff);
+        glClearColor(self.skyColorFrom.r / (float)0xff, self.skyColorFrom.g / (float)0xff,
+                     self.skyColorFrom.b / (float)0xff, self.skyColorFrom.a / (float)0xff);
         glClear(GL_COLOR_BUFFER_BIT);
     }
 }
@@ -116,7 +129,7 @@
 
 -(void) dealloc {
     
-    free(clouds);
+    free(self.clouds);
     
     [super dealloc];
 }

@@ -28,6 +28,13 @@
 
 #define dFreezeTime 30
 
+@interface BlockLayer ()
+
+@property (readwrite, assign) Texture2D                                 **textures;
+@property (readwrite, retain) Label                                     *label;
+
+@end
+
 
 @implementation SpecialBlockLayer
 
@@ -60,8 +67,8 @@
     
     self.type           = DMBlockTypeSpecial;
     
-    [textures[0] release];
-    textures[0]         = [[[TextureMgr sharedTextureMgr] addImage:@"block.whole.bomb.png"] retain];
+    [self.textures[0] release];
+    self.textures[0]         = [[[TextureMgr sharedTextureMgr] addImage:@"block.whole.bomb.png"] retain];
     
     return self;
 }
@@ -106,8 +113,8 @@
     if (!(self = [super initWithType:aType blockSize:size]))
         return nil;
     
-    [textures[0] release];
-    textures[0]         = [[[TextureMgr sharedTextureMgr] addImage:@"block.whole.morph.png"] retain];
+    [self.textures[0] release];
+    self.textures[0]         = [[[TextureMgr sharedTextureMgr] addImage:@"block.whole.morph.png"] retain];
 
     return self;
 }
@@ -164,8 +171,8 @@
     if (!(self = [super initWithType:aType blockSize:size]))
         return nil;
     
-    [textures[0] release];
-    textures[0]         = [[[TextureMgr sharedTextureMgr] addImage:@"block.whole.zap.png"] retain];
+    [self.textures[0] release];
+    self.textures[0]         = [[[TextureMgr sharedTextureMgr] addImage:@"block.whole.zap.png"] retain];
     
     return self;
 }
@@ -227,9 +234,13 @@
 - (void)cool;
 - (void)freeze;
 
+@property (readwrite, assign) NSInteger timeLeft;
+
 @end
 
 @implementation FreezeBlockLayer
+
+@synthesize timeLeft = _timeLeft;
 
 + (NSUInteger)occurancePercentForLevel:(NSUInteger)level type:(DMBlockType)aType {
     
@@ -242,8 +253,8 @@
     if (!(self = [super initWithType:aType blockSize:size]))
         return nil;
     
-    [textures[0] release];
-    textures[0]         = [[[TextureMgr sharedTextureMgr] addImage:@"block.whole.freeze.png"] retain];
+    [self.textures[0] release];
+    self.textures[0]         = [[[TextureMgr sharedTextureMgr] addImage:@"block.whole.freeze.png"] retain];
     
     return self;
 }
@@ -252,23 +263,23 @@
     
     [super onEnter];
     
-    timeLeft = dFreezeTime;
-    [label setString:[NSString stringWithFormat:@"%d", max(0, timeLeft)]];
+    self.timeLeft = dFreezeTime;
+    [self.label setString:[NSString stringWithFormat:@"%d", max(0, self.timeLeft)]];
     [self runAction:[Sequence actionOne:[Repeat actionWithAction:[Sequence actionOne:[DelayTime actionWithDuration:1]
                                                                                  two:[CallFunc actionWithTarget:self selector:@selector(cool)]]
-                                                           times:timeLeft]
+                                                           times:self.timeLeft]
                                     two:[CallFunc actionWithTarget:self selector:@selector(freeze)]]];
 }
 
 - (void)cool {
     
-    --timeLeft;
-    [label setString:[NSString stringWithFormat:@"%d", max(0, timeLeft)]];
+    --self.timeLeft;
+    [self.label setString:[NSString stringWithFormat:@"%d", max(0, self.timeLeft)]];
 }
 
 - (void)freeze {
 
-    [label setString:@""];
+    [self.label setString:@""];
 
     NSInteger row, col;
     FieldLayer *field = [DeblockAppDelegate get].gameLayer.fieldLayer;

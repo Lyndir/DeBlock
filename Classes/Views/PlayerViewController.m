@@ -16,14 +16,19 @@
 - (void)playerAutocomplete:(NSString *)userText;
 - (void)loadPass;
 
-@property (readwrite, retain) UIAlertView   *alertCode;
+
+@property (readwrite, retain) UIAlertView                 *alertCode;
 
 @end
 
 @implementation PlayerViewController
 
-@synthesize playerTitle, playerField, playerSuggestion, next;
-@synthesize alertCode;
+@synthesize playerTitle = _playerTitle;
+@synthesize playerField = _playerField;
+@synthesize playerSuggestion = _playerSuggestion;
+@synthesize next = _next;
+@synthesize alertCode = _alertCode;
+
 
 - (id)init {
     
