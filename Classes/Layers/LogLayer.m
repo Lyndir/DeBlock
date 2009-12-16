@@ -69,4 +69,12 @@
     glBlendFunc(CC_BLEND_SRC, CC_BLEND_DST);
 }
 
+- (void)dealloc {
+
+    self.logLabel = nil;
+    self.logString = nil;
+
+    [super dealloc];
+}
+
 @end

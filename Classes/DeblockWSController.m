@@ -257,4 +257,14 @@
     }
 }
 
+- (void)dealloc {
+
+    self.requestsPlayer = nil;
+    self.alertPassword = nil;
+    self.alertConnection = nil;
+    self.alertPlayer = nil;
+
+    [super dealloc];
+}
+
 @end

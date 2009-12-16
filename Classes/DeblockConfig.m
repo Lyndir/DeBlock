@@ -215,4 +215,21 @@
 }
 
 
+- (void)dealloc {
+
+    self.compete = nil;
+    self.wsUrl = nil;
+    self.levelScore = nil;
+    self.levelPenalty = nil;
+    self.gameMode = nil;
+    self.skyColorFrom = nil;
+    self.skyColorTo = nil;
+    self.flawlessBonus = nil;
+    self.userName = nil;
+    self.userScoreHistory = nil;
+    self.playersCached = nil;
+
+    [super dealloc];
+}
+
 @end

@@ -48,4 +48,12 @@
     return (interfaceOrientation == UIInterfaceOrientationLandscapeRight);
 }
 
+- (void)dealloc {
+
+    self.top = nil;
+    self.bottom = nil;
+
+    [super dealloc];
+}
+
 @end

@@ -79,6 +79,14 @@
     return [NSString stringWithFormat:@"%@: %@: %d", self.username, self.date, self.score];
 }
 
+- (void)dealloc {
+    
+    self.username = nil;
+    self.date = nil;
+
+    [super dealloc];
+}
+
 @end
 
 
@@ -314,6 +322,10 @@
     glDeleteBuffers(1, &_vertexBuffer);
     _vertexBuffer = 0;
     
+    self.sortedScores = nil;
+    self.scoreFormat = nil;
+    self.dateFormatter = nil;
+    
     [super dealloc];
 }
 
@@ -374,6 +386,14 @@
     DrawBorderFrom(CGPointZero, CGPointFromSize(self.contentSize),
                    ccc4(0xff, 0xff, 0xff, 0x66), 2);
     glBlendFunc(CC_BLEND_SRC, CC_BLEND_DST);
+}
+
+- (void)dealloc {
+
+    self.sortedScores = nil;
+    self.graphDataNode = nil;
+
+    [super dealloc];
 }
 
 @end

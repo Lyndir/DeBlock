@@ -152,4 +152,15 @@
     return name;
 }
 
+- (void)dealloc {
+
+    self.playerTitle = nil;
+    self.playerField = nil;
+    self.playerSuggestion = nil;
+    self.next = nil;
+    self.alertCode = nil;
+
+    [super dealloc];
+}
+
 @end

@@ -276,6 +276,9 @@
     self.skyLayer = nil;
     self.fieldLayer = nil;
     
+    self.fieldScroller = nil;
+    self.shakeAction = nil;
+
     [super dealloc];
 }
 

@@ -219,6 +219,13 @@
     self.name = nil;
     self.pass = nil;
 
+    self.nameLock = nil;
+    self.nameAlert = nil;
+    self.nameField = nil;
+    self.passLock = nil;
+    self.passAlert = nil;
+    self.passField = nil;
+
     [super dealloc];
 }
 

@@ -539,4 +539,13 @@ static NSDictionary *blockColors;
             row, col, [self class], self.type, properties];
 }
 
+- (void)dealloc {
+
+    self.moveAction = nil;
+    self.label = nil;
+    self.dropEmitter = nil;
+
+    [super dealloc];
+}
+
 @end

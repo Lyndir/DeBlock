@@ -85,4 +85,11 @@
 }
 
 
+- (void)dealloc {
+
+    self.graph = nil;
+
+    [super dealloc];
+}
+
 @end

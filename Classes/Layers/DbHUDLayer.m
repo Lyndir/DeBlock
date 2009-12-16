@@ -75,4 +75,12 @@
     }
 }
 
+- (void)dealloc {
+
+    self.levelScoreCount = nil;
+    self.levelPenaltyCount = nil;
+
+    [super dealloc];
+}
+
 @end

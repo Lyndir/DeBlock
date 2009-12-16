@@ -40,4 +40,11 @@
     return self;
 }
 
+- (void)dealloc {
+
+    self.guide = nil;
+
+    [super dealloc];
+}
+
 @end

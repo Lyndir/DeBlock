@@ -92,6 +92,15 @@
     self.gameOverMenu = nil;
     self.mainMenu = nil;
     
+    self.splashVC = nil;
+    self.gameLayer = nil;
+    self.moreMenu = nil;
+    self.newGameMenu = nil;
+    self.configMenu = nil;
+    self.continueGame = nil;
+    self.alertWelcome = nil;
+    self.alertCompete = nil;
+
     [super dealloc];
 }
 
@@ -125,6 +134,8 @@
                      [MenuItemSpacer spacerSmall],
                      [MenuItemFont itemFromString:l(@"menu.strategy")
                                            target:self selector:@selector(strategy:)],
+                     [MenuItemFont itemFromString:@"Shutdown"
+                                           target:self selector:@selector(shutdown:)],
                      nil];
     self.mainMenu.background         = [Sprite spriteWithFile:@"back.png"];
     self.mainMenu.outerPadding       = margin(100, 0, 10, 0);
