@@ -120,8 +120,8 @@
     [[DeblockWSController get] reloadScores];
     
     self.splashVC = [[SplashViewController new] autorelease];
-    [window addSubview:self.splashVC.view];
-    [window makeKeyAndVisible];
+    [self.window addSubview:self.splashVC.view];
+    [self.window makeKeyAndVisible];
     
     self.mainMenu = [MenuLayer menuWithDelegate:self logo:[MenuItemSpacer spacerLarge]
                                           items:
@@ -214,7 +214,7 @@
                                                target:self selector:@selector(levelRedo:)],
                          nil];
     
-    [uiLayer addChild:self.gameLayer = [GameLayer node]];
+    [self.uiLayer addChild:self.gameLayer = [GameLayer node]];
 }
 
 - (void)showDirector {
@@ -296,10 +296,10 @@
 
 -(HUDLayer *) hudLayer {
     
-    if(!hudLayer)
-        hudLayer = [DbHUDLayer new];
+    if(!super.hudLayer)
+        self.hudLayer = [DbHUDLayer node];
     
-    return hudLayer;
+    return super.hudLayer;
 }
 
 

@@ -58,19 +58,19 @@
 -(void) updateHudWasGood:(BOOL)wasGood {
     
     NSInteger playerScore = [[DeblockConfig get] currentPlayer].score;
-    [scoreCount setString:[NSString stringWithFormat:@"%04d", playerScore]];
+    [self.scoreCount setString:[NSString stringWithFormat:@"%04d", playerScore]];
     [super updateHudWasGood:wasGood];
     
     NSString *gameScore         = [NSString stringWithFormat:@"%04d", playerScore];
     NSString *levelScore        = [NSString stringWithFormat:@"%+04d", [[DeblockConfig get].levelScore intValue]];
     NSString *levelPenalty      = [NSString stringWithFormat:@"%+04d", [[DeblockConfig get].levelPenalty intValue]];
     
-    self.levelScoreCount.position    = ccp(scoreCount.position.x + 13 * gameScore.length, scoreCount.position.y);
+    self.levelScoreCount.position    = ccp(self.scoreCount.position.x + 13 * gameScore.length, self.scoreCount.position.y);
     [self.levelScoreCount setString:levelScore];
     
     self.levelPenaltyCount.visible = [[DeblockConfig get].gameMode unsignedIntValue] == DbModeTimed;
     if (self.levelPenaltyCount.visible) {
-        self.levelPenaltyCount.position  = ccp(scoreCount.position.x + 13 * (gameScore.length + levelScore.length), scoreCount.position.y);
+        self.levelPenaltyCount.position  = ccp(self.scoreCount.position.x + 13 * (gameScore.length + levelScore.length), self.scoreCount.position.y);
         [self.levelPenaltyCount setString:levelPenalty];
     }
 }

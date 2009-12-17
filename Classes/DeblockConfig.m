@@ -50,7 +50,7 @@
     if (!(self = [super init]))
         return nil;
     
-    [defaults registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
+    [self.defaults registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
                                 [NSNumber numberWithLong:0x38343C00],                           cShadeColor,
 
                                 [NSNumber numberWithUnsignedInt:DbCompeteOff],                  cCompete,
@@ -108,7 +108,7 @@
 - (NSDictionary *)players {
     
     if (!_playersCached) {
-        _playersCached = [[NSKeyedUnarchiver unarchiveObjectWithData:[defaults dataForKey:@"players"]] retain];
+        _playersCached = [[NSKeyedUnarchiver unarchiveObjectWithData:[self.defaults dataForKey:@"players"]] retain];
         
         if(_playersCached == nil)
             _playersCached = [NSDictionary new];
@@ -151,8 +151,8 @@
     [players removeObjectForKey:player.name];
     
     NSData *playersArchive = [NSKeyedArchiver archivedDataWithRootObject:players];
-    [defaults setObject:playersArchive forKey:@"players"];
-    [defaults synchronize];
+    [self.defaults setObject:playersArchive forKey:@"players"];
+    [self.defaults synchronize];
     
     [_playersCached release];
     _playersCached = players;
@@ -167,8 +167,8 @@
     [players setObject:player forKey:player.name];
     
     NSData *playersArchive = [NSKeyedArchiver archivedDataWithRootObject:players];
-    [defaults setObject:playersArchive forKey:@"players"];
-    [defaults synchronize];
+    [self.defaults setObject:playersArchive forKey:@"players"];
+    [self.defaults synchronize];
     
     [_playersCached release];
     _playersCached = players;
