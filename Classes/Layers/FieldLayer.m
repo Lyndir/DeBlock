@@ -106,8 +106,8 @@
                     continue;
                 
                 [self removeChild:block cleanup:YES];
+                [self.blockGrid[row][col] release];
                 self.blockGrid[row][col] = nil;
-                [block release];
             }
             free(self.blockGrid[row]);
         }
@@ -327,8 +327,8 @@
     aBlock.destroyed    = YES;
     [self reorderChild:aBlock z:1];
     [aBlock crumble];
-    [aBlock release];
     
+    [self.blockGrid[row][col] release];
     self.blockGrid[row][col] = nil;
 }
 
@@ -484,8 +484,8 @@
         block.targetCol = targetCol;
         CGFloat dropWidth = fabsf(col - block.targetCol) * (block.contentSize.width + self.blockPadding) * gravityColDirection;
         
-        [block runAction:block.moveAction = [[Sequence alloc] initOne:[MoveBy actionWithDuration:0.3f position:ccp(dropWidth, 0)]
-                                                                  two:[CallFuncN actionWithTarget:self selector:@selector(doneCollapsingBlock:)]]];
+        [block runAction:block.moveAction = [Sequence actionOne:[MoveBy actionWithDuration:0.3f position:ccp(dropWidth, 0)]
+                                                            two:[CallFuncN actionWithTarget:self selector:@selector(doneCollapsingBlock:)]]];
         anyBlockCollapsing = YES;
     }
     
@@ -717,6 +717,23 @@
 
 
 - (void)dealloc {
+    
+    if (self.blockGrid) {
+        for (NSInteger row = 0; row < self.blockRows; ++row) {
+            for (NSInteger col = 0; col < self.blockColumns; ++col) {
+                BlockLayer *block = self.blockGrid[row][col];
+                if (!block)
+                    continue;
+                
+                [self removeChild:block cleanup:YES];
+                [self.blockGrid[row][col] release];
+                self.blockGrid[row][col] = nil;
+            }
+            free(self.blockGrid[row]);
+        }
+        free(self.blockGrid);
+    }
+    self.blockGrid = nil;
     
     self.msgLabel = nil;
     

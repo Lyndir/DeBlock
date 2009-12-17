@@ -67,6 +67,7 @@ static NSDictionary *blockColors;
 
 + (void)initialize {
 
+    [blockColors release];
     blockColors = [[NSDictionary alloc] initWithObjectsAndKeys:
 //                 [NSNumber numberWithLong:0x385D8Aff],    [NSNumber numberWithUnsignedInt:DMBlockTypeOne],
 //                 [NSNumber numberWithLong:0x37A647ff],    [NSNumber numberWithUnsignedInt:DMBlockTypeTwo],
@@ -541,6 +542,9 @@ static NSDictionary *blockColors;
 
 - (void)dealloc {
 
+    free(self.textures);
+    self.textures = nil;
+    
     self.moveAction = nil;
     self.label = nil;
     self.dropEmitter = nil;

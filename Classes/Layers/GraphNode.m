@@ -322,6 +322,13 @@
     glDeleteBuffers(1, &_vertexBuffer);
     _vertexBuffer = 0;
     
+    for (NSUInteger s = 0; s < self.scoreCount; ++s) {
+        [self removeChild:self.scoreLabels[s] cleanup:YES];
+        [self.scoreLabels[s] release];
+    }
+    free(self.scoreLabels);
+    self.scoreLabels                 = nil;
+    
     self.sortedScores = nil;
     self.scoreFormat = nil;
     self.dateFormatter = nil;

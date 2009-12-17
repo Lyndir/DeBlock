@@ -129,7 +129,10 @@
 
 -(void) dealloc {
     
+    for (NSUInteger c = 0; c < kCloudFrames; ++c)
+        [self.clouds[c] release];
     free(self.clouds);
+    self.clouds = nil;
     
     [super dealloc];
 }
