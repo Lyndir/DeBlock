@@ -238,6 +238,14 @@
     }
 }
 
+- (void)didUpdateConfigForKey:(SEL)configKey {
+    
+    [super didUpdateConfigForKey:configKey];
+    
+    if (configKey == @selector(userScoreHistory))
+        [[ScoresLayer get] reset];
+}
+
 
 - (NSString *)labelForSetting:(SEL)setting {
     

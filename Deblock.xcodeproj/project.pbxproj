@@ -702,6 +702,22 @@
 		DAEC2F211058D11D005475FB /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAEC2F201058D11D005475FB /* OpenGLES.framework */; };
 		DAEC2F231058D11D005475FB /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAEC2F221058D11D005475FB /* QuartzCore.framework */; };
 		DAEC2F251058D11D005475FB /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAEC2F241058D11D005475FB /* UIKit.framework */; };
+		DAF3369310EC13A000018151 /* MenuItemSymbolic.m in Sources */ = {isa = PBXBuildFile; fileRef = DAF3369210EC13A000018151 /* MenuItemSymbolic.m */; };
+		DAF3369410EC13A000018151 /* MenuItemSymbolic.m in Sources */ = {isa = PBXBuildFile; fileRef = DAF3369210EC13A000018151 /* MenuItemSymbolic.m */; };
+		DAF3369510EC13A000018151 /* MenuItemSymbolic.m in Sources */ = {isa = PBXBuildFile; fileRef = DAF3369210EC13A000018151 /* MenuItemSymbolic.m */; };
+		DAF3369610EC13A000018151 /* MenuItemSymbolic.m in Sources */ = {isa = PBXBuildFile; fileRef = DAF3369210EC13A000018151 /* MenuItemSymbolic.m */; };
+		DAF336DE10EC182400018151 /* DejaVuSans.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DAF336DD10EC182400018151 /* DejaVuSans.ttf */; };
+		DAF336DF10EC182400018151 /* DejaVuSans.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DAF336DD10EC182400018151 /* DejaVuSans.ttf */; };
+		DAF336E010EC182400018151 /* DejaVuSans.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DAF336DD10EC182400018151 /* DejaVuSans.ttf */; };
+		DAF336E110EC182400018151 /* DejaVuSans.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DAF336DD10EC182400018151 /* DejaVuSans.ttf */; };
+		DAF336F110EC18F300018151 /* Menlo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DAF336F010EC18F300018151 /* Menlo.ttf */; };
+		DAF336F210EC18F300018151 /* Menlo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DAF336F010EC18F300018151 /* Menlo.ttf */; };
+		DAF336F310EC18F300018151 /* Menlo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DAF336F010EC18F300018151 /* Menlo.ttf */; };
+		DAF336F410EC18F300018151 /* Menlo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DAF336F010EC18F300018151 /* Menlo.ttf */; };
+		DAF3370010EC1A7600018151 /* Apple Symbols.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DAF336FF10EC1A7600018151 /* Apple Symbols.ttf */; };
+		DAF3370110EC1A7600018151 /* Apple Symbols.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DAF336FF10EC1A7600018151 /* Apple Symbols.ttf */; };
+		DAF3370210EC1A7600018151 /* Apple Symbols.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DAF336FF10EC1A7600018151 /* Apple Symbols.ttf */; };
+		DAF3370310EC1A7600018151 /* Apple Symbols.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DAF336FF10EC1A7600018151 /* Apple Symbols.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1281,6 +1297,11 @@
 		DAEC2F201058D11D005475FB /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		DAEC2F221058D11D005475FB /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		DAEC2F241058D11D005475FB /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		DAF3369110EC13A000018151 /* MenuItemSymbolic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuItemSymbolic.h; sourceTree = "<group>"; };
+		DAF3369210EC13A000018151 /* MenuItemSymbolic.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuItemSymbolic.m; sourceTree = "<group>"; };
+		DAF336DD10EC182400018151 /* DejaVuSans.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = DejaVuSans.ttf; sourceTree = "<group>"; };
+		DAF336F010EC18F300018151 /* Menlo.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Menlo.ttf; sourceTree = "<group>"; };
+		DAF336FF10EC1A7600018151 /* Apple Symbols.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Apple Symbols.ttf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1766,6 +1787,8 @@
 		DA1AC3D6108C89AA00C9AD7B /* Menus */ = {
 			isa = PBXGroup;
 			children = (
+				DAF3369110EC13A000018151 /* MenuItemSymbolic.h */,
+				DAF3369210EC13A000018151 /* MenuItemSymbolic.m */,
 				DA1AC3D7108C89AA00C9AD7B /* ConfigMenuLayer.h */,
 				DA1AC3D8108C89AA00C9AD7B /* ConfigMenuLayer.m */,
 				DA1AC3D9108C89AA00C9AD7B /* Configuration */,
@@ -1940,6 +1963,9 @@
 		DAB2C591105710DA00B6701A /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
+				DAF336FF10EC1A7600018151 /* Apple Symbols.ttf */,
+				DAF336F010EC18F300018151 /* Menlo.ttf */,
+				DAF336DD10EC182400018151 /* DejaVuSans.ttf */,
 				DA79237810C5403D00321549 /* WenQuanYi-Microhei-Lite.ttf */,
 				DAC0E95A10C3264E00B05A4D /* DejaVuSerif-Bold.ttf */,
 				DA3EE03610B0413200F8488D /* DejaVuSansMono.ttf */,
@@ -2505,6 +2531,9 @@
 				DA87ACB110CC138D006FBCE1 /* title.game.paused.png in Resources */,
 				DA394AB010D79A72008DC0BF /* iTunesArtwork in Resources */,
 				DA70418B10E961020055D910 /* wheel.png in Resources */,
+				DAF336DF10EC182400018151 /* DejaVuSans.ttf in Resources */,
+				DAF336F210EC18F300018151 /* Menlo.ttf in Resources */,
+				DAF3370110EC1A7600018151 /* Apple Symbols.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2595,6 +2624,9 @@
 				DA87ACB310CC138D006FBCE1 /* title.game.paused.png in Resources */,
 				DA394AB110D79A72008DC0BF /* iTunesArtwork in Resources */,
 				DA70418C10E961020055D910 /* wheel.png in Resources */,
+				DAF336E010EC182400018151 /* DejaVuSans.ttf in Resources */,
+				DAF336F310EC18F300018151 /* Menlo.ttf in Resources */,
+				DAF3370210EC1A7600018151 /* Apple Symbols.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2685,6 +2717,9 @@
 				DA40DBAE10D5A5DB00BBC2CD /* title.game.paused.png in Resources */,
 				DA394AB210D79A72008DC0BF /* iTunesArtwork in Resources */,
 				DA70418D10E961020055D910 /* wheel.png in Resources */,
+				DAF336E110EC182400018151 /* DejaVuSans.ttf in Resources */,
+				DAF336F410EC18F300018151 /* Menlo.ttf in Resources */,
+				DAF3370310EC1A7600018151 /* Apple Symbols.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2775,6 +2810,9 @@
 				DA87ACAF10CC138D006FBCE1 /* title.game.paused.png in Resources */,
 				DA394AAF10D79A72008DC0BF /* iTunesArtwork in Resources */,
 				DA70418A10E961020055D910 /* wheel.png in Resources */,
+				DAF336DE10EC182400018151 /* DejaVuSans.ttf in Resources */,
+				DAF336F110EC18F300018151 /* Menlo.ttf in Resources */,
+				DAF3370010EC1A7600018151 /* Apple Symbols.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2851,6 +2889,7 @@
 				DA1D1EE010B9B9F100B125C4 /* SplashViewController.m in Sources */,
 				DA70419A10E961330055D910 /* BarSprite.m in Sources */,
 				DA7041A010E961440055D910 /* ActivitySprite.m in Sources */,
+				DAF3369410EC13A000018151 /* MenuItemSymbolic.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2877,6 +2916,7 @@
 				DA1D202F10B9DE2D00B125C4 /* SplashViewController.m in Sources */,
 				DA70419B10E961330055D910 /* BarSprite.m in Sources */,
 				DA7041A110E961440055D910 /* ActivitySprite.m in Sources */,
+				DAF3369510EC13A000018151 /* MenuItemSymbolic.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2903,6 +2943,7 @@
 				DA40DBC010D5A5DB00BBC2CD /* SplashViewController.m in Sources */,
 				DA70419C10E961330055D910 /* BarSprite.m in Sources */,
 				DA7041A210E961440055D910 /* ActivitySprite.m in Sources */,
+				DAF3369610EC13A000018151 /* MenuItemSymbolic.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2994,6 +3035,7 @@
 				DA1D1EDF10B9B9F100B125C4 /* SplashViewController.m in Sources */,
 				DA70419910E961330055D910 /* BarSprite.m in Sources */,
 				DA70419F10E961440055D910 /* ActivitySprite.m in Sources */,
+				DAF3369310EC13A000018151 /* MenuItemSymbolic.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

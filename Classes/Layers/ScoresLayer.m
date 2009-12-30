@@ -24,6 +24,7 @@
 
 #import "ScoresLayer.h"
 #import "DeblockWSController.h"
+#import "MenuItemSymbolic.h"
 
 
 @interface ScoresLayer ()
@@ -56,11 +57,11 @@
                                           (int)((winSize.height - self.graph.contentSize.height) / 1.5f));
     [self addChild:self.graph];
     
+    [self setNextButton:[MenuItemSymbolic itemFromString:@"  ⟳  "]];
+
     self.wheel = [ActivitySprite node];
-    [self addChild:self.wheel];
-    //[self setNextButton:[MenuItemAtlasSprite itemFromNormalSprite:wheel.sprite selectedSprite:wheel.sprite]];
-    //[self setNextButtonTarget:self selector:@selector(activityButton)];
     self.wheel.position = _nextMenu.position;
+    [self addChild:self.wheel];
     
     [self schedule:@selector(checkWS) interval:0.5f];
     
@@ -68,6 +69,15 @@
 }
 
 - (void)onEnter {
+
+    [self reset];
+    
+    [self checkWS];
+    
+    [super onEnter];
+}
+
+- (void)reset {
     
     NSMutableArray *scores = [NSMutableArray arrayWithCapacity:[[DeblockConfig get].userScoreHistory count]];
     for (NSString *user in [[DeblockConfig get].userScoreHistory allKeys]) {
@@ -88,10 +98,6 @@
     }
     
     [self.graph setScores:scores];
-    
-    [self checkWS];
-    
-    [super onEnter];
 }
 
 - (void)checkWS {

@@ -25,9 +25,10 @@
 #import "ShadeLayer.h"
 #import "GraphNode.h"
 #import "ActivitySprite.h"
+#import "Resettable.h"
 
 
-@interface ScoresLayer : ShadeLayer {
+@interface ScoresLayer : ShadeLayer<Resettable> {
 
 @private
     GraphNode       *_graph;
