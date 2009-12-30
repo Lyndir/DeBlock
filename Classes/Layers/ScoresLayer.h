@@ -24,12 +24,14 @@
 
 #import "ShadeLayer.h"
 #import "GraphNode.h"
+#import "ActivitySprite.h"
 
 
 @interface ScoresLayer : ShadeLayer {
 
 @private
-    GraphNode      *_graph;
+    GraphNode       *_graph;
+    ActivitySprite  *_wheel;
 }
 
 + (ScoresLayer *)get;

@@ -362,16 +362,15 @@
     if (!(self = [super init]))
         return nil;
     
-    CGSize winSize          = [Director sharedDirector].winSize;
-    self.contentSize        = CGSizeMake(winSize.width * 0.9f, winSize.height * 0.7f);
-    self.position           = ccp((winSize.width - self.contentSize.width) / 2,
-                                  (winSize.height - self.contentSize.height) / 2);
-    
     [self addChild:self.graphDataNode = [GraphDataNode node]];
-    self.graphDataNode.contentSize = self.contentSize;
 
     self.comparator         = @selector(compareByTopScore:);
 
+    CGSize winSize          = [Director sharedDirector].winSize;
+    self.contentSize        = CGSizeMake((int)(winSize.width * 0.9f), (int)(winSize.height * 0.7f));
+    self.position           = ccp(((int)(winSize.width - self.contentSize.width) / 2),
+                                  ((int)(winSize.height - self.contentSize.height) / 2));
+    
     return self;
 }
 
@@ -382,6 +381,13 @@
     _sortedScores        = [[newScores sortedArrayUsingSelector:self.comparator] retain];
     
     [self.graphDataNode updateWithSortedScores:self.sortedScores];
+}
+
+
+- (void)setContentSize:(CGSize)newContentSize {
+    
+    super.contentSize = newContentSize;
+    self.graphDataNode.contentSize = self.contentSize;
 }
 
 

@@ -30,6 +30,8 @@
 
 @property (readwrite, retain) NSMutableDictionary     *requestsPlayer;
 
+@property (readwrite, assign) BOOL                      submittingScores;
+
 @property (readwrite, retain) UIAlertView             *alertPassword;
 @property (readwrite, retain) UIAlertView             *alertConnection;
 @property (readwrite, retain) Player                  *alertPlayer;
@@ -40,6 +42,7 @@
 @implementation DeblockWSController
 
 @synthesize requestsPlayer = _requestsPlayer;
+@synthesize submittingScores = _submittingScores;
 @synthesize alertPassword = _alertPassword, alertConnection = _alertConnection;
 @synthesize alertPlayer = _alertPlayer;
 
@@ -139,6 +142,8 @@
         [self.requestsPlayer setObject:player? player: (id)[NSNull null] forKey:requestValue];
         [request startAsynchronous];
         [request retain];
+        
+        self.submittingScores = YES;
     }
     @finally {
         [pool drain];
@@ -156,6 +161,8 @@
 
 
 - (void)requestFinished:(ASIHTTPRequest *)request {
+    
+    self.submittingScores   = NO;
     
     NSValue *requestValue   = [NSValue valueWithPointer:request];
     Player *player          = [self.requestsPlayer objectForKey:requestValue];
@@ -198,6 +205,8 @@
 
 
 - (void)requestFailed:(ASIHTTPRequest *)request {
+    
+    self.submittingScores   = NO;
     
     NSValue *requestValue   = [NSValue valueWithPointer:request];
 

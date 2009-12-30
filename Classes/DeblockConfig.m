@@ -147,7 +147,7 @@
     if (!player.name)
         return;
     
-    NSMutableDictionary *players = [[self players] mutableCopy];
+    NSMutableDictionary *players = [[[self players] mutableCopy] autorelease];
     [players removeObjectForKey:player.name];
     
     NSData *playersArchive = [NSKeyedArchiver archivedDataWithRootObject:players];
@@ -155,7 +155,7 @@
     [self.defaults synchronize];
     
     [_playersCached release];
-    _playersCached = players;
+    _playersCached = [players retain];
 }
 
 - (void)updatePlayer:(Player *)player {
@@ -163,7 +163,7 @@
     if (!player.name)
         return;
     
-    NSMutableDictionary *players = [[self players] mutableCopy];
+    NSMutableDictionary *players = [[[self players] mutableCopy] autorelease];
     [players setObject:player forKey:player.name];
     
     NSData *playersArchive = [NSKeyedArchiver archivedDataWithRootObject:players];
@@ -171,7 +171,7 @@
     [self.defaults synchronize];
     
     [_playersCached release];
-    _playersCached = players;
+    _playersCached = [players retain];
 }
 
 - (void)addScore:(NSInteger)score {

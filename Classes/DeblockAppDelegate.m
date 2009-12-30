@@ -30,6 +30,7 @@
 #import "StrategyLayer.h"
 #import "DeblockWSController.h"
 #import "LogLayer.h"
+#import "ActivitySprite.h"
 
 
 @interface DeblockAppDelegate ()
@@ -160,7 +161,7 @@
     self.moreMenu.opacity            = 0xcc;
     self.moreMenu.color              = ccc3(0x99, 0x99, 0xff);
     self.moreMenu.colorGradient      = ccc4(0xcc, 0xcc, 0xff, 0xcc);
-    [self.moreMenu.nextButton setString:@"   ⌕   "];
+    [(MenuItemFont *)self.moreMenu.nextButton setString:@"   ⌕   "];
     [self.moreMenu setNextButtonTarget:self selector:@selector(log)];
     
     self.newGameMenu = [MenuLayer menuWithDelegate:self logo:[MenuItemSpacer spacerLarge]

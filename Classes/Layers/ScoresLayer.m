@@ -23,18 +23,23 @@
 //
 
 #import "ScoresLayer.h"
+#import "DeblockWSController.h"
 
 
 @interface ScoresLayer ()
 
-@property (readwrite, retain) GraphNode      *graph;
+- (void)wsButton;
+- (void)checkWS;
+
+@property (readwrite, retain) GraphNode             *graph;
+@property (readwrite, retain) ActivitySprite        *wheel;
 
 @end
 
 
 @implementation ScoresLayer
 
-@synthesize graph = _graph;
+@synthesize graph = _graph, wheel = _wheel;
 
 
 - (id)init {
@@ -42,10 +47,22 @@
     if (!(self = [super init]))
         return nil;
     
-    self.background = [Sprite spriteWithFile:@"back.png"];
+    CGSize winSize                  = [Director sharedDirector].winSize;
+    self.background                 = [Sprite spriteWithFile:@"back.png"];
     
-    self.graph = [GraphNode node];
+    self.graph                      = [GraphNode node];
+    self.graph.contentSize          = CGSizeMake((int)(winSize.width * 0.9f), (int)(winSize.height * 0.6f));
+    self.graph.position             = ccp((int)((winSize.width - self.graph.contentSize.width) / 2),
+                                          (int)((winSize.height - self.graph.contentSize.height) / 1.5f));
     [self addChild:self.graph];
+    
+    self.wheel = [ActivitySprite node];
+    [self addChild:self.wheel];
+    //[self setNextButton:[MenuItemAtlasSprite itemFromNormalSprite:wheel.sprite selectedSprite:wheel.sprite]];
+    //[self setNextButtonTarget:self selector:@selector(activityButton)];
+    self.wheel.position = _nextMenu.position;
+    
+    [self schedule:@selector(checkWS) interval:0.5f];
     
     return self;
 }
@@ -72,7 +89,26 @@
     
     [self.graph setScores:scores];
     
+    [self checkWS];
+    
     [super onEnter];
+}
+
+- (void)checkWS {
+    
+    self.wheel.visible = [DeblockWSController get].submittingScores;
+
+    if ([DeblockWSController get].submittingScores)
+        [self setNextButtonTarget:nil selector:nil];
+    else
+        [self setNextButtonTarget:self selector:@selector(wsButton)];
+    
+}
+
+- (void)wsButton {
+    
+    [[DeblockWSController get] reloadScores];
+    [self checkWS];
 }
 
 + (ScoresLayer *)get {

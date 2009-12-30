@@ -13,10 +13,14 @@
 @interface DeblockWSController : NSObject<ASIHTTPRequestDelegate, UIAlertViewDelegate> {
 
     NSMutableDictionary     *_requestsPlayer;
+    
+    BOOL                    _submittingScores;
 
     UIAlertView             *_alertPassword, *_alertConnection;
     Player                  *_alertPlayer;
 }
+
+@property (readonly) BOOL   submittingScores;
 
 /**
  * Get the singleton instance.

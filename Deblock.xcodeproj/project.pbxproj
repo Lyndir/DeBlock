@@ -143,8 +143,6 @@
 		DA1AC3FE108C89AA00C9AD7B /* Config.m in Sources */ = {isa = PBXBuildFile; fileRef = DA1AC3AC108C89AA00C9AD7B /* Config.m */; };
 		DA1AC3FF108C89AA00C9AD7B /* Logger.h in Headers */ = {isa = PBXBuildFile; fileRef = DA1AC3AD108C89AA00C9AD7B /* Logger.h */; };
 		DA1AC400108C89AA00C9AD7B /* Logger.m in Sources */ = {isa = PBXBuildFile; fileRef = DA1AC3AE108C89AA00C9AD7B /* Logger.m */; };
-		DA1AC401108C89AA00C9AD7B /* BarSprite.h in Headers */ = {isa = PBXBuildFile; fileRef = DA1AC3D0108C89AA00C9AD7B /* BarSprite.h */; };
-		DA1AC402108C89AA00C9AD7B /* BarSprite.m in Sources */ = {isa = PBXBuildFile; fileRef = DA1AC3D1108C89AA00C9AD7B /* BarSprite.m */; };
 		DA1AC403108C89AA00C9AD7B /* DebugLayer.h in Headers */ = {isa = PBXBuildFile; fileRef = DA1AC3D2108C89AA00C9AD7B /* DebugLayer.h */; };
 		DA1AC404108C89AA00C9AD7B /* DebugLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = DA1AC3D3108C89AA00C9AD7B /* DebugLayer.m */; };
 		DA1AC405108C89AA00C9AD7B /* HUDLayer.h in Headers */ = {isa = PBXBuildFile; fileRef = DA1AC3D4108C89AA00C9AD7B /* HUDLayer.h */; };
@@ -486,6 +484,18 @@
 		DA63684510583A95001E2410 /* Bilbao-Poster-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DA63683410583A95001E2410 /* Bilbao-Poster-Black.ttf */; };
 		DA63684810583A95001E2410 /* Comic FX.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DA63683710583A95001E2410 /* Comic FX.ttf */; };
 		DA63684F10583A95001E2410 /* MammaGamma.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DA63683E10583A95001E2410 /* MammaGamma.ttf */; };
+		DA70418A10E961020055D910 /* wheel.png in Resources */ = {isa = PBXBuildFile; fileRef = DA70418910E961020055D910 /* wheel.png */; };
+		DA70418B10E961020055D910 /* wheel.png in Resources */ = {isa = PBXBuildFile; fileRef = DA70418910E961020055D910 /* wheel.png */; };
+		DA70418C10E961020055D910 /* wheel.png in Resources */ = {isa = PBXBuildFile; fileRef = DA70418910E961020055D910 /* wheel.png */; };
+		DA70418D10E961020055D910 /* wheel.png in Resources */ = {isa = PBXBuildFile; fileRef = DA70418910E961020055D910 /* wheel.png */; };
+		DA70419910E961330055D910 /* BarSprite.m in Sources */ = {isa = PBXBuildFile; fileRef = DA70419810E961330055D910 /* BarSprite.m */; };
+		DA70419A10E961330055D910 /* BarSprite.m in Sources */ = {isa = PBXBuildFile; fileRef = DA70419810E961330055D910 /* BarSprite.m */; };
+		DA70419B10E961330055D910 /* BarSprite.m in Sources */ = {isa = PBXBuildFile; fileRef = DA70419810E961330055D910 /* BarSprite.m */; };
+		DA70419C10E961330055D910 /* BarSprite.m in Sources */ = {isa = PBXBuildFile; fileRef = DA70419810E961330055D910 /* BarSprite.m */; };
+		DA70419F10E961440055D910 /* ActivitySprite.m in Sources */ = {isa = PBXBuildFile; fileRef = DA70419E10E961440055D910 /* ActivitySprite.m */; };
+		DA7041A010E961440055D910 /* ActivitySprite.m in Sources */ = {isa = PBXBuildFile; fileRef = DA70419E10E961440055D910 /* ActivitySprite.m */; };
+		DA7041A110E961440055D910 /* ActivitySprite.m in Sources */ = {isa = PBXBuildFile; fileRef = DA70419E10E961440055D910 /* ActivitySprite.m */; };
+		DA7041A210E961440055D910 /* ActivitySprite.m in Sources */ = {isa = PBXBuildFile; fileRef = DA70419E10E961440055D910 /* ActivitySprite.m */; };
 		DA7051DF101DD01100399CC3 /* Entitlements.plist in Resources */ = {isa = PBXBuildFile; fileRef = DA7051DE101DD01100399CC3 /* Entitlements.plist */; };
 		DA79227510C5218900321549 /* block.cracked.1.png in Resources */ = {isa = PBXBuildFile; fileRef = DA79225510C5218900321549 /* block.cracked.1.png */; };
 		DA79227610C5218900321549 /* block.cracked.2.png in Resources */ = {isa = PBXBuildFile; fileRef = DA79225610C5218900321549 /* block.cracked.2.png */; };
@@ -961,8 +971,6 @@
 		DA1AC3CA108C89AA00C9AD7B /* fire.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fire.png; sourceTree = "<group>"; };
 		DA1AC3CB108C89AA00C9AD7B /* fps_images.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fps_images.png; sourceTree = "<group>"; };
 		DA1AC3CC108C89AA00C9AD7B /* smoke.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = smoke.png; sourceTree = "<group>"; };
-		DA1AC3D0108C89AA00C9AD7B /* BarSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BarSprite.h; sourceTree = "<group>"; };
-		DA1AC3D1108C89AA00C9AD7B /* BarSprite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BarSprite.m; sourceTree = "<group>"; };
 		DA1AC3D2108C89AA00C9AD7B /* DebugLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DebugLayer.h; sourceTree = "<group>"; };
 		DA1AC3D3108C89AA00C9AD7B /* DebugLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DebugLayer.m; sourceTree = "<group>"; };
 		DA1AC3D4108C89AA00C9AD7B /* HUDLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HUDLayer.h; sourceTree = "<group>"; };
@@ -1041,6 +1049,11 @@
 		DA6A1B361015DC5700B55AF8 /* DeblockConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeblockConfig.h; sourceTree = "<group>"; };
 		DA6A1B371015DC5700B55AF8 /* DeblockConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeblockConfig.m; sourceTree = "<group>"; };
 		DA6A20921017B6D700B55AF8 /* en */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = en; path = English.lproj/Localizable.strings; sourceTree = "<group>"; };
+		DA70418910E961020055D910 /* wheel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wheel.png; sourceTree = "<group>"; };
+		DA70419710E961330055D910 /* BarSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BarSprite.h; sourceTree = "<group>"; };
+		DA70419810E961330055D910 /* BarSprite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BarSprite.m; sourceTree = "<group>"; };
+		DA70419D10E961440055D910 /* ActivitySprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActivitySprite.h; sourceTree = "<group>"; };
+		DA70419E10E961440055D910 /* ActivitySprite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ActivitySprite.m; sourceTree = "<group>"; };
 		DA7051DE101DD01100399CC3 /* Entitlements.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Entitlements.plist; sourceTree = "<group>"; };
 		DA79225310C5215300321549 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = German.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		DA79225410C5215300321549 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = German.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -1679,6 +1692,7 @@
 		DA1AC3B5108C89AA00C9AD7B /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				DA70418910E961020055D910 /* wheel.png */,
 				DAC0E87A10C3019A00B05A4D /* menu.png */,
 				DAC0E87C10C3019A00B05A4D /* score.png */,
 				DA1AC3B6108C89AA00C9AD7B /* aim.body.0.png */,
@@ -1720,6 +1734,10 @@
 		DA1AC3CE108C89AA00C9AD7B /* Sprites */ = {
 			isa = PBXGroup;
 			children = (
+				DA70419710E961330055D910 /* BarSprite.h */,
+				DA70419810E961330055D910 /* BarSprite.m */,
+				DA70419D10E961440055D910 /* ActivitySprite.h */,
+				DA70419E10E961440055D910 /* ActivitySprite.m */,
 			);
 			path = Sprites;
 			sourceTree = "<group>";
@@ -1729,8 +1747,6 @@
 			children = (
 				DA1AC938109268C500C9AD7B /* FlickLayer.h */,
 				DA1AC939109268C500C9AD7B /* FlickLayer.m */,
-				DA1AC3D0108C89AA00C9AD7B /* BarSprite.h */,
-				DA1AC3D1108C89AA00C9AD7B /* BarSprite.m */,
 				DA1AC3D2108C89AA00C9AD7B /* DebugLayer.h */,
 				DA1AC3D3108C89AA00C9AD7B /* DebugLayer.m */,
 				DA1AC3D4108C89AA00C9AD7B /* HUDLayer.h */,
@@ -2048,7 +2064,6 @@
 				DA1AC3FB108C89AA00C9AD7B /* AudioController.h in Headers */,
 				DA1AC3FD108C89AA00C9AD7B /* Config.h in Headers */,
 				DA1AC3FF108C89AA00C9AD7B /* Logger.h in Headers */,
-				DA1AC401108C89AA00C9AD7B /* BarSprite.h in Headers */,
 				DA1AC403108C89AA00C9AD7B /* DebugLayer.h in Headers */,
 				DA1AC405108C89AA00C9AD7B /* HUDLayer.h in Headers */,
 				DA1AC407108C89AA00C9AD7B /* ConfigMenuLayer.h in Headers */,
@@ -2489,6 +2504,7 @@
 				DA87ACB010CC138D006FBCE1 /* title.game.over.png in Resources */,
 				DA87ACB110CC138D006FBCE1 /* title.game.paused.png in Resources */,
 				DA394AB010D79A72008DC0BF /* iTunesArtwork in Resources */,
+				DA70418B10E961020055D910 /* wheel.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2578,6 +2594,7 @@
 				DA87ACB210CC138D006FBCE1 /* title.game.over.png in Resources */,
 				DA87ACB310CC138D006FBCE1 /* title.game.paused.png in Resources */,
 				DA394AB110D79A72008DC0BF /* iTunesArtwork in Resources */,
+				DA70418C10E961020055D910 /* wheel.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2667,6 +2684,7 @@
 				DA40DBAD10D5A5DB00BBC2CD /* title.game.over.png in Resources */,
 				DA40DBAE10D5A5DB00BBC2CD /* title.game.paused.png in Resources */,
 				DA394AB210D79A72008DC0BF /* iTunesArtwork in Resources */,
+				DA70418D10E961020055D910 /* wheel.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2756,6 +2774,7 @@
 				DA87ACAE10CC138D006FBCE1 /* title.game.over.png in Resources */,
 				DA87ACAF10CC138D006FBCE1 /* title.game.paused.png in Resources */,
 				DA394AAF10D79A72008DC0BF /* iTunesArtwork in Resources */,
+				DA70418A10E961020055D910 /* wheel.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2772,7 +2791,6 @@
 				DA1AC3FC108C89AA00C9AD7B /* AudioController.m in Sources */,
 				DA1AC3FE108C89AA00C9AD7B /* Config.m in Sources */,
 				DA1AC400108C89AA00C9AD7B /* Logger.m in Sources */,
-				DA1AC402108C89AA00C9AD7B /* BarSprite.m in Sources */,
 				DA1AC404108C89AA00C9AD7B /* DebugLayer.m in Sources */,
 				DA1AC406108C89AA00C9AD7B /* HUDLayer.m in Sources */,
 				DA1AC408108C89AA00C9AD7B /* ConfigMenuLayer.m in Sources */,
@@ -2831,6 +2849,8 @@
 				DA1D1C9210B7DCC200B125C4 /* Player.m in Sources */,
 				DA1D1C9310B7DCC200B125C4 /* LogLayer.m in Sources */,
 				DA1D1EE010B9B9F100B125C4 /* SplashViewController.m in Sources */,
+				DA70419A10E961330055D910 /* BarSprite.m in Sources */,
+				DA7041A010E961440055D910 /* ActivitySprite.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2855,6 +2875,8 @@
 				DA1D202D10B9DE2D00B125C4 /* Player.m in Sources */,
 				DA1D202E10B9DE2D00B125C4 /* LogLayer.m in Sources */,
 				DA1D202F10B9DE2D00B125C4 /* SplashViewController.m in Sources */,
+				DA70419B10E961330055D910 /* BarSprite.m in Sources */,
+				DA7041A110E961440055D910 /* ActivitySprite.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2879,6 +2901,8 @@
 				DA40DBBE10D5A5DB00BBC2CD /* Player.m in Sources */,
 				DA40DBBF10D5A5DB00BBC2CD /* LogLayer.m in Sources */,
 				DA40DBC010D5A5DB00BBC2CD /* SplashViewController.m in Sources */,
+				DA70419C10E961330055D910 /* BarSprite.m in Sources */,
+				DA7041A210E961440055D910 /* ActivitySprite.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2968,6 +2992,8 @@
 				DADC1EE210A49FCC00593BF9 /* Player.m in Sources */,
 				DA3EE0BD10B0A6F800F8488D /* LogLayer.m in Sources */,
 				DA1D1EDF10B9B9F100B125C4 /* SplashViewController.m in Sources */,
+				DA70419910E961330055D910 /* BarSprite.m in Sources */,
+				DA70419F10E961440055D910 /* ActivitySprite.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3699,6 +3725,7 @@
 		DA8893E71052EB7F00EA8E72 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_PREPROCESSOR_DEFINITIONS = "COCOS2D_DEBUG=0";
 				PRODUCT_NAME = "cocos2d-iphone";
 			};
 			name = Debug;
@@ -3706,6 +3733,7 @@
 		DA8893E81052EB7F00EA8E72 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_PREPROCESSOR_DEFINITIONS = "COCOS2D_DEBUG=0";
 				PRODUCT_NAME = "cocos2d-iphone";
 			};
 			name = Release;
@@ -3713,6 +3741,7 @@
 		DA8893E91052EB7F00EA8E72 /* Release Debugging */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_PREPROCESSOR_DEFINITIONS = "COCOS2D_DEBUG=0";
 				PRODUCT_NAME = "cocos2d-iphone";
 			};
 			name = "Release Debugging";
@@ -3720,6 +3749,7 @@
 		DA8893EA1052EB7F00EA8E72 /* Distribution */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_PREPROCESSOR_DEFINITIONS = "COCOS2D_DEBUG=0";
 				PRODUCT_NAME = "cocos2d-iphone";
 			};
 			name = Distribution;
