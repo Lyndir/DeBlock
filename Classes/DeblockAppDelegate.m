@@ -35,6 +35,7 @@
 
 @interface DeblockAppDelegate ()
 
+- (void)switchPlayer;
 - (void)newGame:(id)caller;
 - (void)newClassicGame:(id)caller;
 - (void)newTimedGame:(id)caller;
@@ -109,7 +110,13 @@
 #pragma mark ###############################
 #pragma mark Behaviors
 
-- (void)prepareUi {
+- (void)preSetup {
+    
+    [[AudioController get] playTrack:[Config get].firstTrack];
+}
+
+
+- (void)setup {
     
     if ([[Config get].firstRun boolValue]) {
         self.alertWelcome = [[[UIAlertView alloc] initWithTitle:l(@"dialog.title.firsttime")
@@ -124,9 +131,8 @@
     [self.window addSubview:self.splashVC.view];
     [self.window makeKeyAndVisible];
     
-    self.mainMenu = [MenuLayer menuWithDelegate:self logo:[MenuItemSpacer spacerLarge]
+    self.mainMenu = [MenuLayer menuWithDelegate:self logo:nil
                                           items:
-                     [MenuItemSpacer spacerNormal],
                  self.continueGame =
                      [MenuItemFont itemFromString:l(@"menu.continue")
                                            target:self selector:@selector(continueGame:)],
@@ -135,62 +141,65 @@
                      [MenuItemSpacer spacerSmall],
                      [MenuItemFont itemFromString:l(@"menu.strategy")
                                            target:self selector:@selector(strategy:)],
-                     [MenuItemFont itemFromString:@"Shutdown"
-                                           target:self selector:@selector(shutdown:)],
+                     /*[MenuItemFont itemFromString:@"Shutdown"
+                                           target:self selector:@selector(shutdown:)],/**/
                      nil];
-    self.mainMenu.background         = [Sprite spriteWithFile:@"back.png"];
-    self.mainMenu.outerPadding       = margin(100, 0, 10, 0);
-    self.mainMenu.innerRatio         = 0;
-    self.mainMenu.opacity            = 0xcc;
-    self.mainMenu.color              = ccc3(0x99, 0x99, 0xff);
-    self.mainMenu.colorGradient      = ccc4(0xcc, 0xcc, 0xff, 0xcc);
+    [self.mainMenu setBackButtonTarget:self selector:@selector(switchPlayer)];
     [self.mainMenu setNextButtonTarget:self selector:@selector(more)];
+    self.mainMenu.offset             = ccp(0, -80);
+    self.mainMenu.background         = [Sprite spriteWithFile:@"back.png"];
+    self.mainMenu.outerPadding       = margin(150, -240, 10, -240);
+    self.mainMenu.innerRatio         = 0;
+    self.mainMenu.opacity            = 0x99;
+    self.mainMenu.color              = ccc3(0xcc, 0xcc, 0xff);
+    self.mainMenu.colorGradient      = ccc4(0xff, 0xff, 0xff, 0xdd);
 
-    self.moreMenu = [MenuLayer menuWithDelegate:self logo:[MenuItemSpacer spacerLarge]
+    self.moreMenu = [MenuLayer menuWithDelegate:self logo:nil
                                           items:
-                     [MenuItemSpacer spacerNormal],
                      [MenuItemFont itemFromString:l(@"menu.scores")
                                            target:self selector:@selector(scores:)],
                      [MenuItemSpacer spacerSmall],
                      [MenuItemFont itemFromString:l(@"menu.config")
                                            target:self selector:@selector(configuration:)],
                      nil];
-    self.moreMenu.background         = [Sprite spriteWithFile:@"back.png"];
-    self.moreMenu.outerPadding       = margin(100, 0, 10, 0);
-    self.moreMenu.innerRatio         = 0;
-    self.moreMenu.opacity            = 0xcc;
-    self.moreMenu.color              = ccc3(0x99, 0x99, 0xff);
-    self.moreMenu.colorGradient      = ccc4(0xcc, 0xcc, 0xff, 0xcc);
     [(MenuItemFont *)self.moreMenu.nextButton setString:@"   ⌕   "];
     [self.moreMenu setNextButtonTarget:self selector:@selector(log)];
+    self.moreMenu.offset             = ccp(0, -80);
+    self.moreMenu.background         = [Sprite spriteWithFile:@"back.png"];
+    self.moreMenu.outerPadding       = margin(150, -240, 10, -240);
+    self.moreMenu.innerRatio         = 0;
+    self.moreMenu.opacity            = 0x99;
+    self.moreMenu.color              = ccc3(0xcc, 0xcc, 0xff);
+    self.moreMenu.colorGradient      = ccc4(0xff, 0xff, 0xff, 0xdd);
     
-    self.newGameMenu = [MenuLayer menuWithDelegate:self logo:[MenuItemSpacer spacerLarge]
+    self.newGameMenu = [MenuLayer menuWithDelegate:self logo:nil
                                              items:
-                        [MenuItemSpacer spacerNormal],
                         [MenuItemFont itemFromString:l(@"menu.game.mode.classic")
                                               target:self selector:@selector(newClassicGame:)],
                         [MenuItemFont itemFromString:l(@"menu.game.mode.timed")
                                               target:self selector:@selector(newTimedGame:)],
                         nil];
+    self.newGameMenu.offset          = ccp(0, -80);
     self.newGameMenu.background      = [Sprite spriteWithFile:@"back.png"];
-    self.newGameMenu.outerPadding    = margin(110, 0, 10, 0);
+    self.newGameMenu.outerPadding    = margin(150, -240, 10, -240);
     self.newGameMenu.innerRatio      = 0;
-    self.newGameMenu.opacity         = 0xcc;
-    self.newGameMenu.color           = ccc3(0x99, 0x99, 0xff);
-    self.newGameMenu.colorGradient   = ccc4(0xcc, 0xcc, 0xff, 0xcc);
+    self.newGameMenu.opacity         = 0x99;
+    self.newGameMenu.color           = ccc3(0xcc, 0xcc, 0xff);
+    self.newGameMenu.colorGradient   = ccc4(0xff, 0xff, 0xff, 0xdd);
     
-    self.configMenu = [ConfigMenuLayer menuWithDelegate:self logo:[MenuItemSpacer spacerLarge]
+    self.configMenu = [ConfigMenuLayer menuWithDelegate:self logo:nil
                                                settings:
                        @selector(music),
                        @selector(soundFx),
                        @selector(compete),
                        nil];
+    self.configMenu.offset           = ccp(0, -80);
     self.configMenu.background       = [Sprite spriteWithFile:@"back.png"];
-    self.configMenu.outerPadding     = margin(110, 0, 10, 0);
+    self.configMenu.outerPadding     = margin(150, -240, 10, -240);
     self.configMenu.innerRatio       = 0;
-    self.configMenu.opacity          = 0xcc;
-    self.configMenu.color            = ccc3(0x99, 0x99, 0xff);
-    self.configMenu.colorGradient    = ccc4(0xcc, 0xcc, 0xff, 0xcc);
+    self.configMenu.opacity          = 0x99;
+    self.configMenu.color            = ccc3(0xcc, 0xcc, 0xff);
+    self.configMenu.colorGradient    = ccc4(0xff, 0xff, 0xff, 0xdd);
     self.configMenu.layout           = MenuLayoutColumns;
     
     self.pausedMenu = [MenuLayer menuWithDelegate:self logo:[MenuItemImage itemFromNormalImage:@"title.game.paused.png"
@@ -225,9 +234,11 @@
     self.mainMenu.fadeNextEntry  = NO;
     [self pushLayer:self.mainMenu];
 
-    Scene *uiScene = [Scene node];
-    [uiScene addChild:self.uiLayer];
-    [[Director sharedDirector] runWithScene:uiScene];
+    if (![Director sharedDirector].runningScene) {
+        Scene *uiScene = [Scene node];
+        [uiScene addChild:self.uiLayer];
+        [[Director sharedDirector] runWithScene:uiScene];
+    }
 }
 
 
@@ -330,6 +341,12 @@
     
     [self pushLayer:self.mainMenu hidden:YES];
     [self pushLayer:self.pausedMenu];
+}
+
+
+- (void)switchPlayer {
+
+    [self.window addSubview:self.splashVC.view];
 }
 
 
