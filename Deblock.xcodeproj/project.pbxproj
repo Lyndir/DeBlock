@@ -7,14 +7,54 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		DA052D7410F0123900C5F2C4 /* Lev3_Deblock.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = DA052D7210F0123900C5F2C4 /* Lev3_Deblock.mp3 */; };
-		DA052D7510F0123900C5F2C4 /* Lopey_Deblock.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = DA052D7310F0123900C5F2C4 /* Lopey_Deblock.mp3 */; };
-		DA052D7610F0123900C5F2C4 /* Lev3_Deblock.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = DA052D7210F0123900C5F2C4 /* Lev3_Deblock.mp3 */; };
-		DA052D7710F0123900C5F2C4 /* Lopey_Deblock.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = DA052D7310F0123900C5F2C4 /* Lopey_Deblock.mp3 */; };
-		DA052D7810F0123900C5F2C4 /* Lev3_Deblock.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = DA052D7210F0123900C5F2C4 /* Lev3_Deblock.mp3 */; };
-		DA052D7910F0123900C5F2C4 /* Lopey_Deblock.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = DA052D7310F0123900C5F2C4 /* Lopey_Deblock.mp3 */; };
-		DA052D7A10F0123900C5F2C4 /* Lev3_Deblock.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = DA052D7210F0123900C5F2C4 /* Lev3_Deblock.mp3 */; };
-		DA052D7B10F0123900C5F2C4 /* Lopey_Deblock.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = DA052D7310F0123900C5F2C4 /* Lopey_Deblock.mp3 */; };
+		DA067254110F8B8B006F14EB /* lev1.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = DA06724D110F8B8B006F14EB /* lev1.mp3 */; };
+		DA067255110F8B8B006F14EB /* lev2.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = DA06724E110F8B8B006F14EB /* lev2.mp3 */; };
+		DA067256110F8B8B006F14EB /* lev5.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = DA06724F110F8B8B006F14EB /* lev5.mp3 */; };
+		DA067257110F8B8B006F14EB /* lev6final.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = DA067250110F8B8B006F14EB /* lev6final.mp3 */; };
+		DA067258110F8B8B006F14EB /* mjolnir.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = DA067251110F8B8B006F14EB /* mjolnir.mp3 */; };
+		DA067259110F8B8B006F14EB /* Pause.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = DA067252110F8B8B006F14EB /* Pause.mp3 */; };
+		DA06725A110F8B8B006F14EB /* title.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = DA067253110F8B8B006F14EB /* title.mp3 */; };
+		DA06725B110F8B8B006F14EB /* lev1.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = DA06724D110F8B8B006F14EB /* lev1.mp3 */; };
+		DA06725C110F8B8B006F14EB /* lev2.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = DA06724E110F8B8B006F14EB /* lev2.mp3 */; };
+		DA06725D110F8B8B006F14EB /* lev5.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = DA06724F110F8B8B006F14EB /* lev5.mp3 */; };
+		DA06725E110F8B8B006F14EB /* lev6final.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = DA067250110F8B8B006F14EB /* lev6final.mp3 */; };
+		DA06725F110F8B8B006F14EB /* mjolnir.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = DA067251110F8B8B006F14EB /* mjolnir.mp3 */; };
+		DA067260110F8B8B006F14EB /* Pause.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = DA067252110F8B8B006F14EB /* Pause.mp3 */; };
+		DA067261110F8B8B006F14EB /* title.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = DA067253110F8B8B006F14EB /* title.mp3 */; };
+		DA067262110F8B8B006F14EB /* lev1.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = DA06724D110F8B8B006F14EB /* lev1.mp3 */; };
+		DA067263110F8B8B006F14EB /* lev2.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = DA06724E110F8B8B006F14EB /* lev2.mp3 */; };
+		DA067264110F8B8B006F14EB /* lev5.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = DA06724F110F8B8B006F14EB /* lev5.mp3 */; };
+		DA067265110F8B8B006F14EB /* lev6final.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = DA067250110F8B8B006F14EB /* lev6final.mp3 */; };
+		DA067266110F8B8B006F14EB /* mjolnir.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = DA067251110F8B8B006F14EB /* mjolnir.mp3 */; };
+		DA067267110F8B8B006F14EB /* Pause.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = DA067252110F8B8B006F14EB /* Pause.mp3 */; };
+		DA067268110F8B8B006F14EB /* title.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = DA067253110F8B8B006F14EB /* title.mp3 */; };
+		DA067269110F8B8B006F14EB /* lev1.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = DA06724D110F8B8B006F14EB /* lev1.mp3 */; };
+		DA06726A110F8B8B006F14EB /* lev2.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = DA06724E110F8B8B006F14EB /* lev2.mp3 */; };
+		DA06726B110F8B8B006F14EB /* lev5.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = DA06724F110F8B8B006F14EB /* lev5.mp3 */; };
+		DA06726C110F8B8B006F14EB /* lev6final.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = DA067250110F8B8B006F14EB /* lev6final.mp3 */; };
+		DA06726D110F8B8B006F14EB /* mjolnir.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = DA067251110F8B8B006F14EB /* mjolnir.mp3 */; };
+		DA06726E110F8B8B006F14EB /* Pause.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = DA067252110F8B8B006F14EB /* Pause.mp3 */; };
+		DA06726F110F8B8B006F14EB /* title.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = DA067253110F8B8B006F14EB /* title.mp3 */; };
+		DA06728E110F8EEA006F14EB /* bomb.caf in Resources */ = {isa = PBXBuildFile; fileRef = DA06727F110F8EEA006F14EB /* bomb.caf */; };
+		DA067291110F8EEA006F14EB /* crumble.caf in Resources */ = {isa = PBXBuildFile; fileRef = DA067282110F8EEA006F14EB /* crumble.caf */; };
+		DA067294110F8EEA006F14EB /* freeze.caf in Resources */ = {isa = PBXBuildFile; fileRef = DA067285110F8EEA006F14EB /* freeze.caf */; };
+		DA067297110F8EEA006F14EB /* morph.caf in Resources */ = {isa = PBXBuildFile; fileRef = DA067288110F8EEA006F14EB /* morph.caf */; };
+		DA06729A110F8EEA006F14EB /* zap.caf in Resources */ = {isa = PBXBuildFile; fileRef = DA06728B110F8EEA006F14EB /* zap.caf */; };
+		DA06729D110F8EEA006F14EB /* bomb.caf in Resources */ = {isa = PBXBuildFile; fileRef = DA06727F110F8EEA006F14EB /* bomb.caf */; };
+		DA0672A0110F8EEA006F14EB /* crumble.caf in Resources */ = {isa = PBXBuildFile; fileRef = DA067282110F8EEA006F14EB /* crumble.caf */; };
+		DA0672A3110F8EEA006F14EB /* freeze.caf in Resources */ = {isa = PBXBuildFile; fileRef = DA067285110F8EEA006F14EB /* freeze.caf */; };
+		DA0672A6110F8EEA006F14EB /* morph.caf in Resources */ = {isa = PBXBuildFile; fileRef = DA067288110F8EEA006F14EB /* morph.caf */; };
+		DA0672A9110F8EEA006F14EB /* zap.caf in Resources */ = {isa = PBXBuildFile; fileRef = DA06728B110F8EEA006F14EB /* zap.caf */; };
+		DA0672AC110F8EEA006F14EB /* bomb.caf in Resources */ = {isa = PBXBuildFile; fileRef = DA06727F110F8EEA006F14EB /* bomb.caf */; };
+		DA0672AF110F8EEA006F14EB /* crumble.caf in Resources */ = {isa = PBXBuildFile; fileRef = DA067282110F8EEA006F14EB /* crumble.caf */; };
+		DA0672B2110F8EEA006F14EB /* freeze.caf in Resources */ = {isa = PBXBuildFile; fileRef = DA067285110F8EEA006F14EB /* freeze.caf */; };
+		DA0672B5110F8EEA006F14EB /* morph.caf in Resources */ = {isa = PBXBuildFile; fileRef = DA067288110F8EEA006F14EB /* morph.caf */; };
+		DA0672B8110F8EEA006F14EB /* zap.caf in Resources */ = {isa = PBXBuildFile; fileRef = DA06728B110F8EEA006F14EB /* zap.caf */; };
+		DA0672BB110F8EEA006F14EB /* bomb.caf in Resources */ = {isa = PBXBuildFile; fileRef = DA06727F110F8EEA006F14EB /* bomb.caf */; };
+		DA0672BE110F8EEA006F14EB /* crumble.caf in Resources */ = {isa = PBXBuildFile; fileRef = DA067282110F8EEA006F14EB /* crumble.caf */; };
+		DA0672C1110F8EEA006F14EB /* freeze.caf in Resources */ = {isa = PBXBuildFile; fileRef = DA067285110F8EEA006F14EB /* freeze.caf */; };
+		DA0672C4110F8EEA006F14EB /* morph.caf in Resources */ = {isa = PBXBuildFile; fileRef = DA067288110F8EEA006F14EB /* morph.caf */; };
+		DA0672C7110F8EEA006F14EB /* zap.caf in Resources */ = {isa = PBXBuildFile; fileRef = DA06728B110F8EEA006F14EB /* zap.caf */; };
 		DA1AC305108C887E00C9AD7B /* Action.h in Headers */ = {isa = PBXBuildFile; fileRef = DA1AC289108C887D00C9AD7B /* Action.h */; };
 		DA1AC306108C887E00C9AD7B /* Action.m in Sources */ = {isa = PBXBuildFile; fileRef = DA1AC28A108C887D00C9AD7B /* Action.m */; };
 		DA1AC307108C887E00C9AD7B /* ActionManager.h in Headers */ = {isa = PBXBuildFile; fileRef = DA1AC28B108C887D00C9AD7B /* ActionManager.h */; };
@@ -204,7 +244,6 @@
 		DA1D1C5010B7DCC200B125C4 /* Entitlements.plist in Resources */ = {isa = PBXBuildFile; fileRef = DA7051DE101DD01100399CC3 /* Entitlements.plist */; };
 		DA1D1C6A10B7DCC200B125C4 /* Absolute.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DA63683010583A95001E2410 /* Absolute.ttf */; };
 		DA1D1C6E10B7DCC200B125C4 /* MammaGamma.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DA63683E10583A95001E2410 /* MammaGamma.ttf */; };
-		DA1D1C7610B7DCC200B125C4 /* Mjolnir_Deblock.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = DA41D6C9107BD031001BAFAB /* Mjolnir_Deblock.mp3 */; };
 		DA1D1C7F10B7DCC200B125C4 /* Secret.plist in Resources */ = {isa = PBXBuildFile; fileRef = DADC1E7210A37AEE00593BF9 /* Secret.plist */; };
 		DA1D1C8010B7DCC200B125C4 /* PlayerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = DAD5C9C910A6CBD100C4E27B /* PlayerView.xib */; };
 		DA1D1C8410B7DCC200B125C4 /* DeblockAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* DeblockAppDelegate.m */; };
@@ -313,7 +352,6 @@
 		DA1D1FE510B9DE2D00B125C4 /* Entitlements.plist in Resources */ = {isa = PBXBuildFile; fileRef = DA7051DE101DD01100399CC3 /* Entitlements.plist */; };
 		DA1D1FFF10B9DE2D00B125C4 /* Absolute.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DA63683010583A95001E2410 /* Absolute.ttf */; };
 		DA1D200310B9DE2D00B125C4 /* MammaGamma.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DA63683E10583A95001E2410 /* MammaGamma.ttf */; };
-		DA1D200B10B9DE2D00B125C4 /* Mjolnir_Deblock.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = DA41D6C9107BD031001BAFAB /* Mjolnir_Deblock.mp3 */; };
 		DA1D201410B9DE2D00B125C4 /* Secret.plist in Resources */ = {isa = PBXBuildFile; fileRef = DADC1E7210A37AEE00593BF9 /* Secret.plist */; };
 		DA1D201510B9DE2D00B125C4 /* PlayerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = DAD5C9C910A6CBD100C4E27B /* PlayerView.xib */; };
 		DA1D201710B9DE2D00B125C4 /* Icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = DA1D1CB010B7E03A00B125C4 /* Icon.icns */; };
@@ -381,7 +419,6 @@
 		DA40DB7310D5A5DB00BBC2CD /* Entitlements.plist in Resources */ = {isa = PBXBuildFile; fileRef = DA7051DE101DD01100399CC3 /* Entitlements.plist */; };
 		DA40DB7410D5A5DB00BBC2CD /* Absolute.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DA63683010583A95001E2410 /* Absolute.ttf */; };
 		DA40DB7810D5A5DB00BBC2CD /* MammaGamma.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DA63683E10583A95001E2410 /* MammaGamma.ttf */; };
-		DA40DB7C10D5A5DB00BBC2CD /* Mjolnir_Deblock.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = DA41D6C9107BD031001BAFAB /* Mjolnir_Deblock.mp3 */; };
 		DA40DB7E10D5A5DB00BBC2CD /* Secret.plist in Resources */ = {isa = PBXBuildFile; fileRef = DADC1E7210A37AEE00593BF9 /* Secret.plist */; };
 		DA40DB7F10D5A5DB00BBC2CD /* PlayerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = DAD5C9C910A6CBD100C4E27B /* PlayerView.xib */; };
 		DA40DB8110D5A5DB00BBC2CD /* Icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = DA1D1CB010B7E03A00B125C4 /* Icon.icns */; };
@@ -460,7 +497,6 @@
 		DA40DBCE10D5A5DB00BBC2CD /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DADC1D9010A0F46400593BF9 /* CFNetwork.framework */; };
 		DA40DBCF10D5A5DB00BBC2CD /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DADC1D9610A0F63100593BF9 /* SystemConfiguration.framework */; };
 		DA40DBD010D5A5DB00BBC2CD /* libTouchJSON.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DADC1DA010A0FA6100593BF9 /* libTouchJSON.a */; };
-		DA41D6CA107BD031001BAFAB /* Mjolnir_Deblock.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = DA41D6C9107BD031001BAFAB /* Mjolnir_Deblock.mp3 */; };
 		DA63684110583A95001E2410 /* Absolute.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DA63683010583A95001E2410 /* Absolute.ttf */; };
 		DA63684F10583A95001E2410 /* MammaGamma.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DA63683E10583A95001E2410 /* MammaGamma.ttf */; };
 		DA70418A10E961020055D910 /* wheel.png in Resources */ = {isa = PBXBuildFile; fileRef = DA70418910E961020055D910 /* wheel.png */; };
@@ -576,10 +612,6 @@
 		DA87ACB110CC138D006FBCE1 /* title.game.paused.png in Resources */ = {isa = PBXBuildFile; fileRef = DA87ACAC10CC138D006FBCE1 /* title.game.paused.png */; };
 		DA87ACB210CC138D006FBCE1 /* title.game.over.png in Resources */ = {isa = PBXBuildFile; fileRef = DA87ACAA10CC138C006FBCE1 /* title.game.over.png */; };
 		DA87ACB310CC138D006FBCE1 /* title.game.paused.png in Resources */ = {isa = PBXBuildFile; fileRef = DA87ACAC10CC138D006FBCE1 /* title.game.paused.png */; };
-		DA8A254110F0C8BB00A9E0F8 /* Title_Deblock.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = DA8A254010F0C8BA00A9E0F8 /* Title_Deblock.mp3 */; };
-		DA8A254210F0C8BB00A9E0F8 /* Title_Deblock.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = DA8A254010F0C8BA00A9E0F8 /* Title_Deblock.mp3 */; };
-		DA8A254310F0C8BB00A9E0F8 /* Title_Deblock.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = DA8A254010F0C8BA00A9E0F8 /* Title_Deblock.mp3 */; };
-		DA8A254410F0C8BB00A9E0F8 /* Title_Deblock.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = DA8A254010F0C8BA00A9E0F8 /* Title_Deblock.mp3 */; };
 		DA9EDF37102809B000528A29 /* DbHUDLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = DA9EDF36102809B000528A29 /* DbHUDLayer.m */; };
 		DAC0E86510C2EE3A00B05A4D /* back.png in Resources */ = {isa = PBXBuildFile; fileRef = DAC0E86310C2EE3A00B05A4D /* back.png */; };
 		DAC0E86610C2EE3A00B05A4D /* back.png in Resources */ = {isa = PBXBuildFile; fileRef = DAC0E86310C2EE3A00B05A4D /* back.png */; };
@@ -795,8 +827,18 @@
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		32CA4F630368D1EE00C91783 /* Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Prefix.pch; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
-		DA052D7210F0123900C5F2C4 /* Lev3_Deblock.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Lev3_Deblock.mp3; sourceTree = "<group>"; };
-		DA052D7310F0123900C5F2C4 /* Lopey_Deblock.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Lopey_Deblock.mp3; sourceTree = "<group>"; };
+		DA06724D110F8B8B006F14EB /* lev1.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = lev1.mp3; sourceTree = "<group>"; };
+		DA06724E110F8B8B006F14EB /* lev2.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = lev2.mp3; sourceTree = "<group>"; };
+		DA06724F110F8B8B006F14EB /* lev5.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = lev5.mp3; sourceTree = "<group>"; };
+		DA067250110F8B8B006F14EB /* lev6final.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = lev6final.mp3; sourceTree = "<group>"; };
+		DA067251110F8B8B006F14EB /* mjolnir.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = mjolnir.mp3; sourceTree = "<group>"; };
+		DA067252110F8B8B006F14EB /* Pause.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Pause.mp3; sourceTree = "<group>"; };
+		DA067253110F8B8B006F14EB /* title.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = title.mp3; sourceTree = "<group>"; };
+		DA06727F110F8EEA006F14EB /* bomb.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = bomb.caf; sourceTree = "<group>"; };
+		DA067282110F8EEA006F14EB /* crumble.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = crumble.caf; sourceTree = "<group>"; };
+		DA067285110F8EEA006F14EB /* freeze.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = freeze.caf; sourceTree = "<group>"; };
+		DA067288110F8EEA006F14EB /* morph.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = morph.caf; sourceTree = "<group>"; };
+		DA06728B110F8EEA006F14EB /* zap.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = zap.caf; sourceTree = "<group>"; };
 		DA1AC289108C887D00C9AD7B /* Action.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Action.h; sourceTree = "<group>"; };
 		DA1AC28A108C887D00C9AD7B /* Action.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Action.m; sourceTree = "<group>"; };
 		DA1AC28B108C887D00C9AD7B /* ActionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActionManager.h; sourceTree = "<group>"; };
@@ -1017,7 +1059,6 @@
 		DA3EE0BB10B0A6F800F8488D /* LogLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogLayer.h; sourceTree = "<group>"; };
 		DA3EE0BC10B0A6F800F8488D /* LogLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LogLayer.m; sourceTree = "<group>"; };
 		DA40DBD610D5A5DB00BBC2CD /* Deblock.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Deblock.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		DA41D6C9107BD031001BAFAB /* Mjolnir_Deblock.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Mjolnir_Deblock.mp3; sourceTree = "<group>"; };
 		DA53050410107849000D32DF /* GameLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameLayer.h; sourceTree = "<group>"; };
 		DA53050510107849000D32DF /* GameLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameLayer.m; sourceTree = "<group>"; };
 		DA53052210108077000D32DF /* SkyLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SkyLayer.h; sourceTree = "<group>"; };
@@ -1149,7 +1190,6 @@
 		DA87ACC510CC13D6006FBCE1 /* Spanish */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Spanish; path = Resources/Spanish.lproj/title.game.over.png; sourceTree = SOURCE_ROOT; };
 		DA87ACC610CC13D6006FBCE1 /* Spanish */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Spanish; path = Resources/Spanish.lproj/title.game.paused.png; sourceTree = SOURCE_ROOT; };
 		DA8893E61052EB7E00EA8E72 /* libcocos2d-iphone.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libcocos2d-iphone.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		DA8A254010F0C8BA00A9E0F8 /* Title_Deblock.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Title_Deblock.mp3; sourceTree = "<group>"; };
 		DA9EDF35102809B000528A29 /* DbHUDLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DbHUDLayer.h; sourceTree = "<group>"; };
 		DA9EDF36102809B000528A29 /* DbHUDLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DbHUDLayer.m; sourceTree = "<group>"; };
 		DAB2C56C10570F2900B6701A /* libz.1.2.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.2.3.dylib; path = /usr/lib/libz.1.2.3.dylib; sourceTree = "<absolute>"; };
@@ -1481,6 +1521,18 @@
 				DAB2C56C10570F2900B6701A /* libz.1.2.3.dylib */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		DA06727D110F8EEA006F14EB /* Sound */ = {
+			isa = PBXGroup;
+			children = (
+				DA06727F110F8EEA006F14EB /* bomb.caf */,
+				DA067282110F8EEA006F14EB /* crumble.caf */,
+				DA067285110F8EEA006F14EB /* freeze.caf */,
+				DA067288110F8EEA006F14EB /* morph.caf */,
+				DA06728B110F8EEA006F14EB /* zap.caf */,
+			);
+			path = Sound;
 			sourceTree = "<group>";
 		};
 		DA1AC288108C887D00C9AD7B /* cocos2d */ = {
@@ -1819,6 +1871,7 @@
 		DA394BCE107086320045A428 /* Audio */ = {
 			isa = PBXGroup;
 			children = (
+				DA06727D110F8EEA006F14EB /* Sound */,
 				DA394BCF107086320045A428 /* Music */,
 			);
 			path = Audio;
@@ -1827,10 +1880,13 @@
 		DA394BCF107086320045A428 /* Music */ = {
 			isa = PBXGroup;
 			children = (
-				DA8A254010F0C8BA00A9E0F8 /* Title_Deblock.mp3 */,
-				DA052D7210F0123900C5F2C4 /* Lev3_Deblock.mp3 */,
-				DA052D7310F0123900C5F2C4 /* Lopey_Deblock.mp3 */,
-				DA41D6C9107BD031001BAFAB /* Mjolnir_Deblock.mp3 */,
+				DA06724D110F8B8B006F14EB /* lev1.mp3 */,
+				DA06724E110F8B8B006F14EB /* lev2.mp3 */,
+				DA06724F110F8B8B006F14EB /* lev5.mp3 */,
+				DA067250110F8B8B006F14EB /* lev6final.mp3 */,
+				DA067251110F8B8B006F14EB /* mjolnir.mp3 */,
+				DA067252110F8B8B006F14EB /* Pause.mp3 */,
+				DA067253110F8B8B006F14EB /* title.mp3 */,
 			);
 			path = Music;
 			sourceTree = "<group>";
@@ -2425,7 +2481,6 @@
 				DA1D1C5010B7DCC200B125C4 /* Entitlements.plist in Resources */,
 				DA1D1C6A10B7DCC200B125C4 /* Absolute.ttf in Resources */,
 				DA1D1C6E10B7DCC200B125C4 /* MammaGamma.ttf in Resources */,
-				DA1D1C7610B7DCC200B125C4 /* Mjolnir_Deblock.mp3 in Resources */,
 				DA1D1C7F10B7DCC200B125C4 /* Secret.plist in Resources */,
 				DA1D1C8010B7DCC200B125C4 /* PlayerView.xib in Resources */,
 				DA1D1CB210B7E03A00B125C4 /* Icon.icns in Resources */,
@@ -2475,9 +2530,18 @@
 				DA394AB010D79A72008DC0BF /* iTunesArtwork in Resources */,
 				DA70418B10E961020055D910 /* wheel.png in Resources */,
 				DAF3370110EC1A7600018151 /* Apple Symbols.ttf in Resources */,
-				DA052D7610F0123900C5F2C4 /* Lev3_Deblock.mp3 in Resources */,
-				DA052D7710F0123900C5F2C4 /* Lopey_Deblock.mp3 in Resources */,
-				DA8A254210F0C8BB00A9E0F8 /* Title_Deblock.mp3 in Resources */,
+				DA06725B110F8B8B006F14EB /* lev1.mp3 in Resources */,
+				DA06725C110F8B8B006F14EB /* lev2.mp3 in Resources */,
+				DA06725D110F8B8B006F14EB /* lev5.mp3 in Resources */,
+				DA06725E110F8B8B006F14EB /* lev6final.mp3 in Resources */,
+				DA06725F110F8B8B006F14EB /* mjolnir.mp3 in Resources */,
+				DA067260110F8B8B006F14EB /* Pause.mp3 in Resources */,
+				DA067261110F8B8B006F14EB /* title.mp3 in Resources */,
+				DA06729D110F8EEA006F14EB /* bomb.caf in Resources */,
+				DA0672A0110F8EEA006F14EB /* crumble.caf in Resources */,
+				DA0672A3110F8EEA006F14EB /* freeze.caf in Resources */,
+				DA0672A6110F8EEA006F14EB /* morph.caf in Resources */,
+				DA0672A9110F8EEA006F14EB /* zap.caf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2510,7 +2574,6 @@
 				DA1D1FE510B9DE2D00B125C4 /* Entitlements.plist in Resources */,
 				DA1D1FFF10B9DE2D00B125C4 /* Absolute.ttf in Resources */,
 				DA1D200310B9DE2D00B125C4 /* MammaGamma.ttf in Resources */,
-				DA1D200B10B9DE2D00B125C4 /* Mjolnir_Deblock.mp3 in Resources */,
 				DA1D201410B9DE2D00B125C4 /* Secret.plist in Resources */,
 				DA1D201510B9DE2D00B125C4 /* PlayerView.xib in Resources */,
 				DA1D201710B9DE2D00B125C4 /* Icon.icns in Resources */,
@@ -2560,9 +2623,18 @@
 				DA394AB110D79A72008DC0BF /* iTunesArtwork in Resources */,
 				DA70418C10E961020055D910 /* wheel.png in Resources */,
 				DAF3370210EC1A7600018151 /* Apple Symbols.ttf in Resources */,
-				DA052D7810F0123900C5F2C4 /* Lev3_Deblock.mp3 in Resources */,
-				DA052D7910F0123900C5F2C4 /* Lopey_Deblock.mp3 in Resources */,
-				DA8A254310F0C8BB00A9E0F8 /* Title_Deblock.mp3 in Resources */,
+				DA067262110F8B8B006F14EB /* lev1.mp3 in Resources */,
+				DA067263110F8B8B006F14EB /* lev2.mp3 in Resources */,
+				DA067264110F8B8B006F14EB /* lev5.mp3 in Resources */,
+				DA067265110F8B8B006F14EB /* lev6final.mp3 in Resources */,
+				DA067266110F8B8B006F14EB /* mjolnir.mp3 in Resources */,
+				DA067267110F8B8B006F14EB /* Pause.mp3 in Resources */,
+				DA067268110F8B8B006F14EB /* title.mp3 in Resources */,
+				DA0672AC110F8EEA006F14EB /* bomb.caf in Resources */,
+				DA0672AF110F8EEA006F14EB /* crumble.caf in Resources */,
+				DA0672B2110F8EEA006F14EB /* freeze.caf in Resources */,
+				DA0672B5110F8EEA006F14EB /* morph.caf in Resources */,
+				DA0672B8110F8EEA006F14EB /* zap.caf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2595,7 +2667,6 @@
 				DA40DB7310D5A5DB00BBC2CD /* Entitlements.plist in Resources */,
 				DA40DB7410D5A5DB00BBC2CD /* Absolute.ttf in Resources */,
 				DA40DB7810D5A5DB00BBC2CD /* MammaGamma.ttf in Resources */,
-				DA40DB7C10D5A5DB00BBC2CD /* Mjolnir_Deblock.mp3 in Resources */,
 				DA40DB7E10D5A5DB00BBC2CD /* Secret.plist in Resources */,
 				DA40DB7F10D5A5DB00BBC2CD /* PlayerView.xib in Resources */,
 				DA40DB8110D5A5DB00BBC2CD /* Icon.icns in Resources */,
@@ -2645,9 +2716,18 @@
 				DA394AB210D79A72008DC0BF /* iTunesArtwork in Resources */,
 				DA70418D10E961020055D910 /* wheel.png in Resources */,
 				DAF3370310EC1A7600018151 /* Apple Symbols.ttf in Resources */,
-				DA052D7A10F0123900C5F2C4 /* Lev3_Deblock.mp3 in Resources */,
-				DA052D7B10F0123900C5F2C4 /* Lopey_Deblock.mp3 in Resources */,
-				DA8A254410F0C8BB00A9E0F8 /* Title_Deblock.mp3 in Resources */,
+				DA067269110F8B8B006F14EB /* lev1.mp3 in Resources */,
+				DA06726A110F8B8B006F14EB /* lev2.mp3 in Resources */,
+				DA06726B110F8B8B006F14EB /* lev5.mp3 in Resources */,
+				DA06726C110F8B8B006F14EB /* lev6final.mp3 in Resources */,
+				DA06726D110F8B8B006F14EB /* mjolnir.mp3 in Resources */,
+				DA06726E110F8B8B006F14EB /* Pause.mp3 in Resources */,
+				DA06726F110F8B8B006F14EB /* title.mp3 in Resources */,
+				DA0672BB110F8EEA006F14EB /* bomb.caf in Resources */,
+				DA0672BE110F8EEA006F14EB /* crumble.caf in Resources */,
+				DA0672C1110F8EEA006F14EB /* freeze.caf in Resources */,
+				DA0672C4110F8EEA006F14EB /* morph.caf in Resources */,
+				DA0672C7110F8EEA006F14EB /* zap.caf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2680,7 +2760,6 @@
 				DA7051DF101DD01100399CC3 /* Entitlements.plist in Resources */,
 				DA63684110583A95001E2410 /* Absolute.ttf in Resources */,
 				DA63684F10583A95001E2410 /* MammaGamma.ttf in Resources */,
-				DA41D6CA107BD031001BAFAB /* Mjolnir_Deblock.mp3 in Resources */,
 				DADC1E7310A37AEE00593BF9 /* Secret.plist in Resources */,
 				DAD5C9CA10A6CBD100C4E27B /* PlayerView.xib in Resources */,
 				DA1D1CB110B7E03A00B125C4 /* Icon.icns in Resources */,
@@ -2730,9 +2809,18 @@
 				DA394AAF10D79A72008DC0BF /* iTunesArtwork in Resources */,
 				DA70418A10E961020055D910 /* wheel.png in Resources */,
 				DAF3370010EC1A7600018151 /* Apple Symbols.ttf in Resources */,
-				DA052D7410F0123900C5F2C4 /* Lev3_Deblock.mp3 in Resources */,
-				DA052D7510F0123900C5F2C4 /* Lopey_Deblock.mp3 in Resources */,
-				DA8A254110F0C8BB00A9E0F8 /* Title_Deblock.mp3 in Resources */,
+				DA067254110F8B8B006F14EB /* lev1.mp3 in Resources */,
+				DA067255110F8B8B006F14EB /* lev2.mp3 in Resources */,
+				DA067256110F8B8B006F14EB /* lev5.mp3 in Resources */,
+				DA067257110F8B8B006F14EB /* lev6final.mp3 in Resources */,
+				DA067258110F8B8B006F14EB /* mjolnir.mp3 in Resources */,
+				DA067259110F8B8B006F14EB /* Pause.mp3 in Resources */,
+				DA06725A110F8B8B006F14EB /* title.mp3 in Resources */,
+				DA06728E110F8EEA006F14EB /* bomb.caf in Resources */,
+				DA067291110F8EEA006F14EB /* crumble.caf in Resources */,
+				DA067294110F8EEA006F14EB /* freeze.caf in Resources */,
+				DA067297110F8EEA006F14EB /* morph.caf in Resources */,
+				DA06729A110F8EEA006F14EB /* zap.caf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

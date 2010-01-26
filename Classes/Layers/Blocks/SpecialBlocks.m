@@ -36,7 +36,20 @@
 @end
 
 
+static SystemSoundID bombBlockEffect;
+static SystemSoundID morphBlockEffect;
+static SystemSoundID zapBlockEffect;
+static SystemSoundID freezeBlockEffect;
+
 @implementation SpecialBlockLayer
+
++ (void)initialize {
+    
+    bombBlockEffect     = [AudioController loadEffectWithName:@"bomb.caf"   ];
+    morphBlockEffect    = [AudioController loadEffectWithName:@"morph.caf"  ];
+    zapBlockEffect      = [AudioController loadEffectWithName:@"zap.caf"    ];
+    freezeBlockEffect   = [AudioController loadEffectWithName:@"freeze.caf" ];
+}
 
 - (BOOL)isLinkedToAdjecentBlock:(BlockLayer *)block forReason:(DMScanReason)aReason {
     
@@ -53,6 +66,10 @@
 
 @implementation BombBlockLayer
 
++ (SystemSoundID)effect {
+    
+    return bombBlockEffect;
+}
 
 + (NSUInteger)occurancePercentForLevel:(NSUInteger)level type:(DMBlockType)aType {
     
@@ -134,6 +151,8 @@
         return;
     }
     
+    [AudioController playEffect:morphBlockEffect];
+
     self.type = [[self class] randomType];
 }
 
@@ -151,6 +170,11 @@
 
 
 @implementation ZapBlockLayer
+
++ (SystemSoundID)effect {
+    
+    return zapBlockEffect;
+}
 
 + (NSUInteger)occurancePercentForLevel:(NSUInteger)level type:(DMBlockType)aType {
     
@@ -280,6 +304,7 @@
 - (void)freeze {
 
     [self.label setString:@""];
+    [AudioController playEffect:freezeBlockEffect];
 
     NSInteger row, col;
     FieldLayer *field = [DeblockAppDelegate get].gameLayer.fieldLayer;

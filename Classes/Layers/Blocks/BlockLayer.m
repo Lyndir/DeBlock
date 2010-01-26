@@ -63,10 +63,13 @@
 @synthesize dropEmitter = _dropEmitter;
 
 
+static SystemSoundID blockEffect;
 static NSDictionary *blockColors;
 
 + (void)initialize {
 
+    blockEffect = [AudioController loadEffectWithName:@"crumble.caf"];
+    
     [blockColors release];
     blockColors = [[NSDictionary alloc] initWithObjectsAndKeys:
 //                 [NSNumber numberWithLong:0x385D8Aff],    [NSNumber numberWithUnsignedInt:DMBlockTypeOne],
@@ -275,8 +278,35 @@ static NSDictionary *blockColors;
                              toSet:allLinkedBlocks];
 }
 
++ (SystemSoundID)effect {
+    
+    return blockEffect;
+}
+
+
+- (void)notifyCrumble {
+
+    NSLog(@"crumbled");
+
+    if([[Config get].soundFx boolValue])
+        [AudioController playEffect:[[self class] effect]];
+}
+
+
+- (void)notifyCrumbled {
+    
+    NSLog(@"crumbled");
+    
+    [self.dropEmitter stopSystem];
+    self.dropEmitter = nil;
+    
+    [self.parent removeChild:self cleanup:YES];
+}
+
 
 - (void)notifyDropped {
+    
+    NSLog(@"dropped");
 
     if (self.dropEmitter)
         [self.dropEmitter resetSystem];
@@ -316,15 +346,7 @@ static NSDictionary *blockColors;
 
 - (void)notifyCollapsed {
     
-}
-
-
-- (void)notifyDestroyed {
-    
-    [self.dropEmitter stopSystem];
-    self.dropEmitter = nil;
-    
-    [self.parent removeChild:self cleanup:YES];
+    NSLog(@"collapsed");
 }
 
 
@@ -430,6 +452,8 @@ static NSDictionary *blockColors;
 
 - (void)crumble {
     
+    [self notifyCrumble];
+    
     PropertyAction *animateFrames      = [PropertyAction actionWithDuration:0.4f key:@"frame"
                                                                    from:[NSNumber numberWithUnsignedInt:0]
                                                                      to:[NSNumber numberWithUnsignedInt:self.frames - 1]];
@@ -465,7 +489,7 @@ static NSDictionary *blockColors;
 
     [self runAction:[Sequence actions:
                      animateFrames,
-                     [CallFunc actionWithTarget:self selector:@selector(notifyDestroyed)],
+                     [CallFunc actionWithTarget:self selector:@selector(notifyCrumbled)],
                      nil]];
 }
 

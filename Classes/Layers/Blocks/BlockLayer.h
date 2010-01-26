@@ -99,8 +99,9 @@ typedef enum DMScanReason {
 - (void)blink;
 - (void)crumble;
 
+- (void)notifyCrumble;
+- (void)notifyCrumbled;
 - (void)notifyDropped;
 - (void)notifyCollapsed;
-- (void)notifyDestroyed;
 
 @end
