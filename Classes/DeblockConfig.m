@@ -49,7 +49,9 @@
     
     if (!(self = [super init]))
         return nil;
-    
+
+    NSMutableCharacterSet *delimitors = [NSMutableCharacterSet whitespaceCharacterSet];
+    [delimitors formUnionWithCharacterSet:[NSCharacterSet punctuationCharacterSet]];
     [self.defaults registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
                                 [NSNumber numberWithLong:0x38343C00],                           cShadeColor,
 
@@ -94,10 +96,41 @@
                                 [NSNumber numberWithInt:10],                                    cFlawlessBonus,
 
                                 [[[[UIDevice currentDevice] name]
-                                  componentsSeparatedByCharactersInSet:
-                                  [NSCharacterSet whitespaceCharacterSet]]
+                                  componentsSeparatedByCharactersInSet:delimitors]
                                  objectAtIndex:0],                                              cUserName,
-                                [NSDictionary dictionary],                                      cUserScoreHistory,
+                                [NSDictionary dictionaryWithObjectsAndKeys:
+                                 
+                                 [NSDictionary dictionaryWithObject:[NSNumber numberWithInteger:3876] forKey:@"0"],
+                                 @"John",
+                                 
+                                 [NSDictionary dictionaryWithObject:[NSNumber numberWithInteger:4012] forKey:@"0"],
+                                 @"Aeryn",
+                                 
+                                 [NSDictionary dictionaryWithObject:[NSNumber numberWithInteger:3589] forKey:@"0"],
+                                 @"D'Argo",
+                                 
+                                 [NSDictionary dictionaryWithObject:[NSNumber numberWithInteger:5076] forKey:@"0"],
+                                 @"Zhaan",
+                                 
+                                 [NSDictionary dictionaryWithObject:[NSNumber numberWithInteger:1319] forKey:@"0"],
+                                 @"Rygel",
+                                 
+                                 [NSDictionary dictionaryWithObject:[NSNumber numberWithInteger:2931] forKey:@"0"],
+                                 @"Chiana",
+                                 
+                                 [NSDictionary dictionaryWithObject:[NSNumber numberWithInteger:9017] forKey:@"0"],
+                                 @"Pilot",
+                                 
+                                 [NSDictionary dictionaryWithObject:[NSNumber numberWithInteger:4017] forKey:@"0"],
+                                 @"Stark",
+                                 
+                                 [NSDictionary dictionaryWithObject:[NSNumber numberWithInteger:3875] forKey:@"0"],
+                                 @"Crais",
+                                 
+                                 [NSDictionary dictionaryWithObject:[NSNumber numberWithInteger:4180] forKey:@"0"],
+                                 @"Scorpius",
+                                 
+                                 nil],                                                          cUserScoreHistory,
 
                                 nil
                                 ]];

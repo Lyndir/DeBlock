@@ -110,12 +110,6 @@
 #pragma mark ###############################
 #pragma mark Behaviors
 
-- (void)preSetup {
-    
-    [[AudioController get] playTrack:[Config get].firstTrack];
-}
-
-
 - (void)setup {
     
     if ([[Config get].firstRun boolValue]) {
@@ -316,7 +310,7 @@
 
 -(HUDLayer *) hudLayer {
     
-    if(!super.hudLayer)
+    if(!_hudLayer)
         self.hudLayer = [DbHUDLayer node];
     
     return super.hudLayer;

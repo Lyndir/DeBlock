@@ -286,16 +286,12 @@ static NSDictionary *blockColors;
 
 - (void)notifyCrumble {
 
-    NSLog(@"crumbled");
-
     if([[Config get].soundFx boolValue])
         [AudioController playEffect:[[self class] effect]];
 }
 
 
 - (void)notifyCrumbled {
-    
-    NSLog(@"crumbled");
     
     [self.dropEmitter stopSystem];
     self.dropEmitter = nil;
@@ -306,8 +302,6 @@ static NSDictionary *blockColors;
 
 - (void)notifyDropped {
     
-    NSLog(@"dropped");
-
     if (self.dropEmitter)
         [self.dropEmitter resetSystem];
     
@@ -346,7 +340,6 @@ static NSDictionary *blockColors;
 
 - (void)notifyCollapsed {
     
-    NSLog(@"collapsed");
 }
 
 

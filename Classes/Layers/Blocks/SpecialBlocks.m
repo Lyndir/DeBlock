@@ -151,9 +151,13 @@ static SystemSoundID freezeBlockEffect;
         return;
     }
     
-    [AudioController playEffect:morphBlockEffect];
+    DMBlockType newType;
+    do {
+        newType = [[self class] randomType];
+    } while (newType == self.type);
 
-    self.type = [[self class] randomType];
+    [AudioController playEffect:morphBlockEffect];
+    self.type = newType;
 }
 
 - (BOOL)isLinkedToAdjecentBlock:(BlockLayer *)block forReason:(DMScanReason)aReason {
