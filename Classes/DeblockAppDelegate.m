@@ -217,6 +217,7 @@
                          [MenuItemFont itemFromString:l(@"menu.level.retry")
                                                target:self selector:@selector(levelRedo:)],
                          nil];
+    [self.gameOverMenu setBackButtonTarget:nil selector:nil];
     
     [self.uiLayer addChild:self.gameLayer = [GameLayer node]];
 }
