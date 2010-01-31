@@ -22,6 +22,7 @@
     UIAlertView                         *_nameAlert;
     UITextField                         *_nameField;
 
+    UIAlertView                         *_alertCode;
     NSConditionLock                     *_passLock;
     UIAlertView                         *_passAlert;
     UITextField                         *_passField;

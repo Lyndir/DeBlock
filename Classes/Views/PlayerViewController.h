@@ -17,8 +17,6 @@
     UILabel                     *_playerSuggestion;
 
     ButtonFontLabel             *_next;
-
-    UIAlertView                 *_alertCode;
 }
 
 @property (retain) IBOutlet FontLabel       *playerTitle;

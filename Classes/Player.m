@@ -31,6 +31,7 @@
 @property (readwrite, retain) UIAlertView                         *nameAlert;
 @property (readwrite, retain) UITextField                         *nameField;
 
+@property (readwrite, retain) UIAlertView                         *alertCode;
 @property (readwrite, retain) NSConditionLock                     *passLock;
 @property (readwrite, retain) UIAlertView                         *passAlert;
 @property (readwrite, retain) UITextField                         *passField;
@@ -47,6 +48,7 @@
 @synthesize nameLock = _nameLock;
 @synthesize nameAlert = _nameAlert;
 @synthesize nameField = _nameField;
+@synthesize alertCode = _alertCode;
 @synthesize passLock = _passLock;
 @synthesize passAlert = _passAlert;
 @synthesize passField = _passField;
@@ -174,16 +176,23 @@
 
     NSAutoreleasePool *pool = [NSAutoreleasePool new];
 
-    self.passAlert = [[[UIAlertView alloc] initWithTitle:l(@"dialog.title.compete.code") message:
-                       [NSString stringWithFormat:l(@"dialog.text.compete.code.ask"), self.name]
-                                                delegate:self cancelButtonTitle:l(@"button.save") otherButtonTitles:nil] autorelease];
-    [self.passAlert addTextFieldWithValue:@"" label:@""];
+    if (! self.alertCode) {
+        self.alertCode = [[[UIAlertView alloc] initWithTitle:l(@"dialog.title.compete.code")
+                                                     message:l(@"dialog.text.compete.code")
+                                                    delegate:self cancelButtonTitle:l(@"button.okay") otherButtonTitles:nil] autorelease];
+        [self.alertCode show];
+    } else {
+        self.passAlert = [[[UIAlertView alloc] initWithTitle:l(@"dialog.title.compete.code")
+                                                     message:[NSString stringWithFormat:l(@"dialog.text.compete.code.ask"), self.name]
+                                                    delegate:self cancelButtonTitle:l(@"button.save") otherButtonTitles:nil] autorelease];
+        [self.passAlert addTextFieldWithValue:@"" label:@""];
 
-    self.passField                       = [self.passAlert textFieldAtIndex:0];
-    self.passField.keyboardType          = UIKeyboardTypeNumberPad;
-    self.passField.keyboardAppearance    = UIKeyboardAppearanceAlert;
-    self.passField.autocorrectionType    = UITextAutocorrectionTypeNo;
-    [self.passAlert show];
+        self.passField                       = [self.passAlert textFieldAtIndex:0];
+        self.passField.keyboardType          = UIKeyboardTypeNumberPad;
+        self.passField.keyboardAppearance    = UIKeyboardAppearanceAlert;
+        self.passField.autocorrectionType    = UITextAutocorrectionTypeNo;
+        [self.passAlert show];
+    }
 
     [pool drain];
 }
@@ -200,12 +209,16 @@
         self.nameField = nil;
     }
 
+    if (alertView == self.alertCode)
+        [self performSelectorOnMainThread:@selector(showPassDialog) withObject:nil waitUntilDone:NO];
+    
     if (alertView == self.passAlert) {
 
         [self.passLock lockWhenCondition:lNotSet];
         self.pass = self.passField.text;
         [self.passLock unlockWithCondition:_pass? lSet: lNotSet];
 
+        self.alertCode = nil;
         self.passAlert = nil;
         self.passField = nil;
     }
@@ -222,6 +235,7 @@
     self.nameLock = nil;
     self.nameAlert = nil;
     self.nameField = nil;
+    self.alertCode = nil;
     self.passLock = nil;
     self.passAlert = nil;
     self.passField = nil;

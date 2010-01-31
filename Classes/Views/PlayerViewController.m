@@ -17,8 +17,6 @@
 - (void)loadPass;
 
 
-@property (readwrite, retain) UIAlertView                 *alertCode;
-
 @end
 
 @implementation PlayerViewController
@@ -27,7 +25,6 @@
 @synthesize playerField = _playerField;
 @synthesize playerSuggestion = _playerSuggestion;
 @synthesize next = _next;
-@synthesize alertCode = _alertCode;
 
 
 - (id)init {
@@ -55,12 +52,6 @@
     }
     
     [DeblockConfig get].userName = [self playerName];
-    if ([[DeblockConfig get].compete unsignedIntValue] != DbCompeteOff && ![[DeblockConfig get] currentPlayer].onlineOk) {
-        self.alertCode = [[[UIAlertView alloc] initWithTitle:l(@"dialog.title.compete.code")
-                                                     message:l(@"dialog.text.compete.code")
-                                                    delegate:self cancelButtonTitle:l(@"button.okay") otherButtonTitles:nil] autorelease];
-        [self.alertCode show];
-    }
     [[DeblockAppDelegate get] showDirector];
 }
 
@@ -104,15 +95,6 @@
     return YES;
 }
 
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    
-    if (alertView == self.alertCode) {
-        [[[[NSThread alloc] initWithTarget:self selector:@selector(loadPass) object:nil] autorelease] start];
-        
-        self.alertCode = nil;
-    }
-}
 
 - (void)loadPass {
     
@@ -158,7 +140,6 @@
     self.playerField = nil;
     self.playerSuggestion = nil;
     self.next = nil;
-    self.alertCode = nil;
 
     [super dealloc];
 }

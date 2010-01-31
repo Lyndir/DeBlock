@@ -286,8 +286,7 @@ static NSDictionary *blockColors;
 
 - (void)notifyCrumble {
 
-    if([[Config get].soundFx boolValue])
-        [AudioController playEffect:[[self class] effect]];
+    [AudioController playEffect:[[self class] effect]];
 }
 
 
