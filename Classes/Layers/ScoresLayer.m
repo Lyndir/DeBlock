@@ -104,7 +104,7 @@
     
     self.wheel.visible = [DeblockWSController get].submittingScores;
 
-    if ([DeblockWSController get].submittingScores)
+    if (self.wheel.visible)
         [self setNextButtonTarget:nil selector:nil];
     else
         [self setNextButtonTarget:self selector:@selector(wsButton)];

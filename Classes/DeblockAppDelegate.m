@@ -46,6 +46,7 @@
 - (void)levelRedo:(id)caller;
 - (void)more;
 - (void)configuration:(id)caller;
+- (void)moreGames:(id)caller;
 - (void)strategy:(id)caller;
 - (void)scores:(id)caller;
 - (void)log;
@@ -152,6 +153,8 @@
                                           items:
                      [MenuItemFont itemFromString:l(@"menu.scores")
                                            target:self selector:@selector(scores:)],
+                     [MenuItemFont itemFromString:l(@"menu.moregames")
+                                           target:self selector:@selector(moreGames:)],
                      [MenuItemSpacer spacerSmall],
                      [MenuItemFont itemFromString:l(@"menu.config")
                                            target:self selector:@selector(configuration:)],
@@ -421,6 +424,13 @@
 - (void)configuration:(id)caller {
     
     [[DeblockAppDelegate get] pushLayer:self.configMenu];
+}
+
+
+- (void)moreGames:(id)caller {
+    
+    [[UIApplication sharedApplication] openURL:
+     [NSURL URLWithString:@"http://iphone.lhunath.com"]];
 }
 
 
