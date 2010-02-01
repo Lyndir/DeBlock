@@ -3592,7 +3592,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Maarten Billemont";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "3683890D-BADD-4008-94B8-58E0ACF79FC5";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "EE35EAF7-DA2E-4740-A07B-B8776BAF711F";
 			};
 			name = Distribution;
 		};
