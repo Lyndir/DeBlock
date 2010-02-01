@@ -25,8 +25,9 @@
 
 @interface DeblockWSController ()
 
-- (NSString *)checksumForName:(NSString *)name withScore:(NSInteger)score atTime:(NSNumber *)timeStamp;
-
+- (NSString *)checksumForName:(NSString *)name
+                     withMode:(NSUInteger)mode atLevel:(NSUInteger)level
+                    withScore:(NSInteger)score atTime:(NSNumber *)timeStamp;
 
 @property (readwrite, retain) NSMutableDictionary     *requestsPlayer;
 
@@ -132,11 +133,22 @@
             NSNumber *timeStamp     = [NSNumber numberWithLongLong:[achievedDate timeIntervalSince1970] * 1000];
             [[Logger get] inf:@"Submitting score %d for %@ at %@", player.score, player.onlineName, achievedDate];
             
-            [request setPostValue:[NSNumber numberWithInteger:player.score] forKey:@"score"];
-            [request setPostValue:player.onlineName forKey:@"name"];
-            [request setPostValue:player.pass forKey:@"pass"];
-            [request setPostValue:timeStamp forKey:@"date"];
-            [request setPostValue:[self checksumForName:player.onlineName withScore:player.score atTime:timeStamp] forKey:@"check"];
+            [request setPostValue:player.onlineName
+                           forKey:@"name"];
+            [request setPostValue:player.pass
+                           forKey:@"pass"];
+            [request setPostValue:[NSNumber numberWithUnsignedInteger:player.mode]
+                           forKey:@"mode"];
+            [request setPostValue:[NSNumber numberWithInteger:player.score]
+                           forKey:@"score"];
+            [request setPostValue:[NSNumber numberWithUnsignedInteger:player.level]
+                           forKey:@"level"];
+            [request setPostValue:timeStamp
+                           forKey:@"date"];
+            [request setPostValue:[self checksumForName:player.onlineName
+                                               withMode:player.mode atLevel:player.level
+                                              withScore:player.score atTime:timeStamp]
+                           forKey:@"check"];
         }
         
         [self.requestsPlayer setObject:player? player: (id)[NSNull null] forKey:requestValue];
@@ -151,12 +163,14 @@
 }
 
 
-- (NSString *)checksumForName:(NSString *)name withScore:(NSInteger)score atTime:(NSNumber *)timeStamp {
+- (NSString *)checksumForName:(NSString *)name
+                     withMode:(NSUInteger)mode atLevel:(NSUInteger)level
+                    withScore:(NSInteger)score atTime:(NSNumber *)timeStamp {
     
     NSDictionary *secrets   = [NSDictionary dictionaryWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Secret" ofType:@"plist"]];
 
-    return [CryptUtils md5:[NSString stringWithFormat:@"%@:%@:%d:%lld",
-                            [secrets objectForKey:@"Salt"], name, score, [timeStamp longLongValue]]];
+    return [CryptUtils md5:[NSString stringWithFormat:@"%@:%@:%d:%d:%d:%lld",
+                            [secrets objectForKey:@"Salt"], name, mode, level, score, [timeStamp longLongValue]]];
 }
 
 
@@ -169,14 +183,15 @@
     if (player == (id)[NSNull null])
         player              = nil;
 
+    [[Logger get] dbg:@"data: %@", [request responseData]];
     NSError *error          = nil;
-    NSDictionary *playersScoreHistory = [NSDictionary dictionaryWithJSONData:[request responseData] error:&error];
+    NSDictionary *playerScores = [NSDictionary dictionaryWithJSONData:[request responseData] error:&error];
     if (error)
         [[Logger get] err:@"Couldn't parse online scores: %@", error];
-    else if (![playersScoreHistory count])
+    else if (![playerScores count])
         [[Logger get] wrn:@"No scores in response."];
     else
-        [DeblockConfig get].userScoreHistory = playersScoreHistory;
+        [DeblockConfig get].playerScores = playerScores;
     
     NSString *errorHeader   = [[request responseHeaders] objectForKey:dErrorHeader];
     if (!errorHeader || errorHeader == (id)[NSNull null])

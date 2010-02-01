@@ -44,6 +44,7 @@
 @synthesize pass = _pass;
 @synthesize score = _score;
 @synthesize level = _level;
+@synthesize mode = _mode;
 @synthesize onlineOk = _onlineOk;
 @synthesize nameLock = _nameLock;
 @synthesize nameAlert = _nameAlert;
@@ -70,6 +71,7 @@
     _pass                   = [[decoder decodeObjectForKey: @"Player_Password"] retain];
     _score                  = [decoder decodeIntegerForKey: @"Player_Score"];
     _level                  = [decoder decodeIntegerForKey: @"Player_Level"];
+    _mode                   = [decoder decodeIntegerForKey: @"Player_Mode"];
     _onlineOk               = [decoder decodeBoolForKey:    @"Player_OnlineOK"];
     
     [self registerObservers];
@@ -83,6 +85,7 @@
     [encoder encodeObject:_pass                     forKey: @"Player_Password"];
     [encoder encodeInteger:_score                   forKey: @"Player_Score"];
     [encoder encodeInteger:_level                   forKey: @"Player_Level"];
+    [encoder encodeInteger:_mode                    forKey: @"Player_Mode"];
     [encoder encodeBool:_onlineOk                   forKey: @"Player_OnlineOK"];
 }
 
@@ -98,6 +101,7 @@
     [self addObserver:self forKeyPath:@"pass"       options:0 context:NULL];
     [self addObserver:self forKeyPath:@"score"      options:0 context:NULL];
     [self addObserver:self forKeyPath:@"level"      options:0 context:NULL];
+    [self addObserver:self forKeyPath:@"mode"       options:0 context:NULL];
     [self addObserver:self forKeyPath:@"onlineOk"   options:0 context:NULL];
 }
 
@@ -107,6 +111,7 @@
     [self removeObserver:self forKeyPath:@"pass"];
     [self removeObserver:self forKeyPath:@"score"];
     [self removeObserver:self forKeyPath:@"level"];
+    [self removeObserver:self forKeyPath:@"mode"];
     [self removeObserver:self forKeyPath:@"onlineOk"];
 }
 

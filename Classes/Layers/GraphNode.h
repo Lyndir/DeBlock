@@ -28,18 +28,30 @@
 @interface Score : NSObject {
 
 @private
-    NSInteger                                   _score;
     NSString                                    *_username;
+    DbMode                                      _mode;
+    NSUInteger                                  _level;
+    NSInteger                                   _score;
     NSDate                                      *_date;
 }
 
+@property (readonly, copy) NSString             *username;
+@property (readonly) DbMode                     mode;
+@property (readonly) NSUInteger                 level;
 @property (readonly) NSInteger                  score;
-@property (readonly, copy) NSString                   *username;
-@property (readonly, copy) NSDate                     *date;
+@property (readonly, copy) NSDate               *date;
 
-+ (Score *)scoreWithScore:(NSInteger)aScore by:(NSString *)aUsername at:(NSDate *)aDate;
++ (Score *)scoreBy:(NSString *)aUsername
+          withMode:(DbMode)aMode
+           atLevel:(NSUInteger)aLevel
+         withScore:(NSInteger)aScore
+            atDate:(NSDate *)aDate;
 
-- (id)initWithScore:(NSInteger)aScore by:(NSString *)aUsername at:(NSDate *)aDate;
+- (id)initWithScoreBy:(NSString *)aUsername
+             withMode:(DbMode)aMode
+              atLevel:(NSUInteger)aLevel
+            withScore:(NSInteger)aScore
+               atDate:(NSDate *)aDate;
 
 - (NSComparisonResult)compareByTopScore:(Score *)other;
 - (NSComparisonResult)compareByRecency:(Score *)other;

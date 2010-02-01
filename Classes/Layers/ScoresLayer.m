@@ -79,22 +79,15 @@
 
 - (void)reset {
     
-    NSMutableArray *scores = [NSMutableArray arrayWithCapacity:[[DeblockConfig get].userScoreHistory count]];
-    for (NSString *user in [[DeblockConfig get].userScoreHistory allKeys]) {
-        NSDictionary *userScores = [[DeblockConfig get].userScoreHistory objectForKey:user];
-        NSNumber *topUserScore = nil;
-        NSDate *topUserScoreDate = nil;
+    NSMutableArray *scores = [NSMutableArray arrayWithCapacity:[[DeblockConfig get].playerScores count]];
+    for (NSString *user in [[DeblockConfig get].playerScores allKeys]) {
+        NSDictionary *playerScore = [[DeblockConfig get].playerScores objectForKey:user];
         
-        for (NSString *dateEncoded in [userScores allKeys]) {
-            NSDate *date = [NSDate dateWithTimeIntervalSince1970:[dateEncoded floatValue]];
-            NSNumber *currentUserScore = [userScores objectForKey:dateEncoded];
-            if (!topUserScore || [currentUserScore compare:topUserScore] == NSOrderedDescending) {
-                topUserScore = currentUserScore;
-                topUserScoreDate = date;
-            }
-        }
-        
-        [scores addObject:[Score scoreWithScore:[topUserScore intValue] by:user at:topUserScoreDate]];
+        [scores addObject:[Score scoreBy:user
+                                withMode:[[playerScore objectForKey:@"m"] integerValue]
+                                 atLevel:[[playerScore objectForKey:@"l"] integerValue]
+                               withScore:[[playerScore objectForKey:@"s"] integerValue]
+                                  atDate:[NSDate dateWithTimeIntervalSince1970:[[playerScore objectForKey:@"d"] floatValue]]]];
     }
     
     [self.graph setScores:scores];

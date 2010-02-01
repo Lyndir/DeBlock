@@ -15,6 +15,7 @@
     NSString                            *_pass;
     NSInteger                           _score;
     NSUInteger                          _level;
+    DbMode                              _mode;
 
     BOOL                                _onlineOk;
 
@@ -29,10 +30,11 @@
 }
 
 @property (readwrite, copy) NSString    *name;
-@property (readonly, retain) NSString           *onlineName;
+@property (readonly, retain) NSString   *onlineName;
 @property (readwrite, copy) NSString    *pass;
 @property (readwrite) NSInteger         score;
 @property (readwrite) NSUInteger        level;
+@property (readwrite) NSUInteger        mode;
 @property (readwrite) BOOL              onlineOk;
 
 @end

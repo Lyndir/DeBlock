@@ -542,6 +542,7 @@
         DbEndReason endReason = DbEndReasonNextField;
         NSInteger levelPoints = [[DeblockConfig get].levelScore intValue] + [[DeblockConfig get].levelPenalty intValue];
         NSInteger bonusPoints = 0;
+        NSUInteger newLevel = [[DeblockConfig get] currentPlayer].level;
         
         if (!blocksLeft) {
             // No blocks left -> flawless finish.
@@ -550,10 +551,10 @@
             [self message:[NSString stringWithFormat:@"%+d", bonusPoints]
                        at:ccp(self.contentSize.width / 2, self.contentSize.height / 2)];
 
-            ++[[DeblockConfig get] currentPlayer].level;
+            ++newLevel;
         } else if (blocksLeft <= 8) {
             // Blocks left under minimum block limit -> level up.
-            ++[[DeblockConfig get] currentPlayer].level;
+            ++newLevel;
         } else {
             // Blocks left over minimum block limit -> game over.
             levelPoints = 0;
@@ -562,6 +563,7 @@
         
         levelPoints += bonusPoints;
         [[DeblockConfig get] addScore:levelPoints];
+        [[DeblockConfig get] currentPlayer].level = newLevel;
         [[DeblockAppDelegate get].hudLayer updateHudWasGood:bonusPoints > 0];
         [[DeblockAppDelegate get].gameLayer stopGame:endReason];
     }

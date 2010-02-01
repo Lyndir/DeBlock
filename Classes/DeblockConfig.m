@@ -42,7 +42,7 @@
 @dynamic gameMode;
 @dynamic skyColorFrom, skyColorTo;
 @dynamic flawlessBonus;
-@dynamic userName, userScoreHistory;
+@dynamic userName, playerScores;
 
 
 - (id)init {
@@ -56,7 +56,7 @@
                                 [NSNumber numberWithLong:0x38343C00],                           cShadeColor,
 
                                 [NSNumber numberWithUnsignedInt:DbCompeteOff],                  cCompete,
-                                @"https://lhunath-deblock.appspot.com",                         cWsUrl,
+                                @"http://deblock.lhunath.com",                                  cWsUrl,
                                 
                                 [NSArray arrayWithObjects:
                                  @"title.mp3",
@@ -130,7 +130,7 @@
                                  [NSDictionary dictionaryWithObject:[NSNumber numberWithInteger:4180] forKey:@"0"],
                                  @"Scorpius",
                                  
-                                 nil],                                                          cUserScoreHistory,
+                                 nil],                                                          cPlayerScores,
 
                                 nil
                                 ]];
@@ -229,30 +229,30 @@
 
 - (void)saveScore {
 
+    NSNumber *mode = [NSNumber numberWithUnsignedInteger:[self currentPlayer].mode];
+    NSNumber *level = [NSNumber numberWithUnsignedInteger:[self currentPlayer].level];
     NSNumber *score = [NSNumber numberWithInteger:[self currentPlayer].score];
     NSString *name = self.userName;
     NSDate *achievedDate = [NSDate date];
 
-    // Find the user's current scores in the score history.
-    NSMutableDictionary *newUserScores = [[self userScoreHistory] mutableCopy];
-    NSDictionary *currentUserScores = [newUserScores objectForKey:name];
-    
-    // Store the new score on the current date amoungst the user's scores.
-    NSMutableDictionary *newCurrentUserScores = nil;
-    if (currentUserScores)
-        newCurrentUserScores = [currentUserScores mutableCopy];
-    else
-        newCurrentUserScores = [NSMutableDictionary new];
-    [newCurrentUserScores setObject:score forKey:[NSString stringWithFormat:@"%f", [achievedDate timeIntervalSince1970]]];
+    // Build a new player score object.
+    NSDictionary *newCurrentUserScores = [NSDictionary dictionaryWithObjectsAndKeys:
+                                          mode,
+                                          @"m",
+                                          level,
+                                          @"l",
+                                          score,
+                                          @"s",
+                                          [NSString stringWithFormat:@"%f", [achievedDate timeIntervalSince1970]],
+                                          @"d",
+                                          nil];
 
-    // Store the user's new scores in the score history.
-    [newUserScores setObject:newCurrentUserScores forKey:[self userName]];
-    [self setUserScoreHistory:newUserScores];
+    // Store the user's new scores in the player scores.
+    NSMutableDictionary *newPlayerScores = [[self playerScores] mutableCopy];
+    [newPlayerScores setObject:newCurrentUserScores forKey:name];
+    [self setPlayerScores:newPlayerScores];
+    [newPlayerScores release];
 
-    // Clean up. 
-    [newCurrentUserScores release];
-    [newUserScores release];
-    
     // Submit the score online.
     [[DeblockWSController get] submitScoreForPlayer:[self currentPlayer]];
 }
@@ -269,7 +269,7 @@
     self.skyColorTo = nil;
     self.flawlessBonus = nil;
     self.userName = nil;
-    self.userScoreHistory = nil;
+    self.playerScores = nil;
     self.playersCached = nil;
 
     [super dealloc];

@@ -28,8 +28,10 @@
 
 @interface Score ()
 
-@property (readwrite) NSInteger                         score;
 @property (readwrite, copy) NSString                    *username;
+@property (readwrite) DbMode                            mode;
+@property (readwrite) NSUInteger                        level;
+@property (readwrite) NSInteger                         score;
 @property (readwrite, copy) NSDate                      *date;
 
 @end
@@ -37,21 +39,31 @@
 
 @implementation Score
 
-@synthesize score = _score, username = _username, date = _date;
+@synthesize username = _username, mode = _mode, level = _level, score = _score, date = _date;
 
-+ (Score *)scoreWithScore:(NSInteger)aScore by:(NSString *)aUsername at:(NSDate *)aDate {
++ (Score *)scoreBy:(NSString *)aUsername
+          withMode:(DbMode)aMode
+           atLevel:(NSUInteger)aLevel
+         withScore:(NSInteger)aScore
+            atDate:(NSDate *)aDate {
 
-    return [[[self alloc] initWithScore:aScore by:aUsername at:aDate] autorelease];
+    return [[[self alloc] initWithScoreBy:aUsername withMode:aMode atLevel:aLevel withScore:aScore atDate:aDate] autorelease];
 }
 
-- (id)initWithScore:(NSInteger)aScore by:(NSString *)aUsername at:(NSDate *)aDate {
+- (id)initWithScoreBy:(NSString *)aUsername
+             withMode:(DbMode)aMode
+              atLevel:(NSUInteger)aLevel
+            withScore:(NSInteger)aScore
+               atDate:(NSDate *)aDate; {
 
     if (!(self = [super init]))
         return nil;
     
-    self.score       = aScore;
-    self.username    = aUsername;
-    self.date        = aDate;
+    self.username   = aUsername;
+    self.mode       = aMode;
+    self.level      = aLevel;
+    self.score      = aScore;
+    self.date       = aDate;
     
     return self;
 }
@@ -76,7 +88,7 @@
 
 - (NSString *)description {
     
-    return [NSString stringWithFormat:@"%@: %@: %d", self.username, self.date, self.score];
+    return [NSString stringWithFormat:@"%@: %@ had %d at level %d in mode %d", self.date, self.username, self.score, self.level, self.mode];
 }
 
 - (void)dealloc {
@@ -130,7 +142,10 @@
     
     self.padding            = 0;
     self.barHeight          = [[Config get].largeFontSize unsignedIntValue];
-    self.scoreFormat        = @"%04d - %@";
+    
+    // 1-username, 2-mode, 3-level, 4-score, 5-date
+    self.scoreFormat        = @"%4$04d (lvl %3$d): %1$@";
+    
     self.dateFormatter      = [[NSDateFormatter new] autorelease];
     [self.dateFormatter setDateStyle:NSDateFormatterShortStyle];
     [self.dateFormatter setTimeStyle:NSDateFormatterShortStyle];
@@ -186,20 +201,20 @@
     self.scrollContentSize      = CGSizeMake(self.contentSize.width, self.scoreCount * self.barHeight);
 
     // Find the top score.
-    self.topScore                    = ((Score *)[self.sortedScores lastObject]).score;
+    self.topScore               = ((Score *)[self.sortedScores lastObject]).score;
     for (Score *score in self.sortedScores)
         if (score.score > self.topScore)
-            self.topScore            = score.score;
+            self.topScore       = score.score;
 
     // Make score labels.
     NSUInteger s = 0;
-    self.scoreLabels                 = malloc(sizeof(Label *) * self.scoreCount);
+    self.scoreLabels            = malloc(sizeof(Label *) * self.scoreCount);
     for (Score *score in self.sortedScores) {
-        self.scoreLabels[s]          = [[Label alloc] initWithString:[NSString stringWithFormat:self.scoreFormat,
-                                                                 score.score, score.username, [self.dateFormatter stringFromDate:score.date]]
+        self.scoreLabels[s]     = [[Label alloc] initWithString:[NSString stringWithFormat:@"%04d (lvl %d): %@",
+                                                                 score.score, score.level, score.username]
                                                        fontName:[Config get].fixedFontName fontSize:[[Config get].fontSize intValue]];
         self.scoreLabels[s].position = ccp(self.scoreLabels[s].contentSize.width / 2 + self.padding + 10,
-                                      self.contentSize.height - self.scoreLabels[s].contentSize.height / 2 - self.barHeight * s);
+                                           self.contentSize.height - self.scoreLabels[s].contentSize.height / 2 - self.barHeight * s);
         [self addChild:self.scoreLabels[s]];
         
         ++s;

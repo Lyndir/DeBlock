@@ -251,7 +251,7 @@
     
     [super didUpdateConfigForKey:configKey];
     
-    if (configKey == @selector(userScoreHistory))
+    if (configKey == @selector(playerScores))
         [[ScoresLayer get] reset];
 }
 

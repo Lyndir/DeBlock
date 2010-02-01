@@ -39,7 +39,7 @@
 #define cFlawlessBonus      NSStringFromSelector(@selector(flawlessBonus))
 
 #define cUserName           NSStringFromSelector(@selector(userName))
-#define cUserScoreHistory   NSStringFromSelector(@selector(userScoreHistory))
+#define cPlayerScores       NSStringFromSelector(@selector(playerScores))
 
 typedef enum DbCompete {
     DbCompeteOff,
@@ -80,6 +80,6 @@ typedef enum DbCompete {
 @property (readwrite, retain) NSNumber          *flawlessBonus;
 
 @property (readwrite, retain) NSString          *userName;
-@property (readwrite, retain) NSDictionary      *userScoreHistory;
+@property (readwrite, retain) NSDictionary      *playerScores;
 
 @end
