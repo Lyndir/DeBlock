@@ -100,34 +100,64 @@
                                  objectAtIndex:0],                                              cUserName,
                                 [NSDictionary dictionaryWithObjectsAndKeys:
                                  
-                                 [NSDictionary dictionaryWithObject:[NSNumber numberWithInteger:3876] forKey:@"0"],
+                                 [NSDictionary dictionaryWithObjectsAndKeys:
+                                  [NSNumber numberWithInteger:3876], @"s",
+                                  [NSNumber numberWithInteger:36], @"l",
+                                  nil],
                                  @"John",
                                  
-                                 [NSDictionary dictionaryWithObject:[NSNumber numberWithInteger:4012] forKey:@"0"],
+                                 [NSDictionary dictionaryWithObjectsAndKeys:
+                                  [NSNumber numberWithInteger:4012], @"s",
+                                  [NSNumber numberWithInteger:38], @"l",
+                                  nil],
                                  @"Aeryn",
                                  
-                                 [NSDictionary dictionaryWithObject:[NSNumber numberWithInteger:3589] forKey:@"0"],
+                                 [NSDictionary dictionaryWithObjectsAndKeys:
+                                  [NSNumber numberWithInteger:3589], @"s",
+                                  [NSNumber numberWithInteger:41], @"l",
+                                  nil],
                                  @"D'Argo",
                                  
-                                 [NSDictionary dictionaryWithObject:[NSNumber numberWithInteger:5076] forKey:@"0"],
+                                 [NSDictionary dictionaryWithObjectsAndKeys:
+                                  [NSNumber numberWithInteger:5076], @"s",
+                                  [NSNumber numberWithInteger:35], @"l",
+                                  nil],
                                  @"Zhaan",
                                  
-                                 [NSDictionary dictionaryWithObject:[NSNumber numberWithInteger:1319] forKey:@"0"],
+                                 [NSDictionary dictionaryWithObjectsAndKeys:
+                                  [NSNumber numberWithInteger:1319], @"s",
+                                  [NSNumber numberWithInteger:21], @"l",
+                                  nil],
                                  @"Rygel",
                                  
-                                 [NSDictionary dictionaryWithObject:[NSNumber numberWithInteger:2931] forKey:@"0"],
+                                 [NSDictionary dictionaryWithObjectsAndKeys:
+                                  [NSNumber numberWithInteger:2931], @"s",
+                                  [NSNumber numberWithInteger:34], @"l",
+                                  nil],
                                  @"Chiana",
                                  
-                                 [NSDictionary dictionaryWithObject:[NSNumber numberWithInteger:9017] forKey:@"0"],
+                                 [NSDictionary dictionaryWithObjectsAndKeys:
+                                  [NSNumber numberWithInteger:9017], @"s",
+                                  [NSNumber numberWithInteger:61], @"l",
+                                  nil],
                                  @"Pilot",
                                  
-                                 [NSDictionary dictionaryWithObject:[NSNumber numberWithInteger:4017] forKey:@"0"],
+                                 [NSDictionary dictionaryWithObjectsAndKeys:
+                                  [NSNumber numberWithInteger:4017], @"s",
+                                  [NSNumber numberWithInteger:34], @"l",
+                                  nil],
                                  @"Stark",
                                  
-                                 [NSDictionary dictionaryWithObject:[NSNumber numberWithInteger:3875] forKey:@"0"],
+                                 [NSDictionary dictionaryWithObjectsAndKeys:
+                                  [NSNumber numberWithInteger:3875], @"s",
+                                  [NSNumber numberWithInteger:41], @"l",
+                                  nil],
                                  @"Crais",
                                  
-                                 [NSDictionary dictionaryWithObject:[NSNumber numberWithInteger:4180] forKey:@"0"],
+                                 [NSDictionary dictionaryWithObjectsAndKeys:
+                                  [NSNumber numberWithInteger:4180], @"s",
+                                  [NSNumber numberWithInteger:35], @"l",
+                                  nil],
                                  @"Scorpius",
                                  
                                  nil],                                                          cPlayerScores,

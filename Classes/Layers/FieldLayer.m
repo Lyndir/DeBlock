@@ -680,7 +680,7 @@
 
 - (void)draw {
     
-    DrawBoxFrom(CGPointMake(-5, -5), CGPointMake(self.contentSize.width + 5, self.contentSize.height + 5),
+    DrawBoxFrom(CGPointMake(-3, -3), CGPointMake(self.contentSize.width + 3, self.contentSize.height + 3),
                 ccc4l([[DeblockConfig get].skyColorTo longValue] & 0x0f0f0f33), ccc4l([[DeblockConfig get].skyColorFrom longValue] & 0x0f0f0f33));
 }
 

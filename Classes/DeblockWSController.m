@@ -183,7 +183,6 @@
     if (player == (id)[NSNull null])
         player              = nil;
 
-    [[Logger get] dbg:@"data: %@", [request responseData]];
     NSError *error          = nil;
     NSDictionary *playerScores = [NSDictionary dictionaryWithJSONData:[request responseData] error:&error];
     if (error)

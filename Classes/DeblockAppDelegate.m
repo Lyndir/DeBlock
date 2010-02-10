@@ -49,7 +49,7 @@
 - (void)moreGames:(id)caller;
 - (void)strategy:(id)caller;
 - (void)scores:(id)caller;
-- (void)log;
+- (void)log;		
 
 
 @property (readwrite, retain) SplashViewController            *splashVC;

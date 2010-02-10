@@ -12,13 +12,6 @@
 #define lSet    2<<1
 
 
-@interface UIAlertView (TextField)
-
-- (void)addTextFieldWithValue:(NSString *)value label:(NSString *)label;
-- (UITextField *)textFieldAtIndex:(NSUInteger)index;
-
-@end
-
 @interface Player ()
 
 - (void)registerObservers;
@@ -164,14 +157,19 @@
     NSAutoreleasePool *pool = [NSAutoreleasePool new];
 
     self.nameAlert = [[[UIAlertView alloc] initWithTitle:l(@"dialog.title.name") message:
-                       [NSString stringWithFormat:l(@"dialog.text.name.ask"), self.name]
+                       [NSString stringWithFormat:@"%@\n\n",
+                        [NSString stringWithFormat:l(@"dialog.text.name.ask"), self.name]]
                                                 delegate:self cancelButtonTitle:l(@"button.save") otherButtonTitles:nil] autorelease];
-    [self.nameAlert addTextFieldWithValue:@"" label:@""];
+    [self.nameAlert setTransform:CGAffineTransformMakeTranslation(0, 88)];
 
-    self.nameField                       = [self.nameAlert textFieldAtIndex:0];
-    self.nameField.keyboardType          = UIKeyboardTypeNamePhonePad;
-    self.nameField.keyboardAppearance    = UIKeyboardAppearanceAlert;
-    self.nameField.autocorrectionType    = UITextAutocorrectionTypeNo;
+    self.nameField                      = [[[UITextField alloc] initWithFrame:CGRectMake(12, 70, 260, 25)] autorelease];
+    self.nameField.borderStyle          = UITextBorderStyleRoundedRect;
+    self.nameField.keyboardType         = UIKeyboardTypeNamePhonePad;
+    self.nameField.keyboardAppearance   = UIKeyboardAppearanceAlert;
+    self.nameField.autocorrectionType   = UITextAutocorrectionTypeNo;
+
+    [self.nameField becomeFirstResponder];
+    [self.nameAlert addSubview:self.nameField];
     [self.nameAlert show];
 
     [pool drain];
@@ -188,14 +186,19 @@
         [self.alertCode show];
     } else {
         self.passAlert = [[[UIAlertView alloc] initWithTitle:l(@"dialog.title.compete.code")
-                                                     message:[NSString stringWithFormat:l(@"dialog.text.compete.code.ask"), self.name]
+                                                     message:[NSString stringWithFormat:@"%@\n\n",
+                                                              [NSString stringWithFormat:l(@"dialog.text.compete.code.ask"), self.name]]
                                                     delegate:self cancelButtonTitle:l(@"button.save") otherButtonTitles:nil] autorelease];
-        [self.passAlert addTextFieldWithValue:@"" label:@""];
+        [self.passAlert setTransform:CGAffineTransformMakeTranslation(0, 88)];
 
-        self.passField                       = [self.passAlert textFieldAtIndex:0];
+        self.passField                      = [[[UITextField alloc] initWithFrame:CGRectMake(12, 70, 260, 25)] autorelease];
+        self.passField.borderStyle          = UITextBorderStyleRoundedRect;
         self.passField.keyboardType          = UIKeyboardTypeNumberPad;
         self.passField.keyboardAppearance    = UIKeyboardAppearanceAlert;
         self.passField.autocorrectionType    = UITextAutocorrectionTypeNo;
+
+        [self.passField becomeFirstResponder];
+        [self.passAlert addSubview:self.passField];
         [self.passAlert show];
     }
 
