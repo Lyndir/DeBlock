@@ -32,6 +32,7 @@
 @property (readwrite) DbMode                            mode;
 @property (readwrite) NSUInteger                        level;
 @property (readwrite) NSInteger                         score;
+@property (readwrite) NSInteger                         ratio;
 @property (readwrite, copy) NSDate                      *date;
 
 @end
@@ -39,7 +40,7 @@
 
 @implementation Score
 
-@synthesize username = _username, mode = _mode, level = _level, score = _score, date = _date;
+@synthesize username = _username, mode = _mode, level = _level, score = _score, ratio = _ratio, date = _date;
 
 + (Score *)scoreBy:(NSString *)aUsername
           withMode:(DbMode)aMode
@@ -65,7 +66,18 @@
     self.score      = aScore;
     self.date       = aDate;
     
+    if (self.level)
+        self.ratio  = self.score / self.level;
+    
     return self;
+}
+
+- (NSComparisonResult)compareByTopRatio:(Score *)other {
+    
+    if (self.ratio == other.ratio)
+        return NSOrderedSame;
+    
+    return self.ratio < other.ratio? NSOrderedDescending: NSOrderedAscending;
 }
 
 - (NSComparisonResult)compareByTopScore:(Score *)other {
@@ -88,7 +100,8 @@
 
 - (NSString *)description {
     
-    return [NSString stringWithFormat:@"%@: %@ had %d at level %d in mode %d", self.date, self.username, self.score, self.level, self.mode];
+    return [NSString stringWithFormat:@"%@: %@ had %d at level %d (÷%d) in mode %d",
+            self.date, self.username, self.score, self.level, self.ratio, self.mode];
 }
 
 - (void)dealloc {
@@ -116,6 +129,7 @@
 
 @property (readwrite, retain) NSArray       *sortedScores;
 @property (readwrite, assign) NSInteger     topScore;
+@property (readwrite, assign) NSInteger     topRatio;
 
 @property (readwrite, assign) NSUInteger    scoreCount;
 @property (readwrite, assign) NSUInteger    barCount;
@@ -123,17 +137,18 @@
 @property (readwrite, assign) ccTime        animationTimeLeft;
 @property (readwrite, assign) GLuint        vertexBuffer;
 @property (readwrite, assign) Label         **scoreLabels;
+@property (readwrite, assign) Label         **detailLabels;
 
 @end
 
 
 @implementation GraphDataNode
 
-@synthesize sortedScores = _sortedScores, topScore = _topScore;
-@synthesize scoreFormat = _scoreFormat, dateFormatter = _dateFormatter;
+@synthesize sortedScores = _sortedScores, topScore = _topScore, topRatio = _topRatio;
+@synthesize detailFormat = _detailFormat, scoreFormat = _scoreFormat, dateFormatter = _dateFormatter;
 @synthesize padding = _padding, barHeight = _barHeight;
 @synthesize scoreCount = _scoreCount, barCount = _barCount;
-@synthesize animationTimeLeft = _animationTimeLeft, vertexBuffer = _vertexBuffer, scoreLabels = _scoreLabels;
+@synthesize animationTimeLeft = _animationTimeLeft, vertexBuffer = _vertexBuffer, scoreLabels = _scoreLabels, detailLabels = _detailLabels;
 
 - (id)init {
 
@@ -143,8 +158,10 @@
     self.padding            = 0;
     self.barHeight          = [[Config get].largeFontSize unsignedIntValue];
     
-    // 1-username, 2-mode, 3-level, 4-score, 5-date
-    self.scoreFormat        = @"%4$04d (lvl %3$d): %1$@";
+    // 1-username, 2-ratio
+    self.scoreFormat        = @"÷%5$03d - %1$@";
+    // 1-score, 2-level, 3-mode, 4-date
+    self.detailFormat       = @"score %1$05d\nlevel %2$d";
     
     self.dateFormatter      = [[NSDateFormatter new] autorelease];
     [self.dateFormatter setDateStyle:NSDateFormatterShortStyle];
@@ -170,6 +187,14 @@
     [self updateVertices];
 }
 
+- (void)setDetailFormat:(NSString *)aDetailFormat {
+    
+    [_detailFormat release];
+    _detailFormat = [aDetailFormat copy];
+    
+    [self updateVertices];
+}
+
 - (void)setScoreFormat:(NSString *)aScoreFormat {
     
     [_scoreFormat release];
@@ -192,9 +217,13 @@
     for (NSUInteger s = 0; s < self.scoreCount; ++s) {
         [self removeChild:self.scoreLabels[s] cleanup:YES];
         [self.scoreLabels[s] release];
+        [self removeChild:self.detailLabels[s] cleanup:YES];
+        [self.detailLabels[s] release];
     }
     free(self.scoreLabels);
     self.scoreLabels                 = nil;
+    free(self.detailLabels);
+    self.detailLabels                 = nil;
     
     self.sortedScores           = newSortedScores;
     self.scoreCount                  = [self.sortedScores count];
@@ -202,20 +231,34 @@
 
     // Find the top score.
     self.topScore               = ((Score *)[self.sortedScores lastObject]).score;
-    for (Score *score in self.sortedScores)
+    self.topRatio               = ((Score *)[self.sortedScores lastObject]).ratio;
+    for (Score *score in self.sortedScores) {
         if (score.score > self.topScore)
             self.topScore       = score.score;
+        if (score.ratio > self.topRatio)
+            self.topRatio       = score.ratio;
+    }
+    
 
     // Make score labels.
     NSUInteger s = 0;
-    self.scoreLabels            = malloc(sizeof(Label *) * self.scoreCount);
+    self.scoreLabels                    = malloc(sizeof(Label *) * self.scoreCount);
+    self.detailLabels                   = malloc(sizeof(Label *) * self.scoreCount);
     for (Score *score in self.sortedScores) {
-        self.scoreLabels[s]     = [[Label alloc] initWithString:[NSString stringWithFormat:@"%04d (lvl %d): %@",
-                                                                 score.score, score.level, score.username]
-                                                       fontName:[Config get].fixedFontName fontSize:[[Config get].fontSize intValue]];
-        self.scoreLabels[s].position = ccp(self.scoreLabels[s].contentSize.width / 2 + self.padding + 10,
-                                           self.contentSize.height - self.scoreLabels[s].contentSize.height / 2 - self.barHeight * s);
+        self.scoreLabels[s]             = [[Label alloc] initWithString:[NSString stringWithFormat:self.scoreFormat,
+                                                                         score.username, score.ratio]
+                                                               fontName:[Config get].fixedFontName fontSize:[[Config get].fontSize intValue]];
+        self.scoreLabels[s].position    = ccp(self.scoreLabels[s].contentSize.width / 2 + self.padding + 90,
+                                              self.contentSize.height - self.scoreLabels[s].contentSize.height / 2 - self.barHeight * s);
         [self addChild:self.scoreLabels[s]];
+
+        self.detailLabels[s]            = [[Label alloc] initWithString:[NSString stringWithFormat:self.detailFormat,
+                                                                         score.score, score.level, score.mode, score.date]
+                                                             dimensions:CGSizeMake(100, self.barHeight) alignment:UITextAlignmentLeft
+                                                               fontName:[Config get].fixedFontName fontSize:[[Config get].smallFontSize intValue]];
+        self.detailLabels[s].position   = ccp(self.detailLabels[s].contentSize.width / 2 + self.padding + 10,
+                                              self.contentSize.height - self.detailLabels[s].contentSize.height / 2 - 8 - self.barHeight * s);
+        [self addChild:self.detailLabels[s]];
         
         ++s;
     }
@@ -245,8 +288,10 @@
 - (void)updateVertices {
 
     // Hide all score labels initially; we will reveal the ones that we create vertices for when we do.
-    for (NSUInteger s = 0; s < self.scoreCount; ++s)
+    for (NSUInteger s = 0; s < self.scoreCount; ++s) {
         self.scoreLabels[s].visible = NO;
+        self.detailLabels[s].visible = NO;
+    }
     
     // Build vertex arrays.
     Vertex *vertices        = malloc(sizeof(Vertex)     /* size of a vertex */
@@ -256,14 +301,14 @@
     NSUInteger sv           = 0;
     CGRect visibleRect      = [self visibleRect];
     CGFloat sy              = visibleRect.size.height - self.padding;
-    float scoreMultiplier   = (kAnimationDuration - self.animationTimeLeft) / (kAnimationDuration * self.topScore);
+    float ratioMultiplier   = (kAnimationDuration - self.animationTimeLeft) / (kAnimationDuration * self.topRatio);
     for (NSUInteger s = 0; s < self.scoreCount; ++s) {
         if (sy - visibleRect.origin.y - self.barHeight > visibleRect.size.height - self.padding) {
             sy              -= self.barHeight;
             continue;
         }
         
-        float scoreRatio    = ((Score *)[self.sortedScores objectAtIndex:s]).score * scoreMultiplier;
+        float ratioRatio    = ((Score *)[self.sortedScores objectAtIndex:s]).ratio * ratioMultiplier;
         
         vertices[sv + 0].c  = vertices[sv + 1].c    = vertices[sv + 5].c    = ccc4(0xee, 0xee, 0xff, 0xbb); // near (top)
         vertices[sv + 2].c  = vertices[sv + 3].c    = vertices[sv + 4].c    = ccc4(0xee, 0xee, 0xff, 0xee); // half
@@ -272,7 +317,7 @@
         
         CGFloat nearX       = self.padding;
         CGFloat nearY       = sy;
-        CGFloat farX        = nearX + (self.contentSize.width - 2 * self.padding) * scoreRatio;
+        CGFloat farX        = nearX + (self.contentSize.width - 2 * self.padding) * ratioRatio;
         CGFloat farY        = nearY - self.barHeight;
         //CGFloat halfX     = (nearX + farX) / 2;
         CGFloat halfY       = farY; //= nearY + (farY - nearY) * (1 - 0.618f);
@@ -292,6 +337,7 @@
         sv                  += 6;
         sy                  -= self.barHeight;
         self.scoreLabels[s].visible = YES;
+        self.detailLabels[s].visible = YES;
         if (sy - visibleRect.origin.y - self.barHeight <= self.padding - self.barHeight)
             break;
     }
@@ -340,9 +386,13 @@
     for (NSUInteger s = 0; s < self.scoreCount; ++s) {
         [self removeChild:self.scoreLabels[s] cleanup:YES];
         [self.scoreLabels[s] release];
+        [self removeChild:self.detailLabels[s] cleanup:YES];
+        [self.detailLabels[s] release];
     }
     free(self.scoreLabels);
     self.scoreLabels                 = nil;
+    free(self.detailLabels);
+    self.detailLabels                 = nil;
     
     self.sortedScores = nil;
     self.scoreFormat = nil;
@@ -379,7 +429,7 @@
     
     [self addChild:self.graphDataNode = [GraphDataNode node]];
 
-    self.comparator         = @selector(compareByTopScore:);
+    self.comparator         = @selector(compareByTopRatio:);
 
     CGSize winSize          = [Director sharedDirector].winSize;
     self.contentSize        = CGSizeMake((int)(winSize.width * 0.9f), (int)(winSize.height * 0.7f));

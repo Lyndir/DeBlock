@@ -32,6 +32,7 @@
     DbMode                                      _mode;
     NSUInteger                                  _level;
     NSInteger                                   _score;
+    NSInteger                                   _ratio;
     NSDate                                      *_date;
 }
 
@@ -39,6 +40,7 @@
 @property (readonly) DbMode                     mode;
 @property (readonly) NSUInteger                 level;
 @property (readonly) NSInteger                  score;
+@property (readonly) NSInteger                  ratio;
 @property (readonly, copy) NSDate               *date;
 
 + (Score *)scoreBy:(NSString *)aUsername
@@ -54,6 +56,7 @@
                atDate:(NSDate *)aDate;
 
 - (NSComparisonResult)compareByTopScore:(Score *)other;
+- (NSComparisonResult)compareByTopRatio:(Score *)other;
 - (NSComparisonResult)compareByRecency:(Score *)other;
 - (NSComparisonResult)compareByUsername:(Score *)other;
 
@@ -64,8 +67,10 @@
 
     NSArray                                     *_sortedScores;
     NSInteger                                   _topScore;
+    NSInteger                                   _topRatio;
 
     NSString                                    *_scoreFormat;
+    NSString                                    *_detailFormat;
     NSDateFormatter                             *_dateFormatter;
 
     CGFloat                                     _padding, _barHeight;
@@ -74,12 +79,17 @@
     ccTime                                      _animationTimeLeft;
     GLuint                                      _vertexBuffer;
     Label                                       **_scoreLabels;
+    Label                                       **_detailLabels;
 }
 
-/** The format string to render the score data with.
+/** The format string show the large-font part of the score bar with.
  *
- * The arguments to the format string are in this order: score, username, formatted date. */
+ * The arguments to the format string are in this order: username, mode, level, score, formatted date. */
 @property (readwrite, retain) NSString          *scoreFormat;
+/** The format string show the small-font part of the score bar with.
+ *
+ * The arguments to the format string are in this order: username, mode, level, score, formatted date. */
+@property (readwrite, retain) NSString          *detailFormat;
 /** The formatter to use when rendering score dates. */
 @property (readwrite, retain) NSDateFormatter   *dateFormatter;
 
