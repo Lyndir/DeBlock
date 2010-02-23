@@ -69,7 +69,7 @@
 
 - (void)reloadScores {
 
-    [self submitScoreForPlayer:nil];
+    [self submitScoreForPlayer:[DeblockConfig get].currentPlayer];
 }
 
 
