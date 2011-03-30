@@ -28,7 +28,7 @@
 @interface DbHUDLayer : HUDLayer {
 
 @private
-    LabelAtlas          *_levelScoreCount, *_levelPenaltyCount;
+    CCLabelAtlas          *_levelScoreCount, *_levelPenaltyCount;
 }
 
 -(void) updateHudWasGood:(BOOL)wasGood;

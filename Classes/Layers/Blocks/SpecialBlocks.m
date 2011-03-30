@@ -30,8 +30,8 @@
 
 @interface BlockLayer ()
 
-@property (readwrite, assign) Texture2D                                 **textures;
-@property (readwrite, retain) Label                                     *label;
+@property (readwrite, assign) CCTexture2D                               **textures;
+@property (readwrite, retain) CCLabelTTF                                *label;
 
 @end
 
@@ -85,7 +85,7 @@ static SystemSoundID freezeBlockEffect;
     self.type           = DMBlockTypeSpecial;
     
     [self.textures[0] release];
-    self.textures[0]         = [[[TextureMgr sharedTextureMgr] addImage:@"block.whole.bomb.png"] retain];
+    self.textures[0]         = [[[CCTextureCache sharedTextureCache] addImage:@"block.whole.bomb.png"] retain];
     
     return self;
 }
@@ -131,7 +131,7 @@ static SystemSoundID freezeBlockEffect;
         return nil;
     
     [self.textures[0] release];
-    self.textures[0]         = [[[TextureMgr sharedTextureMgr] addImage:@"block.whole.morph.png"] retain];
+    self.textures[0]         = [[[CCTextureCache sharedTextureCache] addImage:@"block.whole.morph.png"] retain];
 
     return self;
 }
@@ -200,7 +200,7 @@ static SystemSoundID freezeBlockEffect;
         return nil;
     
     [self.textures[0] release];
-    self.textures[0]         = [[[TextureMgr sharedTextureMgr] addImage:@"block.whole.zap.png"] retain];
+    self.textures[0]         = [[[CCTextureCache sharedTextureCache] addImage:@"block.whole.zap.png"] retain];
     
     return self;
 }
@@ -282,7 +282,7 @@ static SystemSoundID freezeBlockEffect;
         return nil;
     
     [self.textures[0] release];
-    self.textures[0]         = [[[TextureMgr sharedTextureMgr] addImage:@"block.whole.freeze.png"] retain];
+    self.textures[0]         = [[[CCTextureCache sharedTextureCache] addImage:@"block.whole.freeze.png"] retain];
     
     return self;
 }
@@ -293,10 +293,10 @@ static SystemSoundID freezeBlockEffect;
     
     self.timeLeft = dFreezeTime;
     [self.label setString:[NSString stringWithFormat:@"%d", max(0, self.timeLeft)]];
-    [self runAction:[Sequence actionOne:[Repeat actionWithAction:[Sequence actionOne:[DelayTime actionWithDuration:1]
-                                                                                 two:[CallFunc actionWithTarget:self selector:@selector(cool)]]
+    [self runAction:[CCSequence actionOne:[CCRepeat actionWithAction:[CCSequence actionOne:[CCDelayTime actionWithDuration:1]
+                                                                                       two:[CCCallFunc actionWithTarget:self selector:@selector(cool)]]
                                                            times:self.timeLeft]
-                                    two:[CallFunc actionWithTarget:self selector:@selector(freeze)]]];
+                                    two:[CCCallFunc actionWithTarget:self selector:@selector(freeze)]]];
 }
 
 - (void)cool {

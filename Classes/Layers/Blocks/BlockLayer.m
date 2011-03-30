@@ -23,7 +23,6 @@
 //
 
 #import "BlockLayer.h"
-#import "PropertyAction.h"
 #import "DeblockAppDelegate.h"
 #import "SpecialBlocks.h"
 
@@ -35,15 +34,15 @@
 
 - (void)randomEvent:(ccTime)dt;
 
-@property (readwrite, assign) Texture2D                                   **textures;
-@property (readwrite, retain) Label                                       *label;
+@property (readwrite, assign) CCTexture2D                                 **textures;
+@property (readwrite, retain) CCLabelTTF                                  *label;
 
 
 @property (readwrite, assign) NSUInteger                                  frames;
 @property (readwrite, assign) ccColor4B                                   blockColor;
 
 
-@property (readwrite, retain) ParticleSystem                              *dropEmitter;
+@property (readwrite, retain) CCParticleSystem                            *dropEmitter;
 
 @end
 
@@ -52,10 +51,8 @@
 
 @synthesize textures = _textures;
 @synthesize label = _label;
-@synthesize type = _type;
 @synthesize destroyed = _destroyed;
 @synthesize destructible = _destructible;
-@synthesize targetRow = _targetRow, targetCol = _targetCol;
 @synthesize frames = _frames, frame = _frame;
 @synthesize blockColor = _blockColor;
 @synthesize modColor = _modColor;
@@ -188,15 +185,15 @@ static NSDictionary *blockColors;
 
     self.frames              = 11;
     self.frame               = 0;
-    self.textures            = malloc(sizeof(Texture2D *) * self.frames);
-    self.textures[0]         = [[[TextureMgr sharedTextureMgr] addImage:@"block.whole.png"] retain];
+    self.textures            = malloc(sizeof(CCTexture2D *) * self.frames);
+    self.textures[0]         = [[[CCTextureCache sharedTextureCache] addImage:@"block.whole.png"] retain];
     for (NSUInteger i = 1; i < 11; ++i)
-        self.textures[i]     = [[[TextureMgr sharedTextureMgr] addImage:[NSString stringWithFormat:@"block.cracked.%d.png", i]] retain];
+        self.textures[i]     = [[[CCTextureCache sharedTextureCache] addImage:[NSString stringWithFormat:@"block.cracked.%d.png", i]] retain];
 
-    self.label               = [Label labelWithString:@"" dimensions:size
-                                            alignment:UITextAlignmentCenter
-                                             fontName:[Config get].fixedFontName
-                                             fontSize:size.height * 3 / 4];
+    self.label               = [CCLabelTTF labelWithString:@"" dimensions:size
+                                                 alignment:UITextAlignmentCenter
+                                                  fontName:[Config get].fixedFontName
+                                                  fontSize:size.height * 3 / 4];
     self.label.position      = ccp(size.width / 2, size.height / 2);
     [self addChild:self.label];
     
@@ -305,7 +302,7 @@ static NSDictionary *blockColors;
         [self.dropEmitter resetSystem];
     
     else {
-        self.dropEmitter                     = [[[ParticleSmoke alloc] initWithTotalParticles:1000] autorelease];
+        self.dropEmitter                     = [[[CCParticleSmoke alloc] initWithTotalParticles:1000] autorelease];
         self.dropEmitter.duration            = 0.2f;
         self.dropEmitter.life                = 0.7f;
         self.dropEmitter.lifeVar             = 0.3f;
@@ -333,7 +330,7 @@ static NSDictionary *blockColors;
     if (!self.dropEmitter.parent)
         [self.parent addChild:self.dropEmitter];
 
-    self.dropEmitter.centerOfGravity = ccp(self.position.x + self.contentSize.width / 2, self.position.y);
+    self.dropEmitter.sourcePosition = ccp(self.position.x + self.contentSize.width / 2, self.position.y);
 }
 
 
@@ -342,10 +339,22 @@ static NSDictionary *blockColors;
 }
 
 
+- (NSInteger)targetRow {
+    
+    return _targetRow;
+}
+
+
 - (void)setTargetRow:(NSInteger)r {
     
     _targetRow = r;
     //[label setString:[NSString stringWithFormat:@"%d,%d", targetRow, targetCol]];
+}
+
+
+- (NSInteger)targetCol {
+    
+    return _targetCol;
 }
 
 
@@ -386,13 +395,19 @@ static NSDictionary *blockColors;
 }
 
 
+- (DMBlockType)type {
+    
+    return _type;
+}
+
+
 - (void)setType:(DMBlockType)aType {
     
     _type = aType;
     ccColor4B targetColor = [[self class] colorForType:self.type];
     
     if (self.parent)
-        [self runAction:[TintTo actionWithDuration:0.2f red:targetColor.r green:targetColor.g blue:targetColor.b]];
+        [self runAction:[CCTintTo actionWithDuration:0.2f red:targetColor.r green:targetColor.g blue:targetColor.b]];
     else
         self.blockColor = targetColor;
 }
@@ -400,7 +415,7 @@ static NSDictionary *blockColors;
 
 -(void) registerWithTouchDispatcher {
     
-	[[TouchDispatcher sharedDispatcher] addTargetedDelegate:self priority:0 swallowsTouches:YES];
+	[[CCTouchDispatcher sharedDispatcher] addTargetedDelegate:self priority:0 swallowsTouches:YES];
 }
 
 
@@ -435,10 +450,9 @@ static NSDictionary *blockColors;
 
 - (void)blink {
     
-    PropertyAction *animateColor = [PropertyAction actionWithDuration:0.3f key:@"colorMultiplier"
-                                                                   from:[NSNumber numberWithFloat:1.0f]
-                                                                     to:[NSNumber numberWithFloat:1.5f]];
-    [self runAction:[Sequence actions:animateColor, [animateColor reverse], nil]];
+    CCActionTween *animateColor = [CCActionTween actionWithDuration:0.3f key:@"colorMultiplier"
+                                                               from:1.0f to:1.5f];
+    [self runAction:[CCSequence actions:animateColor, [animateColor reverse], nil]];
 }
 
 
@@ -446,11 +460,10 @@ static NSDictionary *blockColors;
     
     [self notifyCrumble];
     
-    PropertyAction *animateFrames      = [PropertyAction actionWithDuration:0.4f key:@"frame"
-                                                                   from:[NSNumber numberWithUnsignedInt:0]
-                                                                     to:[NSNumber numberWithUnsignedInt:self.frames - 1]];
+    CCActionTween *animateFrames    = [CCActionTween actionWithDuration:0.4f key:@"frame"
+                                                                   from:0 to:self.frames - 1];
     
-    ParticleSystem *crumbleEmitter      = [[ParticleSmoke alloc] initWithTotalParticles:1000];
+    CCParticleSystem *crumbleEmitter    = [[CCParticleSmoke alloc] initWithTotalParticles:1000];
     crumbleEmitter.duration             = animateFrames.duration;
     crumbleEmitter.life                 = 1.0f;
     crumbleEmitter.lifeVar              = 0.3f;
@@ -465,7 +478,7 @@ static NSDictionary *blockColors;
     crumbleEmitter.gravity              = ccp(0, -5);
     crumbleEmitter.position             = CGPointZero;
     crumbleEmitter.posVar               = ccp(self.contentSize.width / 2, self.contentSize.height / 3);
-    crumbleEmitter.centerOfGravity      = ccp(self.position.x + self.contentSize.width / 2,
+    crumbleEmitter.sourcePosition       = ccp(self.position.x + self.contentSize.width / 2,
                                               self.position.y + self.contentSize.height / 3);
 #if TARGET_IPHONE_SIMULATOR
     crumbleEmitter.startColor           = ccc4f(1, 1, 1, 0.3f);
@@ -479,9 +492,9 @@ static NSDictionary *blockColors;
     [crumbleEmitter release];
 
 
-    [self runAction:[Sequence actions:
+    [self runAction:[CCSequence actions:
                      animateFrames,
-                     [CallFunc actionWithTarget:self selector:@selector(notifyCrumbled)],
+                     [CCCallFunc actionWithTarget:self selector:@selector(notifyCrumbled)],
                      nil]];
 }
 

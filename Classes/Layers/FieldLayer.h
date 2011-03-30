@@ -24,11 +24,11 @@
 
 #import "Resettable.h"
 #import "BlockLayer.h"
-
-@interface FieldLayer : Layer <Resettable> {
+foo
+@interface FieldLayer : CCLayer <Resettable> {
 
 @private
-    Label                       *_msgLabel;
+    CCLabelTTF                  *_msgLabel;
 
     BOOL                        _locked;
 
@@ -57,7 +57,7 @@
 - (void)stopGame;
 - (void)checkGameState;
 
-- (void)message: (NSString *)msg on:(CocosNode *)node;
+- (void)message: (NSString *)msg on:(CCNode *)node;
 - (void)message: (NSString *)msg at:(CGPoint)point;
 
 @end

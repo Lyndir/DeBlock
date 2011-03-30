@@ -42,11 +42,11 @@ typedef enum DMScanReason {
 
 @class FieldLayer;
 
-@interface BlockLayer : Layer<CocosNodeRGBA> {
+@interface BlockLayer : CCLayer {
 
 @protected
-    Texture2D                                   **_textures;
-    Label                                       *_label;
+    CCTexture2D                                 **_textures;
+    CCLabelTTF                                  *_label;
 
 @private
     DMBlockType                                 _type;
@@ -58,9 +58,9 @@ typedef enum DMScanReason {
     ccColor4B                                   _blockColor;
     ccColor4F                                   _modColor;
 
-    IntervalAction                              *_moveAction;
+    CCActionInterval                            *_moveAction;
 
-    ParticleSystem                              *_dropEmitter;
+    CCParticleSystem                            *_dropEmitter;
 }
 
 @property (readwrite) DMBlockType               type;
@@ -69,7 +69,7 @@ typedef enum DMScanReason {
 @property (readwrite) BOOL                      destructible;
 /** Indicates whether the conditions on this block mean algorithms should not considder it for destruction. */
 @property (readonly) BOOL                       valid;
-@property (readwrite, retain) IntervalAction    *moveAction;
+@property (readwrite, retain) CCActionInterval  *moveAction;
 
 @property (readwrite) NSInteger                 targetRow;
 @property (readwrite) NSInteger                 targetCol;

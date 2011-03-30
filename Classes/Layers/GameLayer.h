@@ -34,7 +34,7 @@ typedef enum DbEndReason {
 } DbEndReason;
 
 
-@interface GameLayer : Layer <Resettable> {
+@interface GameLayer : CCLayer <Resettable> {
 
     BOOL                                                _paused;
     BOOL                                                _running;
@@ -42,9 +42,9 @@ typedef enum DbEndReason {
 
     SkyLayer                                            *_skyLayer;
     FieldLayer                                          *_fieldLayer;
-    Layer                                               *_fieldScroller;
+    CCLayer                                             *_fieldScroller;
 
-    Action                                              *_shakeAction;
+    CCAction                                            *_shakeAction;
 
     ccTime                                              _penaltyInterval;
     ccTime                                              _remainingPenaltyTime;

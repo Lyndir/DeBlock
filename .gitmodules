@@ -1,0 +1,3 @@
+[submodule "External/iLibs"]
+	path = External/iLibs
+	url = git@github.com:Lamentum/iLibs.git

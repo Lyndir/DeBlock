@@ -33,13 +33,13 @@
 
 @interface SkyLayer ()
 
-- (void)cloudDone:(Sprite *)cloud;
+- (void)cloudDone:(CCSprite *)cloud;
 
 @property (readwrite, assign) BOOL                    fancySky;
 
 @property (readwrite, assign) ccColor4B               skyColorFrom;
 @property (readwrite, assign) ccColor4B               skyColorTo;
-@property (readwrite, assign) Texture2D               **clouds;
+@property (readwrite, assign) CCTexture2D             **clouds;
 
 @property (readwrite, assign) CGFloat                 cloudsX;
 
@@ -58,26 +58,26 @@
     if (!(self = [super init]))
 		return self;
     
-    self.contentSize = [Director sharedDirector].winSize;
+    self.contentSize = [CCDirector sharedDirector].winSize;
 
-    self.clouds = malloc(sizeof(Texture2D *) * kCloudFrames);
+    self.clouds = malloc(sizeof(CCTexture2D *) * kCloudFrames);
     for (NSUInteger c = 0; c < kCloudFrames; ++c)
-        self.clouds[c] = [[[TextureMgr sharedTextureMgr] addImage:[NSString stringWithFormat:@"clouds.%d.png", c + 1]] retain];
+        self.clouds[c] = [[[CCTextureCache sharedTextureCache] addImage:[NSString stringWithFormat:@"clouds.%d.png", c + 1]] retain];
     
     ccBlendFunc cloudBlend;
     cloudBlend.src = GL_ONE;
     cloudBlend.dst = GL_ONE_MINUS_SRC_ALPHA;
     
     for (NSUInteger c = 0; c < kCloudCount; ++c) {
-        Sprite *cloud = [Sprite spriteWithTexture:self.clouds[random() % kCloudFrames]];
+        CCSprite *cloud = [CCSprite spriteWithTexture:self.clouds[random() % kCloudFrames]];
         cloud.position = CGPointMake(random() % (NSInteger)(self.contentSize.width + cloud.contentSize.width)
                                      + cloud.contentSize.width / 4,
                                      self.contentSize.height - random() % (NSInteger)cloud.contentSize.height / 3);
         NSInteger t = fmaxf(1.0f, kCloudTime - kCloudTime * cloud.position.x / (self.contentSize.width + cloud.contentSize.width));
-        [cloud runAction:[Sequence actionOne:[MoveTo actionWithDuration:random() % t / 2 + t / 2
-                                                               position:CGPointMake(self.contentSize.width + cloud.contentSize.width / 2,
+        [cloud runAction:[CCSequence actionOne:[CCMoveTo actionWithDuration:random() % t / 2 + t / 2
+                                                                   position:CGPointMake(self.contentSize.width + cloud.contentSize.width / 2,
                                                                                     cloud.position.y)]
-                                         two:[CallFuncN actionWithTarget:self selector:@selector(cloudDone:)]]];
+                                         two:[CCCallFuncN actionWithTarget:self selector:@selector(cloudDone:)]]];
         [cloud setBlendFunc:cloudBlend];
         [self addChild:cloud z:1];
     }
@@ -86,14 +86,14 @@
 }
 
 
-- (void)cloudDone:(Sprite *)cloud {
+- (void)cloudDone:(CCSprite *)cloud {
     
     cloud.position = CGPointMake(-cloud.contentSize.width / 2,
                                  self.contentSize.height + random() % (NSInteger)cloud.contentSize.height / 4);
-    [cloud runAction:[Sequence actionOne:[MoveTo actionWithDuration:random() % kCloudTime / 2 + kCloudTime / 2
-                                                           position:CGPointMake(self.contentSize.width + cloud.contentSize.width / 2,
+    [cloud runAction:[CCSequence actionOne:[CCMoveTo actionWithDuration:random() % kCloudTime / 2 + kCloudTime / 2
+                                                               position:CGPointMake(self.contentSize.width + cloud.contentSize.width / 2,
                                                                                 cloud.position.y)]
-                                     two:[CallFuncN actionWithTarget:self selector:@selector(cloudDone:)]]];
+                                     two:[CCCallFuncN actionWithTarget:self selector:@selector(cloudDone:)]]];
 }
 
 

@@ -49,7 +49,7 @@
 - (void)blinkAll;
 - (void)destroyAll;
 
-@property (readwrite, retain) Label                       *msgLabel;
+@property (readwrite, retain) CCLabelTTF                  *msgLabel;
 
 @property (readwrite, assign) BOOL                        locked;
 
@@ -88,13 +88,13 @@
 
 -(void) registerWithTouchDispatcher {
     
-	[[TouchDispatcher sharedDispatcher] addTargetedDelegate:self priority:0 swallowsTouches:YES];
+	[[CCTouchDispatcher sharedDispatcher] addTargetedDelegate:self priority:0 swallowsTouches:YES];
 }
 
 
 
 -(void) reset {
-
+    
     // Clean up.
     [self stopAllActions];
     
@@ -113,7 +113,7 @@
         }
         free(self.blockGrid);
     }
-
+    
     // Level-based field parameters.
     self.blockColumns    = fmaxf(fminf(kMaxColumns * [[DeblockConfig get] currentPlayer].level / kAllGridLevel, kMaxColumns), kMinColumns);
     self.blockRows       = fmaxf(fminf(kMaxColumns * [[DeblockConfig get] currentPlayer].level / kAllGridLevel, kMaxRows), kMinColumns);
@@ -126,7 +126,7 @@
             // Nil the grid so we can iterate through it before it's been completely filled up.
             self.blockGrid[row][col] = nil;
     }
-            
+    
     // Build field of blocks.
     CGSize blockSize        = CGSizeMake((self.contentSize.width   - self.blockPadding) / self.blockColumns  - self.blockPadding,
                                          (self.contentSize.height  - self.blockPadding) / self.blockRows     - self.blockPadding);
@@ -173,7 +173,7 @@
 
 
 - (NSArray *)blocksInRow:(NSInteger)aRow {
-
+    
     NSMutableArray *blocks = [NSMutableArray arrayWithCapacity:self.blockColumns];
     for (NSInteger col = 0; col < self.blockColumns; ++col) {
         BlockLayer *block = self.blockGrid[aRow][col];
@@ -236,12 +236,12 @@
                 
                 return YES;
             }
-
+    
     return NO;
 }
 
 - (void)getPositionOfBlock:(BlockLayer *)aBlock toRow:(NSInteger *)aRow col:(NSInteger *)aCol {
-
+    
     if (![self findPositionOfBlock:aBlock toRow:aRow col:aCol])
         [NSException raise:NSInternalInconsistencyException format:@"Given block is not in the field."];
 }
@@ -278,7 +278,7 @@
 - (void)destroyBlock:(BlockLayer *)aBlock {
     
     self.locked = YES;
-
+    
     CGPoint blockPoint = aBlock.position;
     blockPoint.x += aBlock.contentSize.width / 2.0f;
     blockPoint.y += aBlock.contentSize.height;
@@ -300,7 +300,7 @@
     NSMutableSet *linkedBlocks = [NSMutableSet set];
     [aBlock getLinksInField:self forReason:DMScanReasonDestroying
                       toSet:linkedBlocks];
-
+    
     // No links and not forced, give up.
     if (!forced && ![linkedBlocks count])
         return 0;
@@ -312,13 +312,13 @@
         multiplier *= [block scoreMultiplier];
         [self destroySingleBlock:block];
     }
-
+    
     return ([linkedBlocks count] - 1) * multiplier;
 }
 
 
 - (void)destroySingleBlock:(BlockLayer *)aBlock {
-
+    
     // Find the position of the block to destroy.
     NSInteger row, col;
     [self getPositionOfBlock:aBlock toRow:&row col:&col];
@@ -389,19 +389,19 @@
     CGFloat dropHeight = fabsf(row - block.targetRow) * (block.contentSize.height + self.blockPadding) * gravityRowDirection;
     ccTime duration = 0.3f * fabsf(dropHeight) / 100.0f;
     
-    [block runAction:block.moveAction = [Sequence actions:
-                                         [EaseSineIn actionWithAction:
-                                          [MoveBy actionWithDuration:duration position:ccp(0, dropHeight)]],
-                                         [CallFunc actionWithTarget:block selector:@selector(notifyDropped)],
-                                         [EaseSineIn actionWithAction:
-                                          [MoveBy actionWithDuration:duration / 3 position:ccp(0, -dropHeight / 20)]],
-                                         [EaseSineIn actionWithAction:
-                                          [MoveBy actionWithDuration:duration / 3 position:ccp(0, dropHeight / 20)]],
-                                         [EaseSineIn actionWithAction:
-                                          [MoveBy actionWithDuration:duration / 6 position:ccp(0, -dropHeight / 40)]],
-                                         [EaseSineIn actionWithAction:
-                                          [MoveBy actionWithDuration:duration / 6 position:ccp(0, dropHeight / 40)]],
-                                         [CallFuncN actionWithTarget:self selector:@selector(doneDroppingBlock:)],
+    [block runAction:block.moveAction = [CCSequence actions:
+                                         [CCEaseSineIn actionWithAction:
+                                          [CCMoveBy actionWithDuration:duration position:ccp(0, dropHeight)]],
+                                         [CCCallFunc actionWithTarget:block selector:@selector(notifyDropped)],
+                                         [CCEaseSineIn actionWithAction:
+                                          [CCMoveBy actionWithDuration:duration / 3 position:ccp(0, -dropHeight / 20)]],
+                                         [CCEaseSineIn actionWithAction:
+                                          [CCMoveBy actionWithDuration:duration / 3 position:ccp(0, dropHeight / 20)]],
+                                         [CCEaseSineIn actionWithAction:
+                                          [CCMoveBy actionWithDuration:duration / 6 position:ccp(0, -dropHeight / 40)]],
+                                         [CCEaseSineIn actionWithAction:
+                                          [CCMoveBy actionWithDuration:duration / 6 position:ccp(0, dropHeight / 40)]],
+                                         [CCCallFuncN actionWithTarget:self selector:@selector(doneDroppingBlock:)],
                                          nil]];
     
     return YES;
@@ -440,7 +440,7 @@
         anyBlockCollapsing |= [self collapseBlocksAtCol:col];
     for (NSInteger col = self.gravityColumn - 1; col >= 0; --col)
         anyBlockCollapsing |= [self collapseBlocksAtCol:col];
-
+    
     if (!anyBlockCollapsing)
         // No blocks are collapsing => collapsing blocks is done.
         [self collapsingFinished];
@@ -448,14 +448,14 @@
 
 
 - (BOOL)collapseBlocksAtCol:(NSInteger)col {
-
+    
     
     NSInteger gravityColDirection = self.gravityColumn - col;
     if (gravityColDirection == 0)
         // Hit the gravity "wall", stop collapsing.
         return NO;
     gravityColDirection /= fabsf(gravityColDirection);
-
+    
     // Column collapsing.
     NSInteger targetCol = col;
     while (YES) {
@@ -472,7 +472,7 @@
     if (targetCol == col)
         // This column is already at its target, no moving needs to be done.
         return NO;
-
+    
     BOOL anyBlockCollapsing = NO;
     for (NSInteger row = 0; row < self.blockRows; ++row) {
         BlockLayer *block = [self blockAtRow:row col:col];
@@ -484,8 +484,8 @@
         block.targetCol = targetCol;
         CGFloat dropWidth = fabsf(col - block.targetCol) * (block.contentSize.width + self.blockPadding) * gravityColDirection;
         
-        [block runAction:block.moveAction = [Sequence actionOne:[MoveBy actionWithDuration:0.3f position:ccp(dropWidth, 0)]
-                                                            two:[CallFuncN actionWithTarget:self selector:@selector(doneCollapsingBlock:)]]];
+        [block runAction:block.moveAction = [CCSequence actionOne:[CCMoveBy actionWithDuration:0.3f position:ccp(dropWidth, 0)]
+                                                              two:[CCCallFuncN actionWithTarget:self selector:@selector(doneCollapsingBlock:)]]];
         anyBlockCollapsing = YES;
     }
     
@@ -523,7 +523,7 @@
     
     if (![DeblockAppDelegate get].gameLayer.running)
         return;
-
+    
     NSMutableSet *allLinkedBlocks = [NSMutableSet new];
     NSUInteger blocksLeft = 0;
     for (NSInteger row = 0; row < self.blockRows; ++row)
@@ -550,7 +550,7 @@
             bonusPoints = [[DeblockConfig get].flawlessBonus intValue] * [[DeblockConfig get] currentPlayer].level;
             [self message:[NSString stringWithFormat:@"%+d", bonusPoints]
                        at:ccp(self.contentSize.width / 2, self.contentSize.height / 2)];
-
+            
             ++newLevel;
         } else if (blocksLeft <= 8) {
             // Blocks left under minimum block limit -> level up.
@@ -570,8 +570,8 @@
 }
 
 
--(void) message:(NSString *)msg on:(CocosNode *)node {
-
+-(void) message:(NSString *)msg on:(CCNode *)node {
+    
     [self message:msg at:ccp(node.position.x, node.position.y + node.contentSize.height)];
 }
 
@@ -582,11 +582,11 @@
         [self.msgLabel stopAllActions];
     
     else {
-        self.msgLabel = [Label labelWithString:@""
-                                    dimensions:CGSizeMake(1000, [[Config get].fontSize intValue] + 5)
-                                     alignment:UITextAlignmentCenter
-                                      fontName:[Config get].fixedFontName
-                                      fontSize:[[Config get].fontSize intValue]];
+        self.msgLabel = [CCLabelTTF labelWithString:@""
+                                         dimensions:CGSizeMake(1000, [[Config get].fontSize intValue] + 5)
+                                          alignment:UITextAlignmentCenter
+                                           fontName:[Config get].fixedFontName
+                                           fontSize:[[Config get].fontSize intValue]];
         
         [self addChild:self.msgLabel z:9];
     }
@@ -595,7 +595,7 @@
     self.msgLabel.position = point;
     
     // Make sure label remains on screen.
-    CGSize winSize = [Director sharedDirector].winSize;
+    CGSize winSize = [CCDirector sharedDirector].winSize;
     if([self.msgLabel position].x < [[Config get].fontSize intValue] / 2)                 // Left edge
         [self.msgLabel setPosition:ccp([[Config get].fontSize intValue] / 2, [self.msgLabel position].y)];
     if([self.msgLabel position].x > winSize.width - [[Config get].fontSize intValue] / 2) // Right edge
@@ -614,20 +614,20 @@
         [self.msgLabel setColor:ccc3(0xFF, 0xFF, 0xFF)];
     
     // Animate the label to fade out.
-    [self.msgLabel runAction:[Spawn actions:
-                         [FadeOut actionWithDuration:3],
-                         [Sequence actions:
-                          [DelayTime actionWithDuration:1],
-                          [MoveBy actionWithDuration:2 position:ccp(0, [[Config get].fontSize intValue] * 2)],
-                          nil],
-                         nil]];
+    [self.msgLabel runAction:[CCSpawn actions:
+                              [CCFadeOut actionWithDuration:3],
+                              [CCSequence actions:
+                               [CCDelayTime actionWithDuration:1],
+                               [CCMoveBy actionWithDuration:2 position:ccp(0, [[Config get].fontSize intValue] * 2)],
+                               nil],
+                              nil]];
 }
 
 
 -(void) startGame {
     
     self.locked = NO;
-
+    
     [[DeblockAppDelegate get].hudLayer updateHudWasGood:YES];
     [[DeblockAppDelegate get].gameLayer started];
 }
@@ -636,7 +636,7 @@
 -(void) stopGame {
     
     self.locked = YES;
-
+    
     BOOL isEmpty = YES;
     for (NSInteger row = 0; row < self.blockRows && isEmpty; ++row)
         for (NSInteger col = 0; col < self.blockColumns && isEmpty; ++col)
@@ -644,22 +644,22 @@
                 isEmpty = NO;
                 break;
             }
-
+    
     if (isEmpty)
         [[DeblockAppDelegate get].gameLayer stopped];
     else
-        [self runAction:[Sequence actions:
-                         [CallFunc actionWithTarget:self selector:@selector(blinkAll)],
-                         [DelayTime actionWithDuration:0.5f],
-                         [CallFunc actionWithTarget:self selector:@selector(destroyAll)],
-                         [DelayTime actionWithDuration:0.5f],
-                         [CallFunc actionWithTarget:[DeblockAppDelegate get].gameLayer selector:@selector(stopped)],
+        [self runAction:[CCSequence actions:
+                         [CCCallFunc actionWithTarget:self selector:@selector(blinkAll)],
+                         [CCDelayTime actionWithDuration:0.5f],
+                         [CCCallFunc actionWithTarget:self selector:@selector(destroyAll)],
+                         [CCDelayTime actionWithDuration:0.5f],
+                         [CCCallFunc actionWithTarget:[DeblockAppDelegate get].gameLayer selector:@selector(stopped)],
                          nil]];
 }
 
 
 - (void)blinkAll {
-
+    
     for (NSInteger row = 0; row < self.blockRows; ++row)
         for (NSInteger col = 0; col < self.blockColumns; ++col)
             [[self blockAtRow:row col:col] blink];
@@ -671,7 +671,7 @@
     for (NSInteger row = 0; row < self.blockRows; ++row)
         for (NSInteger col = 0; col < self.blockColumns; ++col) {
             BlockLayer *block = self.blockGrid[row][col];
-
+            
             if (block)
                 [self destroySingleBlock:block];
         }
@@ -692,7 +692,7 @@
     
     for (NSInteger col = 0; col < self.blockColumns; ++col)
         [d appendFormat:@" %02d  |", col];
-
+    
     for (NSInteger row = self.blockRows - 1; row >= 0; --row) {
         [d appendFormat:@"\n %02d ||", row];
         for (NSInteger col = 0; col < self.blockColumns; ++col) {

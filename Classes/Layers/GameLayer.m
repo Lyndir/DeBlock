@@ -34,11 +34,11 @@
 
 @property (readwrite, assign) DbEndReason                                         endReason;
 
-@property (nonatomic, readwrite, retain) SkyLayer                                            *skyLayer;
-@property (nonatomic, readwrite, retain) FieldLayer                                          *fieldLayer;
-@property (readwrite, retain) Layer                                               *fieldScroller;
+@property (nonatomic, readwrite, retain) SkyLayer                                 *skyLayer;
+@property (nonatomic, readwrite, retain) FieldLayer                               *fieldLayer;
+@property (readwrite, retain) CCLayer                                             *fieldScroller;
 
-@property (readwrite, retain) Action                                              *shakeAction;
+@property (readwrite, retain) CCAction                                            *shakeAction;
 
 @property (readwrite, assign) ccTime                                              penaltyInterval;
 @property (readwrite, assign) ccTime                                              remainingPenaltyTime;
@@ -84,18 +84,18 @@
     
     _paused = isPaused;
     
-    [[UIApplication sharedApplication] setStatusBarHidden:!self.paused animated:YES];
+    [[UIApplication sharedApplication] setStatusBarHidden:!self.paused withAnimation:YES];
     
     if(self.paused) {
         [self unschedule:@selector(increaseTimedPenalty:)];
         [[DeblockAppDelegate get] hideHud];
-        [self.fieldScroller runAction:[MoveTo actionWithDuration:0.5f
+        [self.fieldScroller runAction:[CCMoveTo actionWithDuration:0.5f
                                                 position:CGPointMake(0, self.fieldScroller.contentSize.height)]];
     } else {
         [self schedule:@selector(increaseTimedPenalty:) interval:0.1f];
         [[DeblockAppDelegate get] popAllLayers];
         [[DeblockAppDelegate get] revealHud];
-        [self.fieldScroller runAction:[MoveTo actionWithDuration:0.5f
+        [self.fieldScroller runAction:[CCMoveTo actionWithDuration:0.5f
                                                    position:CGPointZero]];
     }
 }
@@ -173,9 +173,9 @@
 
     self.running                = NO;
     
-    IntervalAction *l           = [MoveBy actionWithDuration:.05f position:ccp(-3, 0)];
-    IntervalAction *r           = [MoveBy actionWithDuration:.05f position:ccp(6, 0)];
-    self.shakeAction            = [Sequence actions:l, r, l, l, r, l, r, l, l, nil];
+    CCActionInterval *l         = [CCMoveBy actionWithDuration:.05f position:ccp(-3, 0)];
+    CCActionInterval *r         = [CCMoveBy actionWithDuration:.05f position:ccp(6, 0)];
+    self.shakeAction            = [CCSequence actions:l, r, l, l, r, l, r, l, l, nil];
     
     // Set up our own layer.
     self.anchorPoint            = ccp(0.5f, 0.5f);
@@ -188,7 +188,7 @@
     self.fieldLayer.position    = ccp((self.contentSize.width - self.fieldLayer.contentSize.width) / 2.0f,
                                       (self.contentSize.height - self.fieldLayer.contentSize.height - [DeblockAppDelegate get].hudLayer.contentSize.height) / 2.0f +  [DeblockAppDelegate get].hudLayer.contentSize.height);
 
-    self.fieldScroller          = [Layer node];
+    self.fieldScroller          = [CCLayer node];
     [self.fieldScroller addChild:self.fieldLayer];
 
     [self addChild:self.skyLayer z:-1];

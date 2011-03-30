@@ -27,8 +27,8 @@
 
 @interface DbHUDLayer ()
 
-@property (readwrite, retain) LabelAtlas          *levelScoreCount;
-@property (readwrite, retain) LabelAtlas          *levelPenaltyCount;
+@property (readwrite, retain) CCLabelAtlas        *levelScoreCount;
+@property (readwrite, retain) CCLabelAtlas        *levelPenaltyCount;
 
 @end
 
@@ -42,13 +42,13 @@
     if (!(self = [super init]))
         return nil;
     
-    self.levelScoreCount             = [LabelAtlas labelAtlasWithString:@""
-                                                            charMapFile:@"bonk.png" itemWidth:13 itemHeight:26 startCharMap:' '];
+    self.levelScoreCount             = [CCLabelAtlas labelWithString:@""
+                                                         charMapFile:@"bonk.png" itemWidth:13 itemHeight:26 startCharMap:' '];
     self.levelScoreCount.color       = ccc3(0x99, 0xFF, 0x99);
     [self addChild:self.levelScoreCount];
     
-    self.levelPenaltyCount           = [LabelAtlas labelAtlasWithString:@""
-                                                            charMapFile:@"bonk.png" itemWidth:13 itemHeight:26 startCharMap:' '];
+    self.levelPenaltyCount           = [CCLabelAtlas labelWithString:@""
+                                                         charMapFile:@"bonk.png" itemWidth:13 itemHeight:26 startCharMap:' '];
     self.levelPenaltyCount.color     = ccc3(0xFF, 0x99, 0x99);
     [self addChild:self.levelPenaltyCount];
     

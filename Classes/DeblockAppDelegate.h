@@ -22,24 +22,21 @@
 //  Copyright lhunath (Maarten Billemont) 2009. All rights reserved.
 //
 
-#import "AbstractAppDelegate.h"
+#import "AbstractCocos2DAppDelegate.h"
 #import "GameLayer.h"
 #import "MenuLayer.h"
-#import "SplashViewController.h"
 #import "ConfigMenuLayer.h"
 #import "DbHUDLayer.h"
 
 
-@interface DeblockAppDelegate : AbstractAppDelegate<MenuDelegate, ConfigMenuDelegate, UIAlertViewDelegate> {
+@interface DeblockAppDelegate : AbstractCocos2DAppDelegate<MenuDelegate, ConfigMenuDelegate, UIAlertViewDelegate> {
 
 @private
-    SplashViewController            *_splashVC;
-
     GameLayer                       *_gameLayer;
     MenuLayer                       *_mainMenu, *_moreMenu, *_newGameMenu, *_pausedMenu, *_gameOverMenu;
     ConfigMenuLayer                 *_configMenu;
 
-    MenuItem                        *_continueGame;
+    CCMenuItem                      *_continueGame;
 
     UIAlertView                     *_alertWelcome, *_alertCompete;
 }
@@ -47,8 +44,6 @@
 @property (readonly, retain) GameLayer      *gameLayer;
 
 +(DeblockAppDelegate *) get;
-
-- (void)showDirector;
 
 - (void)showMainMenu;
 - (void)showScores;

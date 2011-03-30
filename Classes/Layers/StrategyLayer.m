@@ -27,13 +27,13 @@
         return nil;
     
     self.guide = [FlickLayer flickSprites:
-                  [Sprite spriteWithFile:@"strategy-1.png"],
-                  [Sprite spriteWithFile:@"strategy-2.png"],
-                  [Sprite spriteWithFile:@"strategy-3.png"],
-                  [Sprite spriteWithFile:@"strategy-4.png"],
-                  [Sprite spriteWithFile:@"strategy-5.png"],
-                  [Sprite spriteWithFile:@"strategy-6.png"],
-                  [Sprite spriteWithFile:@"strategy-7.png"],
+                  [CCSprite spriteWithFile:@"strategy-1.png"],
+                  [CCSprite spriteWithFile:@"strategy-2.png"],
+                  [CCSprite spriteWithFile:@"strategy-3.png"],
+                  [CCSprite spriteWithFile:@"strategy-4.png"],
+                  [CCSprite spriteWithFile:@"strategy-5.png"],
+                  [CCSprite spriteWithFile:@"strategy-6.png"],
+                  [CCSprite spriteWithFile:@"strategy-7.png"],
                   nil];
     [self addChild:self.guide];
     

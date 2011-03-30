@@ -24,18 +24,15 @@
 
 #import "DeblockAppDelegate.h"
 #import "DbHUDLayer.h"
-#import "ScoresLayer.h"
 #import "MenuItemSpacer.h"
 #import "MenuItemTitle.h"
 #import "StrategyLayer.h"
-#import "DeblockWSController.h"
 #import "LogLayer.h"
 #import "ActivitySprite.h"
 
 
 @interface DeblockAppDelegate ()
 
-- (void)switchPlayer;
 - (void)newGame:(id)caller;
 - (void)newClassicGame:(id)caller;
 - (void)newTimedGame:(id)caller;
@@ -52,8 +49,6 @@
 - (void)log;		
 
 
-@property (readwrite, retain) SplashViewController            *splashVC;
-
 @property (readwrite, retain) GameLayer                       *gameLayer;
 @property (readwrite, retain) MenuLayer                       *mainMenu;
 @property (readwrite, retain) MenuLayer                       *moreMenu;
@@ -62,7 +57,7 @@
 @property (readwrite, retain) MenuLayer                       *gameOverMenu;
 @property (readwrite, retain) ConfigMenuLayer                 *configMenu;
 
-@property (readwrite, retain) MenuItem                        *continueGame;
+@property (readwrite, retain) CCMenuItem                      *continueGame;
 
 @property (readwrite, retain) UIAlertView                     *alertWelcome;
 @property (readwrite, retain) UIAlertView                     *alertCompete;
@@ -72,7 +67,6 @@
 
 @implementation DeblockAppDelegate
 
-@synthesize splashVC = _splashVC;
 @synthesize gameLayer = _gameLayer;
 @synthesize mainMenu = _mainMenu, moreMenu = _moreMenu, newGameMenu = _newGameMenu, pausedMenu = _pausedMenu, gameOverMenu = _gameOverMenu;
 @synthesize configMenu = _configMenu;
@@ -95,7 +89,6 @@
     self.gameOverMenu = nil;
     self.mainMenu = nil;
     
-    self.splashVC = nil;
     self.gameLayer = nil;
     self.moreMenu = nil;
     self.newGameMenu = nil;
@@ -111,7 +104,9 @@
 #pragma mark ###############################
 #pragma mark Behaviors
 
-- (void)setup {
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    
+    [super application:application didFinishLaunchingWithOptions:launchOptions];
     
     if ([[Config get].firstRun boolValue]) {
         self.alertWelcome = [[[UIAlertView alloc] initWithTitle:l(@"dialog.title.firsttime")
@@ -120,29 +115,22 @@
         [self.alertWelcome show];
     }
     
-    [[DeblockWSController get] reloadScores];
-    
-    self.splashVC = [[SplashViewController new] autorelease];
-    [self.window addSubview:self.splashVC.view];
-    [self.window makeKeyAndVisible];
-    
     self.mainMenu = [MenuLayer menuWithDelegate:self logo:nil
                                           items:
                  self.continueGame =
-                     [MenuItemFont itemFromString:l(@"menu.continue")
-                                           target:self selector:@selector(continueGame:)],
-                     [MenuItemFont itemFromString:l(@"menu.game.new")
-                                           target:self selector:@selector(newGame:)],
+                     [CCMenuItemFont itemFromString:l(@"menu.continue")
+                                             target:self selector:@selector(continueGame:)],
+                     [CCMenuItemFont itemFromString:l(@"menu.game.new")
+                                             target:self selector:@selector(newGame:)],
                      [MenuItemSpacer spacerSmall],
-                     [MenuItemFont itemFromString:l(@"menu.strategy")
-                                           target:self selector:@selector(strategy:)],
-                     /*[MenuItemFont itemFromString:@"Shutdown"
-                                           target:self selector:@selector(shutdown:)],/**/
+                     [CCMenuItemFont itemFromString:l(@"menu.strategy")
+                                             target:self selector:@selector(strategy:)],
+                     /*[CCMenuItemFont itemFromString:@"Shutdown"
+                                             target:self selector:@selector(shutdown:)],*/
                      nil];
-    [self.mainMenu setBackButtonTarget:self selector:@selector(switchPlayer)];
     [self.mainMenu setNextButtonTarget:self selector:@selector(more)];
     self.mainMenu.offset             = ccp(0, -80);
-    self.mainMenu.background         = [Sprite spriteWithFile:@"back.png"];
+    self.mainMenu.background         = [CCSprite spriteWithFile:@"back.png"];
     self.mainMenu.outerPadding       = margin(150, -240, 10, -240);
     self.mainMenu.innerRatio         = 0;
     self.mainMenu.opacity            = 0x99;
@@ -151,18 +139,18 @@
 
     self.moreMenu = [MenuLayer menuWithDelegate:self logo:nil
                                           items:
-                     [MenuItemFont itemFromString:l(@"menu.scores")
-                                           target:self selector:@selector(scores:)],
-                     [MenuItemFont itemFromString:l(@"menu.moregames")
-                                           target:self selector:@selector(moreGames:)],
+                     [CCMenuItemFont itemFromString:l(@"menu.scores")
+                                             target:self selector:@selector(scores:)],
+                     [CCMenuItemFont itemFromString:l(@"menu.moregames")
+                                             target:self selector:@selector(moreGames:)],
                      [MenuItemSpacer spacerSmall],
-                     [MenuItemFont itemFromString:l(@"menu.config")
-                                           target:self selector:@selector(configuration:)],
+                     [CCMenuItemFont itemFromString:l(@"menu.config")
+                                             target:self selector:@selector(configuration:)],
                      nil];
-    [(MenuItemFont *)self.moreMenu.nextButton setString:@"   ⌕   "];
+    [(CCMenuItemFont *)self.moreMenu.nextButton setString:@"   ⌕   "];
     [self.moreMenu setNextButtonTarget:self selector:@selector(log)];
     self.moreMenu.offset             = ccp(0, -80);
-    self.moreMenu.background         = [Sprite spriteWithFile:@"back.png"];
+    self.moreMenu.background         = [CCSprite spriteWithFile:@"back.png"];
     self.moreMenu.outerPadding       = margin(150, -240, 10, -240);
     self.moreMenu.innerRatio         = 0;
     self.moreMenu.opacity            = 0x99;
@@ -171,13 +159,13 @@
     
     self.newGameMenu = [MenuLayer menuWithDelegate:self logo:nil
                                              items:
-                        [MenuItemFont itemFromString:l(@"menu.game.mode.classic")
-                                              target:self selector:@selector(newClassicGame:)],
-                        [MenuItemFont itemFromString:l(@"menu.game.mode.timed")
-                                              target:self selector:@selector(newTimedGame:)],
+                        [CCMenuItemFont itemFromString:l(@"menu.game.mode.classic")
+                                                target:self selector:@selector(newClassicGame:)],
+                        [CCMenuItemFont itemFromString:l(@"menu.game.mode.timed")
+                                                target:self selector:@selector(newTimedGame:)],
                         nil];
     self.newGameMenu.offset          = ccp(0, -80);
-    self.newGameMenu.background      = [Sprite spriteWithFile:@"back.png"];
+    self.newGameMenu.background      = [CCSprite spriteWithFile:@"back.png"];
     self.newGameMenu.outerPadding    = margin(150, -240, 10, -240);
     self.newGameMenu.innerRatio      = 0;
     self.newGameMenu.opacity         = 0x99;
@@ -191,7 +179,7 @@
                        @selector(compete),
                        nil];
     self.configMenu.offset           = ccp(0, -80);
-    self.configMenu.background       = [Sprite spriteWithFile:@"back.png"];
+    self.configMenu.background       = [CCSprite spriteWithFile:@"back.png"];
     self.configMenu.outerPadding     = margin(150, -240, 10, -240);
     self.configMenu.innerRatio       = 0;
     self.configMenu.opacity          = 0x99;
@@ -199,44 +187,39 @@
     self.configMenu.colorGradient    = ccc4(0xff, 0xff, 0xff, 0xdd);
     self.configMenu.layout           = MenuLayoutColumns;
     
-    self.pausedMenu = [MenuLayer menuWithDelegate:self logo:[MenuItemImage itemFromNormalImage:@"title.game.paused.png"
-                                                                                 selectedImage:@"title.game.paused.png"]
+    self.pausedMenu = [MenuLayer menuWithDelegate:self logo:[CCMenuItemImage itemFromNormalImage:@"title.game.paused.png"
+                                                                                   selectedImage:@"title.game.paused.png"]
                                             items:
-                       [MenuItemFont itemFromString:l(@"menu.level.restart")
-                                             target:self selector:@selector(levelRedo:)],
+                       [CCMenuItemFont itemFromString:l(@"menu.level.restart")
+                                               target:self selector:@selector(levelRedo:)],
                        [MenuItemSpacer spacerSmall],
-                       [MenuItemFont itemFromString:l(@"menu.main")
-                                             target:self selector:@selector(stopGame:)],
-                       [MenuItemFont itemFromString:l(@"menu.game.end")
-                                             target:self selector:@selector(endGame:)],
+                       [CCMenuItemFont itemFromString:l(@"menu.main")
+                                               target:self selector:@selector(stopGame:)],
+                       [CCMenuItemFont itemFromString:l(@"menu.game.end")
+                                               target:self selector:@selector(endGame:)],
                        nil];
     [self.pausedMenu setBackButtonTarget:self selector:@selector(resumeGame:)];
     
-    self.gameOverMenu = [MenuLayer menuWithDelegate:self logo:[MenuItemImage itemFromNormalImage:@"title.game.over.png"
-                                                                                   selectedImage:@"title.game.over.png"]
+    self.gameOverMenu = [MenuLayer menuWithDelegate:self logo:[CCMenuItemImage itemFromNormalImage:@"title.game.over.png"
+                                                                                     selectedImage:@"title.game.over.png"]
                                               items:
-                         [MenuItemFont itemFromString:l(@"menu.game.end")
-                                               target:self selector:@selector(endGame:)],
-                         [MenuItemFont itemFromString:l(@"menu.level.retry")
-                                               target:self selector:@selector(levelRedo:)],
+                         [CCMenuItemFont itemFromString:l(@"menu.game.end")
+                                                 target:self selector:@selector(endGame:)],
+                         [CCMenuItemFont itemFromString:l(@"menu.level.retry")
+                                                 target:self selector:@selector(levelRedo:)],
                          nil];
     [self.gameOverMenu setBackButtonTarget:nil selector:nil];
     
     [self.uiLayer addChild:self.gameLayer = [GameLayer node]];
-}
 
-- (void)showDirector {
-
-    [self.splashVC.view removeFromSuperview];
-    
     self.mainMenu.fadeNextEntry  = NO;
     [self pushLayer:self.mainMenu];
-
-    if (![Director sharedDirector].runningScene) {
-        Scene *uiScene = [Scene node];
-        [uiScene addChild:self.uiLayer];
-        [[Director sharedDirector] runWithScene:uiScene];
-    }
+    
+    CCScene *uiScene = [CCScene node];
+    [uiScene addChild:self.uiLayer];
+    [[CCDirector sharedDirector] runWithScene:uiScene];
+    
+    return YES;
 }
 
 
@@ -250,9 +233,6 @@
 - (void)didUpdateConfigForKey:(SEL)configKey {
     
     [super didUpdateConfigForKey:configKey];
-    
-    if (configKey == @selector(playerScores))
-        [[ScoresLayer get] reset];
 }
 
 
@@ -272,13 +252,13 @@
 }
 
 
-- (NSMutableArray *)toggleItemsForSetting:(SEL)setting {
+- (NSArray *)toggleItemsForSetting:(SEL)setting {
     
     if (setting == @selector(compete))
         return [NSMutableArray arrayWithObjects:
-                [MenuItemFont itemFromString:l(@"menu.config.off")],
-                [MenuItemFont itemFromString:l(@"menu.config.wifi+carrier")],
-                [MenuItemFont itemFromString:l(@"menu.config.wifi")],
+                [CCMenuItemFont itemFromString:l(@"menu.config.off")],
+                [CCMenuItemFont itemFromString:l(@"menu.config.wifi+carrier")],
+                [CCMenuItemFont itemFromString:l(@"menu.config.wifi")],
                 nil];
     
     return nil;
@@ -315,7 +295,7 @@
 -(HUDLayer *) hudLayer {
     
     if(!_hudLayer)
-        self.hudLayer = [DbHUDLayer node];
+        _hudLayer = [[DbHUDLayer alloc] init];
     
     return super.hudLayer;
 }
@@ -342,12 +322,6 @@
 }
 
 
-- (void)switchPlayer {
-
-    [self.window addSubview:self.splashVC.view];
-}
-
-
 - (void)showMainMenu {
 
     [self pushLayer:self.mainMenu];
@@ -356,8 +330,9 @@
 
 - (void)showScores {
     
-    [self pushLayer:self.mainMenu hidden:YES];
-    [self pushLayer:[ScoresLayer get]];
+    // TODO: GameKit
+    /*[self pushLayer:self.mainMenu hidden:YES];
+    [self pushLayer:[ScoresLayer get]];*/
 }
 
 
@@ -442,7 +417,7 @@
 
 - (void)scores:(id)caller {
     
-    [self pushLayer:[ScoresLayer get]];
+    // TODO: GameKit
 }
 
 

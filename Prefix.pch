@@ -19,18 +19,21 @@ typedef enum DbMode {
     DbModeClassic,
     DbModeTimed,
 } DbMode;
-
 /**
  * Global Dependencies.
  */
 #ifdef __OBJC__
+#define foo void foo();
+#define bar blah
     #import <Foundation/Foundation.h>
     #import <UIKit/UIKit.h>
     
     #import "cocos2d.h"
     #import "Logger.h"
     #import "GLUtils.h"
-    #import "Utils.h"
+    #import "UIUtils.h"
+    #import "StringUtils.h"
+    #import "ObjectUtils.h"
     #import "DebugLayer.h"
     #import "DeblockConfig.h"
 #endif

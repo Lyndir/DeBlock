@@ -23,7 +23,6 @@
 //
 
 #import "DeblockConfig.h"
-#import "DeblockWSController.h"
 
 
 @interface DeblockConfig ()
@@ -259,6 +258,8 @@
 
 - (void)saveScore {
 
+    // TODO: GameKit
+    /*
     NSNumber *mode = [NSNumber numberWithUnsignedInteger:[self currentPlayer].mode];
     NSNumber *level = [NSNumber numberWithUnsignedInteger:[self currentPlayer].level];
     NSNumber *score = [NSNumber numberWithInteger:[self currentPlayer].score];
@@ -284,7 +285,7 @@
     [newPlayerScores release];
 
     // Submit the score online.
-    [[DeblockWSController get] submitScoreForPlayer:[self currentPlayer]];
+    [[DeblockWSController get] submitScoreForPlayer:[self currentPlayer]];*/
 }
 
 

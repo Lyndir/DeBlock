@@ -25,12 +25,12 @@
 #import "Resettable.h"
 
 
-@interface SkyLayer : Layer <Resettable> {
+@interface SkyLayer : CCLayer <Resettable> {
 
     BOOL                    _fancySky;
 
     ccColor4B               _skyColorFrom, _skyColorTo;
-    Texture2D               **_clouds;
+    CCTexture2D             **_clouds;
 
     CGFloat                 _cloudsX;
 }
