@@ -52,12 +52,16 @@
     self.levelPenaltyCount.color     = ccc3(0xFF, 0x99, 0x99);
     [self addChild:self.levelPenaltyCount];
     
+    CCColorLayer *l =[[CCColorLayer alloc] initWithColor:ccc4(0x00, 0xFF, 0x00, 0xFF) width:900000 height:900000];
+    l.position=ccp(-500000, -500000);
+    //[self addChild:l z:99];
+    
     return self;
 }
 
 -(void) updateHudWasGood:(BOOL)wasGood {
     
-    NSInteger playerScore = [[DeblockConfig get] currentPlayer].score;
+    NSInteger playerScore = [Player currentPlayer].score;
     [self.scoreCount setString:[NSString stringWithFormat:@"%04d", playerScore]];
     [super updateHudWasGood:wasGood];
     
@@ -68,7 +72,7 @@
     self.levelScoreCount.position    = ccp(self.scoreCount.position.x + 13 * gameScore.length, self.scoreCount.position.y);
     [self.levelScoreCount setString:levelScore];
     
-    self.levelPenaltyCount.visible = [[DeblockConfig get].gameMode unsignedIntValue] == DbModeTimed;
+    self.levelPenaltyCount.visible = [Player currentPlayer].mode == DbModeTimed;
     if (self.levelPenaltyCount.visible) {
         self.levelPenaltyCount.position  = ccp(self.scoreCount.position.x + 13 * (gameScore.length + levelScore.length), self.scoreCount.position.y);
         [self.levelPenaltyCount setString:levelPenalty];

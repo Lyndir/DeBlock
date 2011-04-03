@@ -88,13 +88,11 @@
     
     if(self.paused) {
         [self unschedule:@selector(increaseTimedPenalty:)];
-        [[DeblockAppDelegate get] hideHud];
         [self.fieldScroller runAction:[CCMoveTo actionWithDuration:0.5f
                                                 position:CGPointMake(0, self.fieldScroller.contentSize.height)]];
     } else {
         [self schedule:@selector(increaseTimedPenalty:) interval:0.1f];
         [[DeblockAppDelegate get] popAllLayers];
-        [[DeblockAppDelegate get] revealHud];
         [self.fieldScroller runAction:[CCMoveTo actionWithDuration:0.5f
                                                    position:CGPointZero]];
     }
@@ -121,9 +119,9 @@
 
 - (void)newGameWithMode:(DbMode)gameMode {
     
-    [[DeblockConfig get] currentPlayer].score = 0;
-    [[DeblockConfig get] currentPlayer].level = 1;
-    [DeblockConfig get].gameMode = [NSNumber numberWithUnsignedInt:gameMode];
+    [Player currentPlayer].score = 0;
+    [Player currentPlayer].level = 1;
+    [Player currentPlayer].mode = gameMode;
     
     [self startGame];
 }
@@ -191,7 +189,7 @@
     self.fieldScroller          = [CCLayer node];
     [self.fieldScroller addChild:self.fieldLayer];
 
-    [self addChild:self.skyLayer z:-1];
+    [self addChild:self.skyLayer];
     [self addChild:self.fieldScroller z:1];
     
     _paused                     = YES;
@@ -218,8 +216,7 @@
 
 -(void) started {
 
-    [[DeblockAppDelegate get].uiLayer message:[NSString stringWithFormat:l(@"message.level"),
-                                               [[DeblockConfig get] currentPlayer].level]];
+    [[DeblockAppDelegate get].uiLayer message:[NSString stringWithFormat:l(@"message.level"), [Player currentPlayer].level]];
     
     self.running = YES;
 
@@ -255,7 +252,7 @@
 
 - (void)increaseTimedPenalty:(ccTime)dt {
     
-    if ([[DeblockConfig get].gameMode unsignedIntValue] != DbModeTimed)
+    if ([Player currentPlayer].mode != DbModeTimed)
         // Don't increase penalty during non-timed games.
         return;
     if (!self.running || self.paused)

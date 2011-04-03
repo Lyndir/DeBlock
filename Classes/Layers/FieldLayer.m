@@ -94,7 +94,7 @@
 
 
 -(void) reset {
-    
+
     // Clean up.
     [self stopAllActions];
     
@@ -115,8 +115,8 @@
     }
     
     // Level-based field parameters.
-    self.blockColumns    = fmaxf(fminf(kMaxColumns * [[DeblockConfig get] currentPlayer].level / kAllGridLevel, kMaxColumns), kMinColumns);
-    self.blockRows       = fmaxf(fminf(kMaxColumns * [[DeblockConfig get] currentPlayer].level / kAllGridLevel, kMaxRows), kMinColumns);
+    self.blockColumns    = fmaxf(fminf(kMaxColumns * [Player currentPlayer].level / kAllGridLevel, kMaxColumns), kMinColumns);
+    self.blockRows       = fmaxf(fminf(kMaxColumns * [Player currentPlayer].level / kAllGridLevel, kMaxRows), kMinColumns);
     self.gravityRow      = 0;
     self.gravityColumn   = self.blockColumns / 2;
     self.blockGrid       = malloc(sizeof(BlockLayer **) * self.blockRows);
@@ -134,7 +134,7 @@
     for (NSInteger row = 0; row < self.blockRows; ++row) {
         for (NSInteger col = 0; col < self.blockColumns; ++col) {
             
-            BlockLayer *block = [BlockLayer randomBlockForLevel:[[DeblockConfig get] currentPlayer].level withSize:blockSize];
+            BlockLayer *block = [BlockLayer randomBlockForLevel:[Player currentPlayer].level withSize:blockSize];
             block.position = ccp(col * (blockSize.width     + self.blockPadding) + self.blockPadding,
                                  row * (blockSize.height    + self.blockPadding) + self.blockPadding);
             
@@ -542,12 +542,12 @@
         DbEndReason endReason = DbEndReasonNextField;
         NSInteger levelPoints = [[DeblockConfig get].levelScore intValue] + [[DeblockConfig get].levelPenalty intValue];
         NSInteger bonusPoints = 0;
-        NSUInteger newLevel = [[DeblockConfig get] currentPlayer].level;
+        NSUInteger newLevel = [Player currentPlayer].level;
         
         if (!blocksLeft) {
             // No blocks left -> flawless finish.
             [[DeblockAppDelegate get].uiLayer message:l(@"message.flawless")];
-            bonusPoints = [[DeblockConfig get].flawlessBonus intValue] * [[DeblockConfig get] currentPlayer].level;
+            bonusPoints = [[DeblockConfig get].flawlessBonus intValue] * [Player currentPlayer].level;
             [self message:[NSString stringWithFormat:@"%+d", bonusPoints]
                        at:ccp(self.contentSize.width / 2, self.contentSize.height / 2)];
             
@@ -563,7 +563,7 @@
         
         levelPoints += bonusPoints;
         [[DeblockConfig get] addScore:levelPoints];
-        [[DeblockConfig get] currentPlayer].level = newLevel;
+        [Player currentPlayer].level = newLevel;
         [[DeblockAppDelegate get].hudLayer updateHudWasGood:bonusPoints > 0];
         [[DeblockAppDelegate get].gameLayer stopGame:endReason];
     }
@@ -680,6 +680,8 @@
 
 - (void)draw {
     
+    [super draw];
+
     DrawBoxFrom(CGPointMake(-3, -3), CGPointMake(self.contentSize.width + 3, self.contentSize.height + 3),
                 ccc4l([[DeblockConfig get].skyColorTo longValue] & 0x0f0f0f33), ccc4l([[DeblockConfig get].skyColorFrom longValue] & 0x0f0f0f33));
 }

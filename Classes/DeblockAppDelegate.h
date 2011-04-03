@@ -41,7 +41,8 @@
     UIAlertView                     *_alertWelcome, *_alertCompete;
 }
 
-@property (readonly, retain) GameLayer      *gameLayer;
+@property (readonly, retain) GameLayer              *gameLayer;
+@property (nonatomic, readonly, retain) DbHUDLayer  *hudLayer;
 
 +(DeblockAppDelegate *) get;
 

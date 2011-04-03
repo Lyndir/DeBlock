@@ -36,12 +36,10 @@
 
 @synthesize playersCached = _playersCached;
 
-@dynamic compete, wsUrl;
+@dynamic compete;
 @dynamic levelScore, levelPenalty;
-@dynamic gameMode;
 @dynamic skyColorFrom, skyColorTo;
 @dynamic flawlessBonus;
-@dynamic userName, playerScores;
 
 
 - (id)init {
@@ -55,7 +53,6 @@
                                 [NSNumber numberWithLong:0x38343C00],                           cShadeColor,
 
                                 [NSNumber numberWithUnsignedInt:DbCompeteOff],                  cCompete,
-                                @"http://deblock.lhunath.com",                                  cWsUrl,
                                 
                                 [NSArray arrayWithObjects:
                                  @"title.mp3",
@@ -94,73 +91,6 @@
                                 
                                 [NSNumber numberWithInt:10],                                    cFlawlessBonus,
 
-                                [[[[UIDevice currentDevice] name]
-                                  componentsSeparatedByCharactersInSet:delimitors]
-                                 objectAtIndex:0],                                              cUserName,
-                                [NSDictionary dictionaryWithObjectsAndKeys:
-                                 
-                                 [NSDictionary dictionaryWithObjectsAndKeys:
-                                  [NSNumber numberWithInteger:3876], @"s",
-                                  [NSNumber numberWithInteger:36], @"l",
-                                  nil],
-                                 @"John",
-                                 
-                                 [NSDictionary dictionaryWithObjectsAndKeys:
-                                  [NSNumber numberWithInteger:4012], @"s",
-                                  [NSNumber numberWithInteger:38], @"l",
-                                  nil],
-                                 @"Aeryn",
-                                 
-                                 [NSDictionary dictionaryWithObjectsAndKeys:
-                                  [NSNumber numberWithInteger:3589], @"s",
-                                  [NSNumber numberWithInteger:41], @"l",
-                                  nil],
-                                 @"D'Argo",
-                                 
-                                 [NSDictionary dictionaryWithObjectsAndKeys:
-                                  [NSNumber numberWithInteger:5076], @"s",
-                                  [NSNumber numberWithInteger:35], @"l",
-                                  nil],
-                                 @"Zhaan",
-                                 
-                                 [NSDictionary dictionaryWithObjectsAndKeys:
-                                  [NSNumber numberWithInteger:1319], @"s",
-                                  [NSNumber numberWithInteger:21], @"l",
-                                  nil],
-                                 @"Rygel",
-                                 
-                                 [NSDictionary dictionaryWithObjectsAndKeys:
-                                  [NSNumber numberWithInteger:2931], @"s",
-                                  [NSNumber numberWithInteger:34], @"l",
-                                  nil],
-                                 @"Chiana",
-                                 
-                                 [NSDictionary dictionaryWithObjectsAndKeys:
-                                  [NSNumber numberWithInteger:9017], @"s",
-                                  [NSNumber numberWithInteger:61], @"l",
-                                  nil],
-                                 @"Pilot",
-                                 
-                                 [NSDictionary dictionaryWithObjectsAndKeys:
-                                  [NSNumber numberWithInteger:4017], @"s",
-                                  [NSNumber numberWithInteger:34], @"l",
-                                  nil],
-                                 @"Stark",
-                                 
-                                 [NSDictionary dictionaryWithObjectsAndKeys:
-                                  [NSNumber numberWithInteger:3875], @"s",
-                                  [NSNumber numberWithInteger:41], @"l",
-                                  nil],
-                                 @"Crais",
-                                 
-                                 [NSDictionary dictionaryWithObjectsAndKeys:
-                                  [NSNumber numberWithInteger:4180], @"s",
-                                  [NSNumber numberWithInteger:35], @"l",
-                                  nil],
-                                 @"Scorpius",
-                                 
-                                 nil],                                                          cPlayerScores,
-
                                 nil
                                 ]];
     
@@ -189,38 +119,10 @@
     return _playersCached;
 }
 
-
-- (Player *)getPlayer:(NSString *)name {
-    
-    return [[self players] objectForKey:name];
-}
-
-
-- (Player *)currentPlayer {
-    
-    Player *currentPlayer = [[self players] objectForKey:self.userName];
-    if (![currentPlayer.name isEqualToString:self.userName]) {
-        [[Logger get] wrn:@"Player name inconsistency detected (key: %@, name: %@).  Fixing by setting name to key.",
-         self.userName, currentPlayer.name];
-        currentPlayer.name = self.userName;
-    }
-    
-    if (!currentPlayer) {
-        currentPlayer = [[Player new] autorelease];
-        currentPlayer.name = self.userName;
-    }
-    
-    return currentPlayer;
-}
-
-
 - (void)removePlayer:(Player *)player {
     
-    if (!player.name)
-        return;
-    
     NSMutableDictionary *players = [[[self players] mutableCopy] autorelease];
-    [players removeObjectForKey:player.name];
+    [players removeObjectForKey:player.playerID];
     
     NSData *playersArchive = [NSKeyedArchiver archivedDataWithRootObject:players];
     [self.defaults setObject:playersArchive forKey:@"players"];
@@ -232,11 +134,11 @@
 
 - (void)updatePlayer:(Player *)player {
     
-    if (!player.name)
+    if (!player.playerID)
         return;
     
     NSMutableDictionary *players = [[[self players] mutableCopy] autorelease];
-    [players setObject:player forKey:player.name];
+    [players setObject:player forKey:player.playerID];
     
     NSData *playersArchive = [NSKeyedArchiver archivedDataWithRootObject:players];
     [self.defaults setObject:playersArchive forKey:@"players"];
@@ -248,15 +150,12 @@
 
 - (void)addScore:(NSInteger)score {
     
-    NSInteger newScore = [self currentPlayer].score + score;
-    if (newScore < 0)
-        newScore = 0;
-    
-    [self currentPlayer].score = newScore;
-    [self saveScore];
+    [Player currentPlayer].score = MAX(0, [Player currentPlayer].score + score);
+
+    [self submitScore];
 }
 
-- (void)saveScore {
+- (void)submitScore {
 
     // TODO: GameKit
     /*
@@ -291,16 +190,6 @@
 
 - (void)dealloc {
 
-    self.compete = nil;
-    self.wsUrl = nil;
-    self.levelScore = nil;
-    self.levelPenalty = nil;
-    self.gameMode = nil;
-    self.skyColorFrom = nil;
-    self.skyColorTo = nil;
-    self.flawlessBonus = nil;
-    self.userName = nil;
-    self.playerScores = nil;
     self.playersCached = nil;
 
     [super dealloc];

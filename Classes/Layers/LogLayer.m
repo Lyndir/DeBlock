@@ -61,10 +61,12 @@
 
 - (void)draw {
     
+    [super draw];
+
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    DrawBoxFrom(CGPointZero, CGPointFromSize(self.contentSize),
+    DrawBoxFrom(CGPointZero, CGPointFromCGSize(self.contentSize),
                 ccc4(0x00, 0x00, 0x00, 0x66), ccc4(0x00, 0x00, 0x00, 0xCC));
-    DrawBorderFrom(CGPointZero, CGPointFromSize(self.contentSize),
+    DrawBorderFrom(CGPointZero, CGPointFromCGSize(self.contentSize),
                    ccc4(0xff, 0xff, 0xff, 0x66), 2);
     glBlendFunc(CC_BLEND_SRC, CC_BLEND_DST);
 }

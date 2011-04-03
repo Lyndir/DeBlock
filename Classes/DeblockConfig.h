@@ -26,7 +26,6 @@
 #import "Player.h"
 
 #define cCompete          	NSStringFromSelector(@selector(compete))
-#define cWsUrl          	NSStringFromSelector(@selector(wsUrl))
 
 #define cLevelScore         NSStringFromSelector(@selector(levelScore))
 #define cLevelPenalty       NSStringFromSelector(@selector(levelPenalty))
@@ -38,8 +37,6 @@
 
 #define cFlawlessBonus      NSStringFromSelector(@selector(flawlessBonus))
 
-#define cUserName           NSStringFromSelector(@selector(userName))
-#define cPlayerScores       NSStringFromSelector(@selector(playerScores))
 
 typedef enum DbCompete {
     DbCompeteOff,
@@ -55,11 +52,9 @@ typedef enum DbCompete {
 + (DeblockConfig *)get;
 
 - (void)addScore:(NSInteger)score;
-- (void)saveScore;
+- (void)submitScore;
 
 - (NSDictionary *)players;
-- (Player *)getPlayer:(NSString *)name;
-- (Player *)currentPlayer;
 - (void)removePlayer:(Player *)player;
 - (void)updatePlayer:(Player *)player;
 
@@ -67,19 +62,13 @@ typedef enum DbCompete {
 #pragma mark Properties
 
 @property (readwrite, retain) NSNumber          *compete;
-@property (readwrite, retain) NSString          *wsUrl;
 
 @property (readwrite, retain) NSNumber          *levelScore;
 @property (readwrite, retain) NSNumber          *levelPenalty;
-
-@property (readwrite, retain) NSNumber          *gameMode;
 
 @property (readwrite, retain) NSNumber          *skyColorFrom;
 @property (readwrite, retain) NSNumber          *skyColorTo;
 
 @property (readwrite, retain) NSNumber          *flawlessBonus;
-
-@property (readwrite, retain) NSString          *userName;
-@property (readwrite, retain) NSDictionary      *playerScores;
 
 @end

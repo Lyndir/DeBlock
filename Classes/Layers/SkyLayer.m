@@ -115,9 +115,10 @@
 
 -(void) draw {
     
-    if(self.fancySky) {
+    [super draw];
+
+    if(self.fancySky)
         DrawBoxFrom(CGPointZero, ccp(self.contentSize.width, self.contentSize.height), self.skyColorFrom, self.skyColorTo);
-    }
     
     else {
         glClearColor(self.skyColorFrom.r / (float)0xff, self.skyColorFrom.g / (float)0xff,

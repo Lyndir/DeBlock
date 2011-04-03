@@ -168,7 +168,7 @@ static NSDictionary *blockColors;
 
 + (DMBlockType)randomType {
     
-    DMBlockType typeRange = DMBlockTypeCount * [[DeblockConfig get] currentPlayer].level / kAllBlocksLevel;
+    DMBlockType typeRange = DMBlockTypeCount * [Player currentPlayer].level / kAllBlocksLevel;
     return random() % ((int)fmaxf(fminf(typeRange, DMBlockTypeCount), kMinBlocks));
 }
 
@@ -513,7 +513,8 @@ static NSDictionary *blockColors;
 
 - (void)draw {
 
-    //CGPoint to    = CGPointMake(self.contentSize.width, self.contentSize.height);
+    [super draw];
+
     ccColor4B fromC = self.blockColor;
     fromC.r         = fminf(0xff, fmaxf(0x00, fromC.r * self.modColor.r));
     fromC.g         = fminf(0xff, fmaxf(0x00, fromC.g * self.modColor.g));
@@ -524,11 +525,13 @@ static NSDictionary *blockColors;
     toC.g           = fmaxf(0x00, toC.g * 0.5f);
     toC.b           = fmaxf(0x00, toC.b * 0.5f);
     
-    glEnableClientState( GL_VERTEX_ARRAY);
-	glEnableClientState( GL_TEXTURE_COORD_ARRAY );
-	glEnable( GL_TEXTURE_2D);
+    // Default GL states: GL_TEXTURE_2D, GL_VERTEX_ARRAY, GL_COLOR_ARRAY, GL_TEXTURE_COORD_ARRAY
+    //glEnableClientState(GL_VERTEX_ARRAY);
+    glDisableClientState(GL_COLOR_ARRAY);
+    //glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    //glEnable(GL_TEXTURE_2D);
     
-    glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+    //glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 	glColor4ub( fromC.r, fromC.g, fromC.b, fromC.a);
     
     CGRect textureRect;
@@ -536,16 +539,18 @@ static NSDictionary *blockColors;
     textureRect.size   = self.contentSize;
     [self.textures[self.frame] drawInRect:textureRect];
 	
-	// is this chepear than saving/restoring color state ?
 	glColor4ub( 255, 255, 255, 255);
     
-	glDisable( GL_TEXTURE_2D);
+    //glDisableClientState(GL_VERTEX_ARRAY);
+    glEnableClientState(GL_COLOR_ARRAY);
+    //glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+    //glDisable(GL_TEXTURE_2D);
     
-	glDisableClientState(GL_VERTEX_ARRAY );
-	glDisableClientState( GL_TEXTURE_COORD_ARRAY );
-    
-    //DrawBoxFrom(CGPointZero, to, fromC, toC);
-    //DrawBorderFrom(CGPointZero, to, fromC, 1.0f);
+    /*
+    CGPoint to    = CGPointMake(self.contentSize.width, self.contentSize.height);
+    DrawBoxFrom(CGPointZero, to, fromC, toC);
+    DrawBorderFrom(CGPointZero, to, fromC, 1.0f);
+     */
 }
 
 - (NSString *)description {

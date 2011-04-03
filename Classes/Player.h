@@ -11,30 +11,17 @@
 
 @interface Player : NSObject <NSCoding> {
 
-    NSString                            *_name;
-    NSString                            *_pass;
+    NSString                            *_playerID;
     NSInteger                           _score;
     NSUInteger                          _level;
     DbMode                              _mode;
-
-    BOOL                                _onlineOk;
-
-    NSConditionLock                     *_nameLock;
-    UIAlertView                         *_nameAlert;
-    UITextField                         *_nameField;
-
-    UIAlertView                         *_alertCode;
-    NSConditionLock                     *_passLock;
-    UIAlertView                         *_passAlert;
-    UITextField                         *_passField;
 }
 
-@property (readwrite, copy) NSString    *name;
-@property (readonly, retain) NSString   *onlineName;
-@property (readwrite, copy) NSString    *pass;
+@property (readwrite, retain) NSString  *playerID;
 @property (readwrite) NSInteger         score;
 @property (readwrite) NSUInteger        level;
-@property (readwrite) NSUInteger        mode;
-@property (readwrite) BOOL              onlineOk;
+@property (readwrite) DbMode            mode;
+
++ (Player *)currentPlayer;
 
 @end

@@ -80,6 +80,7 @@
 
 + (void)initialize {
     
+    [Logger get].autoprintLevel = LogLevelDebug;
     [DeblockConfig get];
 }
 
@@ -226,7 +227,7 @@
 - (void)didEnter:(MenuLayer *)menuLayer {
     
     if (menuLayer == self.mainMenu) {
-        [self.continueGame setIsEnabled:[[DeblockConfig get] currentPlayer].level > 1];
+        [self.continueGame setIsEnabled:[Player currentPlayer].level > 1];
     }
 }
 
@@ -268,40 +269,24 @@
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
 
-    if (alertView == self.alertWelcome) {
-        self.alertCompete = [[[UIAlertView alloc] initWithTitle:l(@"dialog.title.compete")
-                                                        message:l(@"dialog.text.compete")
-                                                       delegate:self cancelButtonTitle:l(@"button.no.kind") otherButtonTitles:l(@"button.sure"), nil] autorelease];
-        [self.alertCompete show];
-
+    if (alertView == self.alertWelcome)
         self.alertWelcome = nil;
-    }
-    else if (alertView == self.alertCompete) {
-        if (buttonIndex == [alertView cancelButtonIndex]) {
-            [DeblockConfig get].compete = [NSNumber numberWithUnsignedInt:DbCompeteOff];
-            [[[[UIAlertView alloc] initWithTitle:l(@"dialog.title.compete")
-                                         message:l(@"dialog.text.compete.later")
-                                        delegate:nil cancelButtonTitle:l(@"button.thanks") otherButtonTitles:nil] autorelease] show];
-        }
-        else
-            [DeblockConfig get].compete = [NSNumber numberWithUnsignedInt:DbCompeteWiFiCarrier];
-        
-        self.alertCompete = nil;
-    }
 }
 
 
 
--(HUDLayer *) hudLayer {
+-(DbHUDLayer *) hudLayer {
     
     if(!_hudLayer)
         _hudLayer = [[DbHUDLayer alloc] init];
     
-    return super.hudLayer;
+    return (DbHUDLayer *)super.hudLayer;
 }
 
 
 - (void)poppedAll {
+    
+    [super poppedAll];
     
     self.gameLayer.paused = NO;
 }
