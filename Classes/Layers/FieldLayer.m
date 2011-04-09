@@ -94,6 +94,16 @@
 
 
 -(void) reset {
+    
+    CGSize winSize = [CCDirector sharedDirector].winSize;
+    CGFloat hudHeight = [DeblockAppDelegate get].hudLayer.contentSize.height;
+    if (![DeblockAppDelegate get].hudLayer.visible)
+        hudHeight = 0;
+    
+    self.contentSize = CGSizeMake(winSize.width * 9/10,
+                                  winSize.height * 4/5);
+    self.position    = ccp((winSize.width - self.contentSize.width) / 2.0f,
+                           (winSize.height - self.contentSize.height - hudHeight) / 2.0f + hudHeight);    
 
     // Clean up.
     [self stopAllActions];
@@ -286,8 +296,11 @@
     NSInteger destroyedBlocks = [self destroyBlock:aBlock forced:NO];
     NSInteger points = powf(destroyedBlocks, 1.5f);
     if (points) {
-        [DeblockConfig get].levelScore = [NSNumber numberWithInt:[[DeblockConfig get].levelScore intValue] + points];
-        [[DeblockAppDelegate get].hudLayer updateHudWasGood:points > 0];
+        if (![[DeblockConfig get].kidsMode boolValue]) {
+            [DeblockConfig get].levelScore = [NSNumber numberWithInt:[[DeblockConfig get].levelScore intValue] + points];
+            [[DeblockAppDelegate get].hudLayer updateHudWasGood:points > 0];
+        }
+        
         [self message:[NSString stringWithFormat:@"%+d", points] at:blockPoint];
     }
     
@@ -562,8 +575,10 @@
         }
         
         levelPoints += bonusPoints;
-        [[DeblockConfig get] addScore:levelPoints];
-        [Player currentPlayer].level = newLevel;
+        if (![[DeblockConfig get].kidsMode boolValue]) {
+            [[DeblockConfig get] addScore:levelPoints];
+            [Player currentPlayer].level = newLevel;
+        }
         [[DeblockAppDelegate get].hudLayer updateHudWasGood:bonusPoints > 0];
         [[DeblockAppDelegate get].gameLayer stopGame:endReason];
     }
@@ -681,7 +696,7 @@
 - (void)draw {
     
     [super draw];
-
+    
     DrawBoxFrom(CGPointMake(-3, -3), CGPointMake(self.contentSize.width + 3, self.contentSize.height + 3),
                 ccc4l([[DeblockConfig get].skyColorTo longValue] & 0x0f0f0f33), ccc4l([[DeblockConfig get].skyColorFrom longValue] & 0x0f0f0f33));
 }

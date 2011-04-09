@@ -108,6 +108,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
     [super application:application didFinishLaunchingWithOptions:launchOptions];
+    [CCDirector sharedDirector].openGLView.multipleTouchEnabled = YES;
     
     // Game Center setup.
     [[GKLocalPlayer localPlayer] authenticateWithCompletionHandler:^(NSError *error){
@@ -118,7 +119,7 @@
     if ([[Config get].firstRun boolValue]) {
         self.alertWelcome = [[[UIAlertView alloc] initWithTitle:l(@"dialog.title.firsttime")
                                                         message:l(@"dialog.text.firsttime.strategy")
-                                                       delegate:self cancelButtonTitle:l(@"button.thanks") otherButtonTitles:nil] autorelease];
+                                                       delegate:self cancelButtonTitle:l(@"common.button.thanks") otherButtonTitles:nil] autorelease];
         [self.alertWelcome show];
     }
     
@@ -183,7 +184,7 @@
                                                settings:
                        @selector(music),
                        @selector(soundFx),
-                       @selector(compete),
+                       @selector(kidsMode),
                        nil];
     self.configMenu.offset           = ccp(0, -80);
     self.configMenu.background       = [CCSprite spriteWithFile:@"back.png"];
@@ -233,13 +234,16 @@
 - (void)didEnter:(MenuLayer *)menuLayer {
     
     if (menuLayer == self.mainMenu) {
-        [self.continueGame setIsEnabled:[Player currentPlayer].level > 1];
+        [self.continueGame setIsEnabled:[Player currentPlayer].level > 1 && ![[DeblockConfig get].kidsMode boolValue]];
     }
 }
 
 - (void)didUpdateConfigForKey:(SEL)configKey {
     
     [super didUpdateConfigForKey:configKey];
+    
+    if (configKey == @selector(kidsMode))
+        self.hudLayer.visible = ![[DeblockConfig get].kidsMode boolValue];
 }
 
 
@@ -251,8 +255,8 @@
     else if (setting == @selector(soundFx))
         return l(@"menu.config.sound");
     
-    else if (setting == @selector(compete))
-        return l(@"dialog.title.compete");
+    else if (setting == @selector(kidsMode))
+        return l(@"dialog.title.kidsMode");
     
     else
         return nil;
@@ -260,13 +264,6 @@
 
 
 - (NSArray *)toggleItemsForSetting:(SEL)setting {
-    
-    if (setting == @selector(compete))
-        return [NSMutableArray arrayWithObjects:
-                [CCMenuItemFont itemFromString:l(@"menu.config.off")],
-                [CCMenuItemFont itemFromString:l(@"menu.config.wifi+carrier")],
-                [CCMenuItemFont itemFromString:l(@"menu.config.wifi")],
-                nil];
     
     return nil;
 }

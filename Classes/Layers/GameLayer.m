@@ -182,10 +182,6 @@
     self.fieldLayer             = [FieldLayer node];
     self.skyLayer               = [SkyLayer node];
     
-    self.fieldLayer.contentSize = CGSizeMake(self.contentSize.width * 9/10, self.contentSize.height * 4/5);
-    self.fieldLayer.position    = ccp((self.contentSize.width - self.fieldLayer.contentSize.width) / 2.0f,
-                                      (self.contentSize.height - self.fieldLayer.contentSize.height - [DeblockAppDelegate get].hudLayer.contentSize.height) / 2.0f +  [DeblockAppDelegate get].hudLayer.contentSize.height);
-
     self.fieldScroller          = [CCLayer node];
     [self.fieldScroller addChild:self.fieldLayer];
 

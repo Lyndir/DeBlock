@@ -52,9 +52,7 @@
     self.levelPenaltyCount.color     = ccc3(0xFF, 0x99, 0x99);
     [self addChild:self.levelPenaltyCount];
     
-    CCColorLayer *l =[[CCColorLayer alloc] initWithColor:ccc4(0x00, 0xFF, 0x00, 0xFF) width:900000 height:900000];
-    l.position=ccp(-500000, -500000);
-    //[self addChild:l z:99];
+    self.visible = ![[DeblockConfig get].kidsMode boolValue];
     
     return self;
 }

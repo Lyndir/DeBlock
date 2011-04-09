@@ -420,7 +420,7 @@ static NSDictionary *blockColors;
 
 
 - (BOOL)ccTouchBegan:(UITouch *)touch withEvent:(UIEvent *)event {
-    
+
     if (!self.valid || [DeblockAppDelegate get].gameLayer.paused || [DeblockAppDelegate get].gameLayer.fieldLayer.locked)
         return NO;
 
