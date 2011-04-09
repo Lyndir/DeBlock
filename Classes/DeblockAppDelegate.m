@@ -109,6 +109,12 @@
     
     [super application:application didFinishLaunchingWithOptions:launchOptions];
     
+    // Game Center setup.
+    [[GKLocalPlayer localPlayer] authenticateWithCompletionHandler:^(NSError *error){
+        if (error)
+            wrn(@"Game Center unavailable: %@", error);
+    }]; 
+
     if ([[Config get].firstRun boolValue]) {
         self.alertWelcome = [[[UIAlertView alloc] initWithTitle:l(@"dialog.title.firsttime")
                                                         message:l(@"dialog.text.firsttime.strategy")
@@ -316,8 +322,13 @@
 - (void)showScores {
     
     // TODO: GameKit
-    /*[self pushLayer:self.mainMenu hidden:YES];
-    [self pushLayer:[ScoresLayer get]];*/
+    [self showMainMenu];
+    [self scores:nil];
+}
+
+- (void)leaderboardViewControllerDidFinish:(GKLeaderboardViewController *)viewController {
+    
+    [[UIApplication sharedApplication].keyWindow.rootViewController dismissModalViewControllerAnimated:YES];
 }
 
 
@@ -402,7 +413,12 @@
 
 - (void)scores:(id)caller {
     
-    // TODO: GameKit
+    GKLeaderboardViewController *leaderboardController = [GKLeaderboardViewController new];
+    if (leaderboardController != nil) {
+        leaderboardController.leaderboardDelegate = self;
+        [[UIApplication sharedApplication].keyWindow.rootViewController presentModalViewController:leaderboardController animated:YES];
+        [leaderboardController release];
+    }
 }
 
 

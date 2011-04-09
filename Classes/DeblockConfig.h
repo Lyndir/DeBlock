@@ -25,7 +25,7 @@
 #import "Config.h"
 #import "Player.h"
 
-#define cCompete          	NSStringFromSelector(@selector(compete))
+#define cKidsMode          	NSStringFromSelector(@selector(kidsMode))
 
 #define cLevelScore         NSStringFromSelector(@selector(levelScore))
 #define cLevelPenalty       NSStringFromSelector(@selector(levelPenalty))
@@ -37,12 +37,6 @@
 
 #define cFlawlessBonus      NSStringFromSelector(@selector(flawlessBonus))
 
-
-typedef enum DbCompete {
-    DbCompeteOff,
-    DbCompeteWiFiCarrier,
-    DbCompeteWiFi,
-} DbCompete;
 
 @interface DeblockConfig : Config {
 
@@ -61,7 +55,7 @@ typedef enum DbCompete {
 #pragma mark ###############################
 #pragma mark Properties
 
-@property (readwrite, retain) NSNumber          *compete;
+@property (readwrite, retain) NSNumber          *kidsMode;
 
 @property (readwrite, retain) NSNumber          *levelScore;
 @property (readwrite, retain) NSNumber          *levelPenalty;

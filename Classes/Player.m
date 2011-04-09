@@ -25,7 +25,7 @@
 
 @synthesize playerID = _playerID;
 @synthesize score = _score;
-@synthesize level = _level;
+//@synthesize level = _level;
 @synthesize mode = _mode;
 
 
@@ -95,6 +95,16 @@
     [self removeObserver:self forKeyPath:@"score"];
     [self removeObserver:self forKeyPath:@"level"];
     [self removeObserver:self forKeyPath:@"mode"];
+}
+
+- (void)setLevel:(NSUInteger)level {
+    
+    _level = level;
+}
+
+- (NSUInteger)level {
+    
+    return _level;
 }
 
 - (void)dealloc {

@@ -23,6 +23,7 @@
 //
 
 #import "DeblockConfig.h"
+#import <GameKit/GameKit.h>
 
 
 @interface DeblockConfig ()
@@ -36,7 +37,7 @@
 
 @synthesize playersCached = _playersCached;
 
-@dynamic compete;
+@dynamic kidsMode;
 @dynamic levelScore, levelPenalty;
 @dynamic skyColorFrom, skyColorTo;
 @dynamic flawlessBonus;
@@ -52,7 +53,7 @@
     [self.defaults registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
                                 [NSNumber numberWithLong:0x38343C00],                           cShadeColor,
 
-                                [NSNumber numberWithUnsignedInt:DbCompeteOff],                  cCompete,
+                                [NSNumber numberWithBool:NO],                                   cKidsMode,
                                 
                                 [NSArray arrayWithObjects:
                                  @"title.mp3",
@@ -157,34 +158,25 @@
 
 - (void)submitScore {
 
-    // TODO: GameKit
-    /*
-    NSNumber *mode = [NSNumber numberWithUnsignedInteger:[self currentPlayer].mode];
-    NSNumber *level = [NSNumber numberWithUnsignedInteger:[self currentPlayer].level];
-    NSNumber *score = [NSNumber numberWithInteger:[self currentPlayer].score];
-    NSString *name = self.userName;
-    NSDate *achievedDate = [NSDate date];
-
-    // Build a new player score object.
-    NSDictionary *newCurrentUserScores = [NSDictionary dictionaryWithObjectsAndKeys:
-                                          mode,
-                                          @"m",
-                                          level,
-                                          @"l",
-                                          score,
-                                          @"s",
-                                          [NSString stringWithFormat:@"%f", [achievedDate timeIntervalSince1970]],
-                                          @"d",
-                                          nil];
-
-    // Store the user's new scores in the player scores.
-    NSMutableDictionary *newPlayerScores = [[self playerScores] mutableCopy];
-    [newPlayerScores setObject:newCurrentUserScores forKey:name];
-    [self setPlayerScores:newPlayerScores];
-    [newPlayerScores release];
-
-    // Submit the score online.
-    [[DeblockWSController get] submitScoreForPlayer:[self currentPlayer]];*/
+    Player *player = [Player currentPlayer];
+    NSString *category;
+    switch (player.mode) {
+        case DbModeClassic:
+            category = @"com.lyndir.lhunath.deblock.Classic";
+            break;
+            
+        case DbModeTimed:
+            category = @"com.lyndir.lhunath.deblock.Timed";
+            break;
+    }
+    
+    GKScore *score = [[GKScore alloc] initWithCategory:category];
+    score.value = player.score;
+    
+    [score reportScoreWithCompletionHandler:^(NSError *error) {
+        if (error)
+            err(@"Error reporting score: %@", error);
+    }]; 
 }
 
 

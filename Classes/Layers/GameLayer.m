@@ -216,7 +216,7 @@
 
 -(void) started {
 
-    [[DeblockAppDelegate get].uiLayer message:[NSString stringWithFormat:l(@"message.level"), [Player currentPlayer].level]];
+    [[DeblockAppDelegate get].uiLayer message:l(@"message.level", [Player currentPlayer].level)];
     
     self.running = YES;
 

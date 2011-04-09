@@ -22,6 +22,8 @@
 //  Copyright lhunath (Maarten Billemont) 2009. All rights reserved.
 //
 
+#import <GameKit/GameKit.h>
+
 #import "AbstractCocos2DAppDelegate.h"
 #import "GameLayer.h"
 #import "MenuLayer.h"
@@ -29,7 +31,7 @@
 #import "DbHUDLayer.h"
 
 
-@interface DeblockAppDelegate : AbstractCocos2DAppDelegate<MenuDelegate, ConfigMenuDelegate, UIAlertViewDelegate> {
+@interface DeblockAppDelegate : AbstractCocos2DAppDelegate<MenuDelegate, ConfigMenuDelegate, UIAlertViewDelegate, GKLeaderboardViewControllerDelegate> {
 
 @private
     GameLayer                       *_gameLayer;

@@ -11,14 +11,17 @@ isIn() {
 cd "${0%/*}/../../"
 
 emit "Enumerating localization keys"
-code=$(find Classes -type f -exec grep -o 'NSLocalizedString(@"[^"]*"' {} + | sed -n 's/.*\("[^"]*"\).*/\1/p' | sort -bu)
+code=$(find Classes -type f -exec grep -o '[^a-zA-Z]\(l\|NSLocalizedString\)(@"[^"]*"' {} + | sed -n 's/.*\("[^"]*"\).*/\1/p' | sort -bu)
 for l in Resources/*.lproj/Localizable.strings; do
-    k=${l#*/}; k=${k%%/*}
+    k=${l#*/} k=${k%%/*}
     emit "   - Found language: ${k%.lproj}"
 
+    charset=$(file -ib "$l") charset=${charset##*charset=} charset=${charset%% *}
+    lData=$(iconv -f "$charset" -t utf-8 < "$l")
+
     lang+=( "$k" )
-    lprojLocal+=( "$(sed -n '/\/\/[^"]*\[REMOTE\][^"]*$/!s/^\("[^"]*"\).*/\1/p' "$l" | sort -bu)" )
-    lprojAll+=( "$(sed -n 's/^\("[^"]*"\).*/\1/p' "$l" | sort -u)" )
+    lprojLocal+=( "$(sed -n '/\/\/[^"]*\[REMOTE\][^"]*$/!s/^\("[^"]*"\).*/\1/p' <<< "$lData" | sort -bu)" )
+    lprojAll+=( "$(sed -n 's/^\("[^"]*"\).*/\1/p' <<< "$lData" | sort -u)" )
 done
 
 allhealthy=1
