@@ -7,9 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "Resettable.h"
 
 
-@interface Player : NSObject <NSCoding> {
+@interface Player : NSObject <NSCoding, Resettable> {
 
     NSString                            *_playerID;
     NSInteger                           _score;

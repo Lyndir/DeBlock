@@ -234,7 +234,7 @@
 - (void)didEnter:(MenuLayer *)menuLayer {
     
     if (menuLayer == self.mainMenu) {
-        [self.continueGame setIsEnabled:[Player currentPlayer].level > 1 && ![[DeblockConfig get].kidsMode boolValue]];
+        [self.continueGame setIsEnabled:[Player currentPlayer].level > 1];
     }
 }
 
@@ -242,8 +242,10 @@
     
     [super didUpdateConfigForKey:configKey];
     
-    if (configKey == @selector(kidsMode))
+    if (configKey == @selector(kidsMode)) {
         self.hudLayer.visible = ![[DeblockConfig get].kidsMode boolValue];
+        [[Player currentPlayer] reset];
+    }
 }
 
 
@@ -337,7 +339,10 @@
 
 - (void)newGame:(id)caller {
     
-    [self pushLayer:self.newGameMenu];
+    if ([[DeblockConfig get].kidsMode boolValue])
+        [self.gameLayer newGameWithMode:DbModeClassic];
+    else        
+        [self pushLayer:self.newGameMenu];
 }
 
 

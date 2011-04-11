@@ -157,6 +157,9 @@
 }
 
 - (void)submitScore {
+    
+    if ([[DeblockConfig get].kidsMode boolValue])
+        return;
 
     Player *player = [Player currentPlayer];
     NSString *category;

@@ -97,6 +97,13 @@
     [self removeObserver:self forKeyPath:@"mode"];
 }
 
+- (void)reset {
+    
+    self.score = 0;
+    self.level = 0;
+    self.mode = 0;
+}
+
 - (void)setLevel:(NSUInteger)level {
     
     _level = level;

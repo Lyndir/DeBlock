@@ -575,10 +575,9 @@
         }
         
         levelPoints += bonusPoints;
-        if (![[DeblockConfig get].kidsMode boolValue]) {
+        if (![[DeblockConfig get].kidsMode boolValue])
             [[DeblockConfig get] addScore:levelPoints];
-            [Player currentPlayer].level = newLevel;
-        }
+        [Player currentPlayer].level = newLevel;
         [[DeblockAppDelegate get].hudLayer updateHudWasGood:bonusPoints > 0];
         [[DeblockAppDelegate get].gameLayer stopGame:endReason];
     }
