@@ -29,9 +29,10 @@
 #import "MenuLayer.h"
 #import "ConfigMenuLayer.h"
 #import "DbHUDLayer.h"
+#import "PlayHaven.h"
 
 
-@interface DeblockAppDelegate : AbstractCocos2DAppDelegate<MenuDelegate, ConfigMenuDelegate, UIAlertViewDelegate, GKLeaderboardViewControllerDelegate> {
+@interface DeblockAppDelegate : AbstractCocos2DAppDelegate<MenuDelegate, ConfigMenuDelegate, UIAlertViewDelegate, GKLeaderboardViewControllerDelegate, PHPreloadDelegate, PHRequestDelegate> {
 
 @private
     GameLayer                       *_gameLayer;
@@ -41,6 +42,7 @@
     CCMenuItem                      *_continueGame;
 
     UIAlertView                     *_alertWelcome, *_alertCompete;
+    UIView                          *_notifierView;
 }
 
 @property (readonly, retain) GameLayer              *gameLayer;

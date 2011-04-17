@@ -87,8 +87,8 @@
 
                                 [NSNumber numberWithLong:DbModeClassic],                        cGameMode,
                                 
-                                [NSNumber numberWithLong:0x58748Cff],                           cSkyColorFrom,
-                                [NSNumber numberWithLong:0xB3D5F2ff],                           cSkyColorTo,
+                                [NSNumber numberWithLong:0x4E80BAff],                           cSkyColorFrom,
+                                [NSNumber numberWithLong:0x194079ff],                           cSkyColorTo,
                                 
                                 [NSNumber numberWithInt:10],                                    cFlawlessBonus,
 
@@ -173,8 +173,8 @@
             break;
     }
     
-    GKScore *score = [[GKScore alloc] initWithCategory:category];
-    score.value = player.score;
+    GKScore *score = [[[GKScore alloc] initWithCategory:category] autorelease];
+    score.value = player.score / player.level;
     
     [score reportScoreWithCompletionHandler:^(NSError *error) {
         if (error)

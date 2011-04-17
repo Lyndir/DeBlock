@@ -25,10 +25,10 @@
 #import "SkyLayer.h"
 #import "DeblockAppDelegate.h"
 
-#define kCloudCount         10
+#define kCloudCount         6
 #define kCloudFrames        6
 #define kCloudAnimation     @"clouds"
-#define kCloudTime          40
+#define kCloudTime          60
 
 
 @interface SkyLayer ()
@@ -73,6 +73,8 @@
         cloud.position = CGPointMake(random() % (NSInteger)(self.contentSize.width + cloud.contentSize.width)
                                      + cloud.contentSize.width / 4,
                                      self.contentSize.height - random() % (NSInteger)cloud.contentSize.height / 3);
+        cloud.opacity = MIN(255, random() % 256 + 40 * c);
+        
         NSInteger t = fmaxf(1.0f, kCloudTime - kCloudTime * cloud.position.x / (self.contentSize.width + cloud.contentSize.width));
         [cloud runAction:[CCSequence actionOne:[CCMoveTo actionWithDuration:random() % t / 2 + t / 2
                                                                    position:CGPointMake(self.contentSize.width + cloud.contentSize.width / 2,

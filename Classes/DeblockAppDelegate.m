@@ -31,6 +31,10 @@
 #import "ActivitySprite.h"
 
 
+static NSString *PHContextNotifier  = @"PH.notifier";
+static NSString *PHContextCharts    = @"PH.charts";
+//static NSString *PHContextCommunity = @"PH.community";
+
 @interface DeblockAppDelegate ()
 
 - (void)newGame:(id)caller;
@@ -38,7 +42,6 @@
 - (void)newTimedGame:(id)caller;
 - (void)continueGame:(id)caller;
 - (void)resumeGame:(id)caller;
-- (void)endGame:(id)caller;
 - (void)stopGame:(id)caller;
 - (void)levelRedo:(id)caller;
 - (void)more;
@@ -61,6 +64,7 @@
 
 @property (readwrite, retain) UIAlertView                     *alertWelcome;
 @property (readwrite, retain) UIAlertView                     *alertCompete;
+@property (readwrite, retain) UIView                          *notifierView;
 
 @end
 
@@ -72,7 +76,7 @@
 @synthesize configMenu = _configMenu;
 @synthesize continueGame = _continueGame;
 @synthesize alertWelcome = _alertWelcome, alertCompete = _alertCompete;
-
+@synthesize notifierView = _notifierView;
 
 
 #pragma mark ###############################
@@ -97,7 +101,7 @@
     self.continueGame = nil;
     self.alertWelcome = nil;
     self.alertCompete = nil;
-
+    
     [super dealloc];
 }
 
@@ -114,8 +118,13 @@
     [[GKLocalPlayer localPlayer] authenticateWithCompletionHandler:^(NSError *error){
         if (error)
             wrn(@"Game Center unavailable: %@", error);
-    }]; 
-
+    }];
+    
+    // PlayHaven setup.
+    [PlayHaven preloadWithDelegate:self];
+    [PlayHaven loadChartsNotifierWithDelegate:self context:PHContextNotifier];
+    
+    // First run pop-up.
     if ([[Config get].firstRun boolValue]) {
         self.alertWelcome = [[[UIAlertView alloc] initWithTitle:l(@"dialog.title.firsttime")
                                                         message:l(@"dialog.text.firsttime.strategy")
@@ -123,9 +132,10 @@
         [self.alertWelcome show];
     }
     
+    // Menuing.
     self.mainMenu = [MenuLayer menuWithDelegate:self logo:nil
                                           items:
-                 self.continueGame =
+                     self.continueGame =
                      [CCMenuItemFont itemFromString:l(@"menu.continue")
                                              target:self selector:@selector(continueGame:)],
                      [CCMenuItemFont itemFromString:l(@"menu.game.new")
@@ -134,7 +144,7 @@
                      [CCMenuItemFont itemFromString:l(@"menu.strategy")
                                              target:self selector:@selector(strategy:)],
                      /*[CCMenuItemFont itemFromString:@"Shutdown"
-                                             target:self selector:@selector(shutdown:)],*/
+                      target:self selector:@selector(shutdown:)],*/
                      nil];
     [self.mainMenu setNextButtonTarget:self selector:@selector(more)];
     self.mainMenu.offset             = ccp(0, -80);
@@ -144,7 +154,7 @@
     self.mainMenu.opacity            = 0x99;
     self.mainMenu.color              = ccc3(0xcc, 0xcc, 0xff);
     self.mainMenu.colorGradient      = ccc4(0xff, 0xff, 0xff, 0xdd);
-
+    
     self.moreMenu = [MenuLayer menuWithDelegate:self logo:nil
                                           items:
                      [CCMenuItemFont itemFromString:l(@"menu.scores")
@@ -201,10 +211,10 @@
                        [CCMenuItemFont itemFromString:l(@"menu.level.restart")
                                                target:self selector:@selector(levelRedo:)],
                        [MenuItemSpacer spacerSmall],
-                       [CCMenuItemFont itemFromString:l(@"menu.main")
-                                               target:self selector:@selector(stopGame:)],
                        [CCMenuItemFont itemFromString:l(@"menu.game.end")
-                                               target:self selector:@selector(endGame:)],
+                                               target:self selector:@selector(stopGame:)],
+                       [CCMenuItemFont itemFromString:l(@"menu.moregames")
+                                               target:self selector:@selector(moreGames:)],
                        nil];
     [self.pausedMenu setBackButtonTarget:self selector:@selector(resumeGame:)];
     
@@ -212,14 +222,14 @@
                                                                                      selectedImage:@"title.game.over.png"]
                                               items:
                          [CCMenuItemFont itemFromString:l(@"menu.game.end")
-                                                 target:self selector:@selector(endGame:)],
+                                                 target:self selector:@selector(stopGame:)],
                          [CCMenuItemFont itemFromString:l(@"menu.level.retry")
                                                  target:self selector:@selector(levelRedo:)],
                          nil];
     [self.gameOverMenu setBackButtonTarget:nil selector:nil];
     
     [self.uiLayer addChild:self.gameLayer = [GameLayer node]];
-
+    
     self.mainMenu.fadeNextEntry  = NO;
     [self pushLayer:self.mainMenu];
     
@@ -228,6 +238,13 @@
     [[CCDirector sharedDirector] runWithScene:uiScene];
     
     return YES;
+}
+
+- (void)applicationWillResignActive:(UIApplication *)application {
+    
+    [self.gameLayer setPaused:YES];
+    
+    [super applicationWillResignActive:application];
 }
 
 
@@ -253,7 +270,7 @@
     
     if (setting == @selector(music))
         return l(@"menu.config.music");
-
+    
     else if (setting == @selector(soundFx))
         return l(@"menu.config.sound");
     
@@ -273,7 +290,7 @@
 
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-
+    
     if (alertView == self.alertWelcome)
         self.alertWelcome = nil;
 }
@@ -289,21 +306,47 @@
 }
 
 
-- (void)poppedAll {
-    
-    [super poppedAll];
-    
-    self.gameLayer.paused = NO;
-}
-
-
-- (void)pushLayer:(ShadeLayer *)layer {
+- (void)didPushLayer:(ShadeLayer *)layer hidden:(BOOL)hidden {
     
     self.gameLayer.paused = YES;
+
+    if (self.notifierView.superview && (layer != self.moreMenu || layer != self.pausedMenu))
+        [self.notifierView removeFromSuperview];
     
-    [super pushLayer:layer];
+    else if (self.notifierView) {
+        if (layer == self.moreMenu) {
+            self.notifierView.center = ccp(100, 325);
+            [[CCDirector sharedDirector].openGLView addSubview:self.notifierView];
+        } else if (layer == self.pausedMenu) {
+            self.notifierView.center = ccp(65, 325);
+            [[CCDirector sharedDirector].openGLView addSubview:self.notifierView];
+        }
+    }
+
+    [super didPushLayer:layer hidden:hidden];
 }
 
+
+- (void)didPopLayer:(ShadeLayer *)layer anyLeft:(BOOL)anyLeft {
+    
+    if (self.notifierView.superview && (layer == self.moreMenu || layer == self.pausedMenu))
+        [self.notifierView removeFromSuperview];
+    
+    else if (self.notifierView) {
+        if ([self isLayerShowing:self.moreMenu]) {
+            self.notifierView.center = ccp(100, 330);
+            [[CCDirector sharedDirector].openGLView addSubview:self.notifierView];
+        } else if ([self isLayerShowing:self.pausedMenu]) {
+            self.notifierView.center = ccp(65, 330);
+            [[CCDirector sharedDirector].openGLView addSubview:self.notifierView];
+        }
+    }
+
+    if (!anyLeft)
+        self.gameLayer.paused = NO;
+    
+    [super didPopLayer:layer anyLeft:anyLeft];
+}
 
 - (void)hudMenuPressed {
     
@@ -313,7 +356,7 @@
 
 
 - (void)showMainMenu {
-
+    
     [self pushLayer:self.mainMenu];
 }
 
@@ -365,20 +408,14 @@
 
 
 - (void)resumeGame:(id)caller {
-
-    [[DeblockAppDelegate get] popAllLayers];
+    
+    [self popAllLayers];
 }
 
 
 - (void)stopGame:(id)caller {
     
     [self.gameLayer stopGame:DbEndReasonStopped];
-}
-
-
-- (void)endGame:(id)caller {
-    
-    [self.gameLayer stopGame:DbEndReasonEnded];
 }
 
 
@@ -390,20 +427,19 @@
 
 - (void)more {
     
-    [[DeblockAppDelegate get] pushLayer:self.moreMenu];
+    [self pushLayer:self.moreMenu];
 }
 
 
 - (void)configuration:(id)caller {
     
-    [[DeblockAppDelegate get] pushLayer:self.configMenu];
+    [self pushLayer:self.configMenu];
 }
 
 
 - (void)moreGames:(id)caller {
-    
-    [[UIApplication sharedApplication] openURL:
-     [NSURL URLWithString:@"http://iphone.lhunath.com"]];
+
+    [PlayHaven loadChartsWithDelegate:self context:PHContextCharts];
 }
 
 
@@ -435,5 +471,67 @@
     return (DeblockAppDelegate *) [super get];
 }
 
+#pragma mark - PHPreloadDelegate
+
+-(NSString *)playhavenPublisherToken {
+    
+    return [[NSDictionary dictionaryWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"PlayHaven" withExtension:@"plist"]] valueForKeyPath:@"Token"];
+}
+
+-(BOOL)shouldTestPlayHaven {
+    
+#ifdef DEBUG
+    return YES;
+#else
+    return NO;
+#endif
+}
+
+-(void)playhavenDidFinishPreloading {
+    
+}
+
+-(void)playhavenPreloadDidFailWithError:(NSString *)message {
+    
+    err(@"Playhaven preload failed with error: %@", message);
+}
+
+-(PHLogLevel *)playhavenDebugLogLevel {
+    
+    return [self shouldTestPlayHaven]? [PHLogLevel logLevelDebug]: [PHLogLevel logLevelWarn];
+}
+
+
+#pragma mark - PHRequestDelegate
+
+- (void)playhaven:(UIView *)view didLoadWithContext:(id)contextValue {
+    
+    if (contextValue == PHContextNotifier) {
+        [self.notifierView removeFromSuperview];
+        self.notifierView = view;
+        
+        if ([self isLayerShowing:self.moreMenu])
+            [[CCDirector sharedDirector].openGLView addSubview:view];
+    }
+    
+    if (contextValue == PHContextCharts) {
+        [[CCDirector sharedDirector].openGLView addSubview:view];
+        [[CCDirector sharedDirector] pause];
+    }
+}
+
+- (void)playhaven:(UIView *)view didFailWithError:(NSString *)message context:(id)contextValue {
+    
+    err(@"Playhaven context: %@, failed with error: %@", contextValue, message);
+    
+    [view removeFromSuperview];
+    [[CCDirector sharedDirector] resume];
+}
+
+- (void)playhaven:(UIView *)view wasDismissedWithContext:(id)contextValue {
+    
+    [view removeFromSuperview];
+    [[CCDirector sharedDirector] resume];
+}
 
 @end

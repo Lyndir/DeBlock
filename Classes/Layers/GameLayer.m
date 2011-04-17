@@ -133,7 +133,7 @@
         return;
     }
     
-    self.endReason                           = DbEndReasonEnded;
+    self.endReason                           = DbEndReasonStopped;
     self.penaltyInterval                     = 2;
     [DeblockConfig get].levelScore      = [NSNumber numberWithInt:0];
     [DeblockConfig get].levelPenalty    = [NSNumber numberWithInt:0];
@@ -225,9 +225,6 @@
     self.running     = NO;
 
     switch (self.endReason) {
-        case DbEndReasonEnded:
-            [[DeblockAppDelegate get] showScores];
-            break;
         case DbEndReasonStopped:
             [[DeblockAppDelegate get] showMainMenu];
             break;
@@ -242,7 +239,7 @@
                         format:@"End reason not implemented: %d", self.endReason];
     }
     
-    self.endReason   = DbEndReasonEnded;
+    self.endReason   = DbEndReasonStopped;
 }
 
 

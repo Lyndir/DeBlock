@@ -3,6 +3,7 @@
 
 # Secret salt for online score submission.
 /Resources/Secret.plist
+/Resources/PlayHaven.plist
 
 # OS-Specific junk.
 .DS_Store
@@ -11,6 +12,3 @@
 /*.xcodeproj/*
 !/*.xcodeproj/*.pbxproj
 /build
-
-# Gorillas Stuff
-/promocodes

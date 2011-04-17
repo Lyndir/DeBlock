@@ -303,6 +303,8 @@
 		DA7923C610C5E76100321549 /* strategy-7.png in Resources */ = {isa = PBXBuildFile; fileRef = DA7923BE10C5E76100321549 /* strategy-7.png */; };
 		DA87ACAE10CC138D006FBCE1 /* title.game.over.png in Resources */ = {isa = PBXBuildFile; fileRef = DA87ACAA10CC138C006FBCE1 /* title.game.over.png */; };
 		DA87ACAF10CC138D006FBCE1 /* title.game.paused.png in Resources */ = {isa = PBXBuildFile; fileRef = DA87ACAC10CC138D006FBCE1 /* title.game.paused.png */; };
+		DA8F5047135B7CC8009F4817 /* libPlayHaven.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA8F5046135B7CC8009F4817 /* libPlayHaven.a */; };
+		DA8F51D2135B7D1D009F4817 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DA8F51D1135B7D1D009F4817 /* libicucore.dylib */; };
 		DA9EDF37102809B000528A29 /* DbHUDLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = DA9EDF36102809B000528A29 /* DbHUDLayer.m */; };
 		DAA2C72C1343D0D600971C6E /* bar.png in Resources */ = {isa = PBXBuildFile; fileRef = DA0EA113133E09E900AC780F /* bar.png */; };
 		DAA2C72D1343D0D900971C6E /* bonk.png in Resources */ = {isa = PBXBuildFile; fileRef = DA0EA114133E09E900AC780F /* bonk.png */; };
@@ -803,6 +805,9 @@
 		DA87ACC510CC13D6006FBCE1 /* Spanish */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Spanish; path = Resources/Spanish.lproj/title.game.over.png; sourceTree = SOURCE_ROOT; };
 		DA87ACC610CC13D6006FBCE1 /* Spanish */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Spanish; path = Resources/Spanish.lproj/title.game.paused.png; sourceTree = SOURCE_ROOT; };
 		DA8893E61052EB7E00EA8E72 /* libcocos2d-iphone.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libcocos2d-iphone.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		DA8F5046135B7CC8009F4817 /* libPlayHaven.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPlayHaven.a; path = External/PlayHavenSDK/libPlayHaven.a; sourceTree = "<group>"; };
+		DA8F5144135B7CEF009F4817 /* PlayHaven.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayHaven.h; sourceTree = "<group>"; };
+		DA8F51D1135B7D1D009F4817 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
 		DA9EDF35102809B000528A29 /* DbHUDLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DbHUDLayer.h; sourceTree = "<group>"; };
 		DA9EDF36102809B000528A29 /* DbHUDLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DbHUDLayer.m; sourceTree = "<group>"; };
 		DAB2C56C10570F2900B6701A /* libz.1.2.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.2.3.dylib; path = /usr/lib/libz.1.2.3.dylib; sourceTree = "<absolute>"; };
@@ -914,6 +919,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DA8F51D2135B7D1D009F4817 /* libicucore.dylib in Frameworks */,
 				DADF3CDC1347CC3E00C12557 /* libiLibs.a in Frameworks */,
 				DA6583041347284D00C40D8C /* GameKit.framework in Frameworks */,
 				DA658302134724F800C40D8C /* Security.framework in Frameworks */,
@@ -927,6 +933,7 @@
 				DA1AC47F108C8EEF00C9AD7B /* libz.1.2.3.dylib in Frameworks */,
 				DADC1D9110A0F46400593BF9 /* CFNetwork.framework in Frameworks */,
 				DADC1D9710A0F63100593BF9 /* SystemConfiguration.framework in Frameworks */,
+				DA8F5047135B7CC8009F4817 /* libPlayHaven.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -970,6 +977,7 @@
 		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
 			isa = PBXGroup;
 			children = (
+				DA8F5048135B7CEF009F4817 /* PlayHavenSDK */,
 				DA0EA5B4133E0BB800AC780F /* cocos2d */,
 				DA0EA0CE133E09E900AC780F /* iLibs */,
 				32CA4F630368D1EE00C91783 /* Prefix.pch */,
@@ -996,6 +1004,8 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				DA8F51D1135B7D1D009F4817 /* libicucore.dylib */,
+				DA8F5046135B7CC8009F4817 /* libPlayHaven.a */,
 				DA1AC392108C888D00C9AD7B /* libiLibs.a */,
 				DA8893E61052EB7E00EA8E72 /* libcocos2d-iphone.a */,
 				DA6583031347284D00C40D8C /* GameKit.framework */,
@@ -1522,6 +1532,15 @@
 				DA3EE0BC10B0A6F800F8488D /* LogLayer.m */,
 			);
 			path = Layers;
+			sourceTree = "<group>";
+		};
+		DA8F5048135B7CEF009F4817 /* PlayHavenSDK */ = {
+			isa = PBXGroup;
+			children = (
+				DA8F5144135B7CEF009F4817 /* PlayHaven.h */,
+			);
+			name = PlayHavenSDK;
+			path = External/PlayHavenSDK;
 			sourceTree = "<group>";
 		};
 		DAB2C591105710DA00B6701A /* Fonts */ = {
@@ -2334,7 +2353,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEPLOYMENT_POSTPROCESSING = NO;
 				GCC_C_LANGUAGE_STANDARD = c99;
@@ -2345,6 +2363,7 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Prefix.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
 				GCC_STRICT_ALIASING = NO;
 				GCC_THUMB_SUPPORT = NO;
 				GCC_TREAT_IMPLICIT_FUNCTION_DECLARATIONS_AS_ERRORS = YES;
@@ -2379,8 +2398,8 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = "${TARGET_NAME}";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
 				STRIP_INSTALLED_PRODUCT = NO;
 			};
 			name = Debug;
@@ -2399,6 +2418,7 @@
 				GCC_OPTIMIZATION_LEVEL = 3;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Prefix.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = "";
 				GCC_STRICT_ALIASING = YES;
 				GCC_THUMB_SUPPORT = NO;
 				GCC_TREAT_IMPLICIT_FUNCTION_DECLARATIONS_AS_ERRORS = YES;
@@ -2434,6 +2454,7 @@
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
 				STRIP_INSTALLED_PRODUCT = YES;
 			};
 			name = Release;
@@ -2473,8 +2494,13 @@
 			buildSettings = {
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/External/PlayHavenSDK\"",
+				);
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
-				TARGETED_DEVICE_FAMILY = "1,2";
+				SKIP_INSTALL = NO;
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -2483,10 +2509,98 @@
 			buildSettings = {
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/External/PlayHavenSDK\"",
+				);
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
-				TARGETED_DEVICE_FAMILY = "1,2";
+				SKIP_INSTALL = NO;
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
+		};
+		DAF50D92135B89C0002987DE /* Distribution */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEPLOYMENT_POSTPROCESSING = YES;
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_DYNAMIC_NO_PIC = YES;
+				GCC_FAST_MATH = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = Prefix.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = APPSTORE;
+				GCC_STRICT_ALIASING = YES;
+				GCC_THUMB_SUPPORT = NO;
+				GCC_TREAT_IMPLICIT_FUNCTION_DECLARATIONS_AS_ERRORS = YES;
+				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = YES;
+				GCC_WARN_ABOUT_INVALID_OFFSETOF_MACRO = YES;
+				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
+				GCC_WARN_ABOUT_POINTER_SIGNEDNESS = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_ALLOW_INCOMPLETE_PROTOCOL = YES;
+				GCC_WARN_CHECK_SWITCH_STATEMENTS = YES;
+				GCC_WARN_EFFECTIVE_CPLUSPLUS_VIOLATIONS = YES;
+				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = YES;
+				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
+				GCC_WARN_MISSING_PARENTHESES = YES;
+				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = YES;
+				GCC_WARN_SIGN_COMPARE = YES;
+				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = YES;
+				GCC_WARN_UNKNOWN_PRAGMAS = YES;
+				GCC_WARN_UNUSED_LABEL = YES;
+				GCC_WARN_UNUSED_VALUE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = Resources/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
+				LINKER_DISPLAYS_MANGLED_NAMES = NO;
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = (
+					"-all_load",
+					"-ObjC",
+				);
+				PRODUCT_NAME = "${TARGET_NAME}";
+				RUN_CLANG_STATIC_ANALYZER = YES;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				STRIP_INSTALLED_PRODUCT = YES;
+			};
+			name = Distribution;
+		};
+		DAF50D93135B89C0002987DE /* Distribution */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/External/PlayHavenSDK\"",
+				);
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				SKIP_INSTALL = NO;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Distribution;
+		};
+		DAF50D94135B89C0002987DE /* Distribution */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PREPROCESSOR_DEFINITIONS = "COCOS2D_DEBUG=0";
+				PRODUCT_NAME = "cocos2d-iphone";
+			};
+			name = Distribution;
+		};
+		DAF50D95135B89C0002987DE /* Distribution */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = iLibs;
+			};
+			name = Distribution;
 		};
 /* End XCBuildConfiguration section */
 
@@ -2496,6 +2610,7 @@
 			buildConfigurations = (
 				C01FCF4F08A954540054247B /* Debug */,
 				C01FCF5008A954540054247B /* Release */,
+				DAF50D92135B89C0002987DE /* Distribution */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
@@ -2505,6 +2620,7 @@
 			buildConfigurations = (
 				DA1AC393108C889300C9AD7B /* Debug */,
 				DA1AC394108C889300C9AD7B /* Release */,
+				DAF50D95135B89C0002987DE /* Distribution */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
@@ -2514,6 +2630,7 @@
 			buildConfigurations = (
 				DA8893E71052EB7F00EA8E72 /* Debug */,
 				DA8893E81052EB7F00EA8E72 /* Release */,
+				DAF50D94135B89C0002987DE /* Distribution */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
@@ -2523,6 +2640,7 @@
 			buildConfigurations = (
 				DACF73EC101A3520003F2AF6 /* Debug */,
 				DACF73ED101A3520003F2AF6 /* Release */,
+				DAF50D93135B89C0002987DE /* Distribution */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;

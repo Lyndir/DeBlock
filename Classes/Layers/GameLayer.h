@@ -27,7 +27,6 @@
 #import "FieldLayer.h"
 
 typedef enum DbEndReason {
-    DbEndReasonEnded,
     DbEndReasonStopped,
     DbEndReasonGameOver,
     DbEndReasonNextField,
