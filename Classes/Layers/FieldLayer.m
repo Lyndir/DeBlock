@@ -575,9 +575,10 @@
         }
         
         levelPoints += bonusPoints;
-        if (![[DeblockConfig get].kidsMode boolValue])
+        if (![[DeblockConfig get].kidsMode boolValue]) {
             [[DeblockConfig get] addScore:levelPoints];
-        [Player currentPlayer].level = newLevel;
+            [Player currentPlayer].level = newLevel;
+        }
         [[DeblockAppDelegate get].hudLayer updateHudWasGood:bonusPoints > 0];
         [[DeblockAppDelegate get].gameLayer stopGame:endReason];
     }
@@ -696,8 +697,8 @@
     
     [super draw];
     
-    DrawBoxFrom(CGPointMake(-3, -3), CGPointMake(self.contentSize.width + 3, self.contentSize.height + 3),
-                ccc4l([[DeblockConfig get].skyColorTo longValue] & 0x0f0f0f33), ccc4l([[DeblockConfig get].skyColorFrom longValue] & 0x0f0f0f33));
+    //DrawBoxFrom(CGPointMake(-3, -3), CGPointMake(self.contentSize.width + 3, self.contentSize.height + 3),
+    //            ccc4l([[DeblockConfig get].skyColorTo longValue] & 0x0f0f0f33), ccc4l([[DeblockConfig get].skyColorFrom longValue] & 0x0f0f0f33));
 }
 
 
