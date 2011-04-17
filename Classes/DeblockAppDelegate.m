@@ -510,6 +510,9 @@ static NSString *PHContextCharts    = @"PH.charts";
         [self.notifierView removeFromSuperview];
         self.notifierView = view;
         
+        // Rotate it to landscape.
+        self.notifierView.transform = CGAffineTransformMakeRotation(CC_DEGREES_TO_RADIANS(90));
+        
         if ([self isLayerShowing:self.moreMenu])
             [[CCDirector sharedDirector].openGLView addSubview:view];
     }
