@@ -40,7 +40,13 @@
 
 + (NSString *)localID {
     
-    return [GKLocalPlayer localPlayer].playerID? [GKLocalPlayer localPlayer].playerID: @"local";
+    if ([[DeblockConfig get].kidsMode boolValue])
+        return @"kid";
+    
+    if ([GKLocalPlayer localPlayer].playerID)
+        return [GKLocalPlayer localPlayer].playerID;
+    
+    return @"local";
 }
 
 - (id)initWithCoder:(NSCoder *)decoder {

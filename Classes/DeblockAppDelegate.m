@@ -29,6 +29,7 @@
 #import "StrategyLayer.h"
 #import "LogLayer.h"
 #import "ActivitySprite.h"
+#import "AlertViewController.h"
 
 
 static NSString *PHContextNotifier  = @"PH.notifier";
@@ -38,6 +39,7 @@ static NSString *PHContextCharts    = @"PH.charts";
 @interface DeblockAppDelegate ()
 
 - (void)newGame:(id)caller;
+- (void)newGameConfirmed;
 - (void)newClassicGame:(id)caller;
 - (void)newTimedGame:(id)caller;
 - (void)continueGame:(id)caller;
@@ -384,8 +386,15 @@ static NSString *PHContextCharts    = @"PH.charts";
     
     if ([[DeblockConfig get].kidsMode boolValue])
         [self.gameLayer newGameWithMode:DbModeClassic];
-    else        
-        [self pushLayer:self.newGameMenu];
+    else if ([Player currentPlayer].level > 1)
+        [AlertViewController showMessage:l(@"dialog.text.new") withTitle:l(@"dialog.title.new") backString:l(@"common.button.cancel") acceptString:l(@"common.button.continue") callback:self :@selector(newGameConfirmed)];
+    else
+        [self newGameConfirmed];
+}
+
+- (void)newGameConfirmed {
+    
+    [self pushLayer:self.newGameMenu];
 }
 
 
