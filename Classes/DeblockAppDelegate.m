@@ -123,8 +123,13 @@ static NSString *PHContextCharts    = @"PH.charts";
     }];
     
     // PlayHaven setup.
-    [PlayHaven preloadWithDelegate:self];
-    [PlayHaven loadChartsNotifierWithDelegate:self context:PHContextNotifier];
+    @try {
+        [PlayHaven preloadWithDelegate:self];
+        [PlayHaven loadChartsNotifierWithDelegate:self context:PHContextNotifier];
+    }
+    @catch (NSException *exception) {
+        err(@"PlayHaven exception: %@", exception);
+    }
     
     // First run pop-up.
     if ([[Config get].firstRun boolValue]) {
@@ -311,7 +316,7 @@ static NSString *PHContextCharts    = @"PH.charts";
 - (void)didPushLayer:(ShadeLayer *)layer hidden:(BOOL)hidden {
     
     self.gameLayer.paused = YES;
-
+    
     if (self.notifierView.superview && (layer != self.moreMenu || layer != self.pausedMenu))
         [self.notifierView removeFromSuperview];
     
@@ -324,7 +329,7 @@ static NSString *PHContextCharts    = @"PH.charts";
             [[CCDirector sharedDirector].openGLView addSubview:self.notifierView];
         }
     }
-
+    
     [super didPushLayer:layer hidden:hidden];
 }
 
@@ -343,7 +348,7 @@ static NSString *PHContextCharts    = @"PH.charts";
             [[CCDirector sharedDirector].openGLView addSubview:self.notifierView];
         }
     }
-
+    
     if (!anyLeft)
         self.gameLayer.paused = NO;
     
@@ -447,7 +452,7 @@ static NSString *PHContextCharts    = @"PH.charts";
 
 
 - (void)moreGames:(id)caller {
-
+    
     [PlayHaven loadChartsWithDelegate:self context:PHContextCharts];
 }
 
@@ -484,7 +489,8 @@ static NSString *PHContextCharts    = @"PH.charts";
 
 -(NSString *)playhavenPublisherToken {
     
-    return [[NSDictionary dictionaryWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"PlayHaven" withExtension:@"plist"]] valueForKeyPath:@"Token"];
+    return [[NSDictionary dictionaryWithContentsOfURL:
+             [[NSBundle mainBundle] URLForResource:@"PlayHaven" withExtension:@"plist"]] valueForKeyPath:@"Token"];
 }
 
 -(BOOL)shouldTestPlayHaven {
