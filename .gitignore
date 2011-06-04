@@ -1,7 +1,7 @@
 # Encoded audio.
 /Resources/Audio/*/*flac
 
-# Secret salt for online score submission.
+# Secret stuff
 /Resources/Secret.plist
 /Resources/PlayHaven.plist
 
