@@ -36,7 +36,7 @@
 
 @private
     GameLayer                       *_gameLayer;
-    MenuLayer                       *_mainMenu, *_moreMenu, *_newGameMenu, *_pausedMenu, *_gameOverMenu;
+    MenuLayer                       *_mainMenu, *_moreMenu, *_gameMenu, *_pausedMenu, *_gameOverMenu;
     ConfigMenuLayer                 *_configMenu;
 
     CCMenuItem                      *_continueGame;

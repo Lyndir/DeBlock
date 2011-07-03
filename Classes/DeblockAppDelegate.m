@@ -57,7 +57,7 @@ static NSString *PHContextCharts    = @"PH.charts";
 @property (readwrite, retain) GameLayer                       *gameLayer;
 @property (readwrite, retain) MenuLayer                       *mainMenu;
 @property (readwrite, retain) MenuLayer                       *moreMenu;
-@property (readwrite, retain) MenuLayer                       *newGameMenu;
+@property (readwrite, retain) MenuLayer                       *gameMenu;
 @property (readwrite, retain) MenuLayer                       *pausedMenu;
 @property (readwrite, retain) MenuLayer                       *gameOverMenu;
 @property (readwrite, retain) ConfigMenuLayer                 *configMenu;
@@ -74,7 +74,7 @@ static NSString *PHContextCharts    = @"PH.charts";
 @implementation DeblockAppDelegate
 
 @synthesize gameLayer = _gameLayer;
-@synthesize mainMenu = _mainMenu, moreMenu = _moreMenu, newGameMenu = _newGameMenu, pausedMenu = _pausedMenu, gameOverMenu = _gameOverMenu;
+@synthesize mainMenu = _mainMenu, moreMenu = _moreMenu, gameMenu = _gameMenu, pausedMenu = _pausedMenu, gameOverMenu = _gameOverMenu;
 @synthesize configMenu = _configMenu;
 @synthesize continueGame = _continueGame;
 @synthesize alertWelcome = _alertWelcome, alertCompete = _alertCompete;
@@ -98,7 +98,7 @@ static NSString *PHContextCharts    = @"PH.charts";
     
     self.gameLayer = nil;
     self.moreMenu = nil;
-    self.newGameMenu = nil;
+    self.gameMenu = nil;
     self.configMenu = nil;
     self.continueGame = nil;
     self.alertWelcome = nil;
@@ -182,20 +182,20 @@ static NSString *PHContextCharts    = @"PH.charts";
     self.moreMenu.color              = ccc3(0xcc, 0xcc, 0xff);
     self.moreMenu.colorGradient      = ccc4(0xff, 0xff, 0xff, 0xdd);
     
-    self.newGameMenu = [MenuLayer menuWithDelegate:self logo:nil
-                                             items:
-                        [CCMenuItemFont itemFromString:l(@"menu.game.mode.classic")
-                                                target:self selector:@selector(newClassicGame:)],
-                        [CCMenuItemFont itemFromString:l(@"menu.game.mode.timed")
-                                                target:self selector:@selector(newTimedGame:)],
-                        nil];
-    self.newGameMenu.offset          = ccp(0, -80);
-    self.newGameMenu.background      = [CCSprite spriteWithFile:@"back.png"];
-    self.newGameMenu.outerPadding    = margin(150, -240, 10, -240);
-    self.newGameMenu.innerRatio      = 0;
-    self.newGameMenu.opacity         = 0x99;
-    self.newGameMenu.color           = ccc3(0xcc, 0xcc, 0xff);
-    self.newGameMenu.colorGradient   = ccc4(0xff, 0xff, 0xff, 0xdd);
+    self.gameMenu = [MenuLayer menuWithDelegate:self logo:nil
+                                          items:
+                     [CCMenuItemFont itemFromString:l(@"menu.game.mode.classic")
+                                             target:self selector:@selector(newClassicGame:)],
+                     [CCMenuItemFont itemFromString:l(@"menu.game.mode.timed")
+                                             target:self selector:@selector(newTimedGame:)],
+                     nil];
+    self.gameMenu.offset          = ccp(0, -80);
+    self.gameMenu.background      = [CCSprite spriteWithFile:@"back.png"];
+    self.gameMenu.outerPadding    = margin(150, -240, 10, -240);
+    self.gameMenu.innerRatio      = 0;
+    self.gameMenu.opacity         = 0x99;
+    self.gameMenu.color           = ccc3(0xcc, 0xcc, 0xff);
+    self.gameMenu.colorGradient   = ccc4(0xff, 0xff, 0xff, 0xdd);
     
     self.configMenu = [ConfigMenuLayer menuWithDelegate:self logo:nil
                                                settings:
@@ -399,7 +399,7 @@ static NSString *PHContextCharts    = @"PH.charts";
 
 - (void)newGameConfirmed {
     
-    [self pushLayer:self.newGameMenu];
+    [self pushLayer:self.gameMenu];
 }
 
 

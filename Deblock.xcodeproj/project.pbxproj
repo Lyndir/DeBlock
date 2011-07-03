@@ -275,7 +275,6 @@
 		DA0EA702133E0BB900AC780F /* utlist.h in Headers */ = {isa = PBXBuildFile; fileRef = DA0EA65C133E0BB800AC780F /* utlist.h */; };
 		DA0EA703133E0BB900AC780F /* ZipUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = DA0EA65D133E0BB800AC780F /* ZipUtils.h */; };
 		DA0EA704133E0BB900AC780F /* ZipUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = DA0EA65E133E0BB800AC780F /* ZipUtils.m */; };
-		DA1AC47F108C8EEF00C9AD7B /* libz.1.2.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DA1AC47E108C8EEF00C9AD7B /* libz.1.2.3.dylib */; };
 		DA1AC8191092522400C9AD7B /* StrategyLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = DA1AC8181092522400C9AD7B /* StrategyLayer.m */; };
 		DA394AAF10D79A72008DC0BF /* iTunesArtwork in Resources */ = {isa = PBXBuildFile; fileRef = DA394AAE10D79A72008DC0BF /* iTunesArtwork */; };
 		DA3EE0BD10B0A6F800F8488D /* LogLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3EE0BC10B0A6F800F8488D /* LogLayer.m */; };
@@ -294,6 +293,7 @@
 		DA6583041347284D00C40D8C /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA6583031347284D00C40D8C /* GameKit.framework */; };
 		DA65830713472CDC00C40D8C /* Player.m in Sources */ = {isa = PBXBuildFile; fileRef = DA65830613472CDC00C40D8C /* Player.m */; };
 		DA7051DF101DD01100399CC3 /* Entitlements.plist in Resources */ = {isa = PBXBuildFile; fileRef = DA7051DE101DD01100399CC3 /* Entitlements.plist */; };
+		DA7054B213C115210036424F /* libz.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DA7054B113C115210036424F /* libz.1.dylib */; };
 		DA7923C010C5E76100321549 /* strategy-1.png in Resources */ = {isa = PBXBuildFile; fileRef = DA7923B210C5E76100321549 /* strategy-1.png */; };
 		DA7923C110C5E76100321549 /* strategy-2.png in Resources */ = {isa = PBXBuildFile; fileRef = DA7923B410C5E76100321549 /* strategy-2.png */; };
 		DA7923C210C5E76100321549 /* strategy-3.png in Resources */ = {isa = PBXBuildFile; fileRef = DA7923B610C5E76100321549 /* strategy-3.png */; };
@@ -725,6 +725,7 @@
 		DA6A1B371015DC5700B55AF8 /* DeblockConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeblockConfig.m; sourceTree = "<group>"; };
 		DA6A20921017B6D700B55AF8 /* en */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = en; path = English.lproj/Localizable.strings; sourceTree = "<group>"; };
 		DA7051DE101DD01100399CC3 /* Entitlements.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Entitlements.plist; sourceTree = "<group>"; };
+		DA7054B113C115210036424F /* libz.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.dylib; path = usr/lib/libz.1.dylib; sourceTree = SDKROOT; };
 		DA79225310C5215300321549 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = German.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		DA79225410C5215300321549 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = German.lproj/Localizable.strings; sourceTree = "<group>"; };
 		DA7922D510C5219B00321549 /* de */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = de; path = Resources/German.lproj/back.png; sourceTree = SOURCE_ROOT; };
@@ -917,6 +918,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DA7054B213C115210036424F /* libz.1.dylib in Frameworks */,
 				DA8F51D2135B7D1D009F4817 /* libicucore.dylib in Frameworks */,
 				DADF3CDC1347CC3E00C12557 /* libiLibs.a in Frameworks */,
 				DA6583041347284D00C40D8C /* GameKit.framework in Frameworks */,
@@ -928,7 +930,6 @@
 				DAEC2F211058D11D005475FB /* OpenGLES.framework in Frameworks */,
 				DAEC2F231058D11D005475FB /* QuartzCore.framework in Frameworks */,
 				DAEC2F251058D11D005475FB /* UIKit.framework in Frameworks */,
-				DA1AC47F108C8EEF00C9AD7B /* libz.1.2.3.dylib in Frameworks */,
 				DADC1D9110A0F46400593BF9 /* CFNetwork.framework in Frameworks */,
 				DADC1D9710A0F63100593BF9 /* SystemConfiguration.framework in Frameworks */,
 				DA8F5047135B7CC8009F4817 /* libPlayHaven.a in Frameworks */,
@@ -1003,6 +1004,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				DA7054B113C115210036424F /* libz.1.dylib */,
 				DA8F51D1135B7D1D009F4817 /* libicucore.dylib */,
 				DA8F5046135B7CC8009F4817 /* libPlayHaven.a */,
 				DA1AC392108C888D00C9AD7B /* libiLibs.a */,
@@ -1571,7 +1573,7 @@
 				DAEE2B211348B34D002DC610 /* JRSwizzle.m */,
 			);
 			name = jrswizzle;
-			path = External/iLibs/External/jrswizzle;
+			path = External/Pearl/External/jrswizzle;
 			sourceTree = SOURCE_ROOT;
 		};
 		DAF1E1271343C1EA001C7902 /* FontLabel */ = {
@@ -1815,6 +1817,9 @@
 /* Begin PBXProject section */
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0420;
+			};
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "Deblock" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
@@ -2452,6 +2457,7 @@
 		DA1AC393108C889300C9AD7B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
 				PRODUCT_NAME = iLibs;
 			};
 			name = Debug;
@@ -2459,6 +2465,7 @@
 		DA1AC394108C889300C9AD7B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
 				PRODUCT_NAME = iLibs;
 			};
 			name = Release;
@@ -2467,6 +2474,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_PREPROCESSOR_DEFINITIONS = "COCOS2D_DEBUG=0";
+				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
 				PRODUCT_NAME = "cocos2d-iphone";
 			};
 			name = Debug;
@@ -2475,6 +2483,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_PREPROCESSOR_DEFINITIONS = "COCOS2D_DEBUG=0";
+				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
 				PRODUCT_NAME = "cocos2d-iphone";
 			};
 			name = Release;
@@ -2582,6 +2591,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_PREPROCESSOR_DEFINITIONS = "COCOS2D_DEBUG=0";
+				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
 				PRODUCT_NAME = "cocos2d-iphone";
 			};
 			name = Distribution;
@@ -2589,6 +2599,7 @@
 		DAF50D95135B89C0002987DE /* Distribution */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
 				PRODUCT_NAME = iLibs;
 			};
 			name = Distribution;
