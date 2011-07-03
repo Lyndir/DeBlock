@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 source bashlib
+cd "${0%/*}/../Images"
 
 
 emit "Converting PVRs"
@@ -48,7 +49,6 @@ emit "Converting iTunesArtwork"
         [72]="Icon-72.png"
         [114]="Icon@2x.png"
     )
-    cd "${0%/*}/../Images"
 
     for size in "${!icons[@]}"; do
         file=${icons[size]}

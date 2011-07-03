@@ -977,7 +977,7 @@
 			children = (
 				DA8F5048135B7CEF009F4817 /* PlayHavenSDK */,
 				DA0EA5B4133E0BB800AC780F /* cocos2d */,
-				DA0EA0CE133E09E900AC780F /* iLibs */,
+				DA0EA0CE133E09E900AC780F /* Pearl */,
 				32CA4F630368D1EE00C91783 /* Prefix.pch */,
 				29B97316FDCFA39411CA2CEA /* main.m */,
 			);
@@ -1036,7 +1036,7 @@
 			path = Sound;
 			sourceTree = "<group>";
 		};
-		DA0EA0CE133E09E900AC780F /* iLibs */ = {
+		DA0EA0CE133E09E900AC780F /* Pearl */ = {
 			isa = PBXGroup;
 			children = (
 				DA0EA0CF133E09E900AC780F /* AbstractAppDelegate.h */,
@@ -1049,8 +1049,8 @@
 				DA0EA52E133E09EB00AC780F /* Utility */,
 				DAEE2A791348B34D002DC610 /* jrswizzle */,
 			);
-			name = iLibs;
-			path = External/iLibs/iLibs;
+			name = Pearl;
+			path = External/Pearl/iLibs;
 			sourceTree = "<group>";
 		};
 		DA0EA0D1133E09E900AC780F /* Cocos2D */ = {
@@ -1361,7 +1361,7 @@
 				DA0EA648133E0BB800AC780F /* Support */,
 			);
 			name = cocos2d;
-			path = External/iLibs/External/Cocos2D/cocos2d;
+			path = External/Pearl/External/Cocos2D/cocos2d;
 			sourceTree = "<group>";
 		};
 		DA0EA62F133E0BB800AC780F /* Platforms */ = {
@@ -1590,7 +1590,7 @@
 				DAF1E1321343C1EA001C7902 /* ZFont.m */,
 			);
 			name = FontLabel;
-			path = External/iLibs/External/Cocos2D/external/FontLabel;
+			path = External/Pearl/External/Cocos2D/external/FontLabel;
 			sourceTree = SOURCE_ROOT;
 		};
 /* End PBXGroup section */
