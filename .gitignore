@@ -1,10 +1,6 @@
 # Encoded audio.
 /Resources/Audio/*/*flac
 
-# Secret stuff
-/Resources/Secret.plist
-/Resources/PlayHaven.plist
-
 # OS-Specific junk.
 .DS_Store
 

@@ -323,7 +323,6 @@
 		DACF7538101A369F003F2AF6 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
 		DADC1D9110A0F46400593BF9 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DADC1D9010A0F46400593BF9 /* CFNetwork.framework */; };
 		DADC1D9710A0F63100593BF9 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DADC1D9610A0F63100593BF9 /* SystemConfiguration.framework */; };
-		DADC1E7310A37AEE00593BF9 /* Secret.plist in Resources */ = {isa = PBXBuildFile; fileRef = DADC1E7210A37AEE00593BF9 /* Secret.plist */; };
 		DADCE3F5135CDAEE0054AD9A /* PlayHaven.plist in Resources */ = {isa = PBXBuildFile; fileRef = DADCE3F4135CDAEE0054AD9A /* PlayHaven.plist */; };
 		DADF3CDB1347CC2B00C12557 /* libcocos2d-iphone.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA8893E61052EB7E00EA8E72 /* libcocos2d-iphone.a */; };
 		DADF3CDC1347CC3E00C12557 /* libiLibs.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA1AC392108C888D00C9AD7B /* libiLibs.a */; };
@@ -837,7 +836,6 @@
 		DACF73E9101A3520003F2AF6 /* Deblock.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Deblock.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DADC1D9010A0F46400593BF9 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		DADC1D9610A0F63100593BF9 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
-		DADC1E7210A37AEE00593BF9 /* Secret.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Secret.plist; sourceTree = "<group>"; };
 		DADCE3F4135CDAEE0054AD9A /* PlayHaven.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = PlayHaven.plist; sourceTree = "<group>"; };
 		DAE937571110EBFE00DB41CA /* pause.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = pause.mp3; sourceTree = "<group>"; };
 		DAEC2F181058D11C005475FB /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
@@ -995,7 +993,6 @@
 				8D1107310486CEB800E47090 /* Info.plist */,
 				DAC0E97510C329F600B05A4D /* InfoPlist.strings */,
 				DA6A20911017B6D700B55AF8 /* Localizable.strings */,
-				DADC1E7210A37AEE00593BF9 /* Secret.plist */,
 				DADCE3F4135CDAEE0054AD9A /* PlayHaven.plist */,
 			);
 			path = Resources;
@@ -1859,7 +1856,6 @@
 				DA7051DF101DD01100399CC3 /* Entitlements.plist in Resources */,
 				DA63684110583A95001E2410 /* Absolute.ttf in Resources */,
 				DA63684F10583A95001E2410 /* MammaGamma.ttf in Resources */,
-				DADC1E7310A37AEE00593BF9 /* Secret.plist in Resources */,
 				DAC0E86510C2EE3A00B05A4D /* back.png in Resources */,
 				DAC0E8A510C30EE200B05A4D /* splash-bottom.png in Resources */,
 				DAC0E8A610C30EE200B05A4D /* splash-top.png in Resources */,
