@@ -1,0 +1,7 @@
+language: objective-c
+xcode_project: Deblock.xcodeproj
+xcode_scheme: Deblock
+xcode_sdk: iphonesimulator
+git:
+  submodules: false
+before_install: ./Scripts/updateDependencies
