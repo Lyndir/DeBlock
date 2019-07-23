@@ -32,10 +32,6 @@
 #import "AlertViewController.h"
 
 
-static NSString *PHContextNotifier  = @"PH.notifier";
-static NSString *PHContextCharts    = @"PH.charts";
-//static NSString *PHContextCommunity = @"PH.community";
-
 @interface DeblockAppDelegate ()
 
 - (void)newGame:(id)caller;
@@ -51,7 +47,7 @@ static NSString *PHContextCharts    = @"PH.charts";
 - (void)moreGames:(id)caller;
 - (void)strategy:(id)caller;
 - (void)scores:(id)caller;
-- (void)log;		
+- (void)log;
 
 
 @property (readwrite, retain) GameLayer                       *gameLayer;
@@ -121,15 +117,6 @@ static NSString *PHContextCharts    = @"PH.charts";
         if (error)
             wrn(@"Game Center unavailable: %@", error);
     }];
-    
-    // PlayHaven setup.
-    @try {
-        [PlayHaven preloadWithDelegate:self];
-        [PlayHaven loadChartsNotifierWithDelegate:self context:PHContextNotifier];
-    }
-    @catch (NSException *exception) {
-        err(@"PlayHaven exception: %@", exception);
-    }
     
     // First run pop-up.
     if ([[Config get].firstRun boolValue]) {
@@ -453,7 +440,6 @@ static NSString *PHContextCharts    = @"PH.charts";
 
 - (void)moreGames:(id)caller {
     
-    [PlayHaven loadChartsWithDelegate:self context:PHContextCharts];
 }
 
 
@@ -483,73 +469,6 @@ static NSString *PHContextCharts    = @"PH.charts";
 + (DeblockAppDelegate *)get {
     
     return (DeblockAppDelegate *) [super get];
-}
-
-#pragma mark - PHPreloadDelegate
-
--(NSString *)playhavenPublisherToken {
-    
-    return [[NSDictionary dictionaryWithContentsOfURL:
-             [[NSBundle mainBundle] URLForResource:@"PlayHaven" withExtension:@"plist"]] valueForKeyPath:@"Token"];
-}
-
--(BOOL)shouldTestPlayHaven {
-    
-#ifdef DEBUG
-    return YES;
-#else
-    return NO;
-#endif
-}
-
--(void)playhavenDidFinishPreloading {
-    
-}
-
--(void)playhavenPreloadDidFailWithError:(NSString *)message {
-    
-    err(@"Playhaven preload failed with error: %@", message);
-}
-
--(PHLogLevel *)playhavenDebugLogLevel {
-    
-    return [self shouldTestPlayHaven]? [PHLogLevel logLevelDebug]: [PHLogLevel logLevelWarn];
-}
-
-
-#pragma mark - PHRequestDelegate
-
-- (void)playhaven:(UIView *)view didLoadWithContext:(id)contextValue {
-    
-    if (contextValue == PHContextNotifier) {
-        [self.notifierView removeFromSuperview];
-        self.notifierView = view;
-        
-        // Rotate it to landscape.
-        self.notifierView.transform = CGAffineTransformMakeRotation(CC_DEGREES_TO_RADIANS(90));
-        
-        if ([self isLayerShowing:self.moreMenu])
-            [[CCDirector sharedDirector].openGLView addSubview:view];
-    }
-    
-    if (contextValue == PHContextCharts) {
-        [[CCDirector sharedDirector].openGLView addSubview:view];
-        [[CCDirector sharedDirector] pause];
-    }
-}
-
-- (void)playhaven:(UIView *)view didFailWithError:(NSString *)message context:(id)contextValue {
-    
-    err(@"Playhaven context: %@, failed with error: %@", contextValue, message);
-    
-    [view removeFromSuperview];
-    [[CCDirector sharedDirector] resume];
-}
-
-- (void)playhaven:(UIView *)view wasDismissedWithContext:(id)contextValue {
-    
-    [view removeFromSuperview];
-    [[CCDirector sharedDirector] resume];
 }
 
 @end

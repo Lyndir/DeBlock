@@ -29,10 +29,9 @@
 #import "MenuLayer.h"
 #import "ConfigMenuLayer.h"
 #import "DbHUDLayer.h"
-#import "PlayHaven.h"
 
 
-@interface DeblockAppDelegate : AbstractCocos2DAppDelegate<MenuDelegate, ConfigMenuDelegate, UIAlertViewDelegate, GKLeaderboardViewControllerDelegate, PHPreloadDelegate, PHRequestDelegate> {
+@interface DeblockAppDelegate : AbstractCocos2DAppDelegate<MenuDelegate, ConfigMenuDelegate, UIAlertViewDelegate, GKLeaderboardViewControllerDelegate> {
 
 @private
     GameLayer                       *_gameLayer;
